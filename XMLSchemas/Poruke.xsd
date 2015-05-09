@@ -12,34 +12,10 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="SWIFTKodBankeDuznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunskiRacunBanke">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="18"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="SWIFTKodBankePoverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunskiRacunBankePoverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="18"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
+                <xs:element name="SWIFTKodBankeDuznika" type="xws:ТSWIFTKod"> </xs:element>
+                <xs:element name="obracunskiRacunBanke" type="xws:TObracunskiRacunBanke"> </xs:element>
+                <xs:element name="SWIFTKodBankePoverioca" type="xws:ТSWIFTKod"> </xs:element>
+                <xs:element name="obracunskiRacunBankePoverioca" type="xws:TObracunskiRacunBanke"> </xs:element>
                 <xs:element name="duznik">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
