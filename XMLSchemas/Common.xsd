@@ -104,4 +104,14 @@
             <xs:element name="broj" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:simpleType name="ТSWIFTKod">
+        <xs:restriction base="xs:string">
+            <xs:length value="8"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TObracunskiRacunBanke">
+        <xs:restriction base="xs:string">
+            <xs:length value="18"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
