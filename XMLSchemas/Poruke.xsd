@@ -2,10 +2,10 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="PoslovnaXWS/Fakture" xmlns="PoslovnaXWS/Fakture" xmlns:xws="PoslovnaXWS/Common">
     <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
-    <xs:element name="МТ103">
+    <xs:element name="МТ10X">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="MT103">
+                <xs:element name="ID">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="50"/>
