@@ -25,13 +25,23 @@
     </xs:element>
     <xs:complexType abstract="true" name="TPoruka">
         <xs:sequence>
-            <xs:element name="ID"/>
+            <xs:element name="ID">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="tip">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:pattern value="MT"/>
-                    <xs:length value="3"/>
+                    <xs:length value="5"/>
+                    <xs:enumeration value="MT102"/>
+                    <xs:enumeration value="MT103"/>
+                    <xs:enumeration value="MT900"/>
+                    <xs:enumeration value="MT910"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -66,28 +76,32 @@
                                 <xs:element name="IDNalogaZaPlacanje">
                                     <xs:simpleType>
                                         <xs:restriction base="xs:string">
-                                            <xs:length value="50"/>
+                                            <xs:minLength value="1"/>
+                                            <xs:maxLength value="50"/>
                                         </xs:restriction>
                                     </xs:simpleType>
                                 </xs:element>
                                 <xs:element name="duznik">
                                     <xs:simpleType>
                                         <xs:restriction base="xs:string">
-                                            <xs:length value="255"/>
+                                            <xs:minLength value="1"/>
+                                            <xs:maxLength value="255"/>
                                         </xs:restriction>
                                     </xs:simpleType>
                                 </xs:element>
                                 <xs:element name="svrhaPlacanja">
                                     <xs:simpleType>
                                         <xs:restriction base="xs:string">
-                                            <xs:length value="255"/>
+                                            <xs:minLength value="1"/>
+                                            <xs:maxLength value="255"/>
                                         </xs:restriction>
                                     </xs:simpleType>
                                 </xs:element>
                                 <xs:element name="primalac">
                                     <xs:simpleType>
                                         <xs:restriction base="xs:string">
-                                            <xs:length value="255"/>
+                                            <xs:minLength value="1"/>
+                                            <xs:maxLength value="255"/>
                                         </xs:restriction>
                                     </xs:simpleType>
                                 </xs:element>
