@@ -1,72 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="PoslovnaXWS/Fakture" xmlns="PoslovnaXWS/Fakture" xmlns:xws="PoslovnaXWS/Common">
+    targetNamespace="PoslovnaXWS/Poruke" xmlns="PoslovnaXWS/Poruke" xmlns:xws="PoslovnaXWS/Common">
+
     <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
-    <xs:element name="МТ10X">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="ID">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="SWIFTKodBankeDuznika" type="xws:ТSWIFTKod"> </xs:element>
-                <xs:element name="obracunskiRacunBanke" type="xws:TObracunskiRacunBanke"> </xs:element>
-                <xs:element name="SWIFTKodBankePoverioca" type="xws:ТSWIFTKod"> </xs:element>
-                <xs:element name="obracunskiRacunBankePoverioca" type="xws:TObracunskiRacunBanke"> </xs:element>
-                <xs:element name="duznik">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="255"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="svrhaPlacanja">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="255"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="primalac">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="255"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="datumNaloga" type="xs:date"/>
-                <xs:element name="datumValute" type="xs:date"/>
-                <xs:element name="racunDuznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xws:TRacun"/>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="modelZaduzenja" type="TModel"/>
-                <xs:element name="pozivNaBroj" type="TPozivNaBroj"/>
-                <xs:element name="racunPoverioca" type="xws:TRacun"/>
-                <xs:element name="modelOdobrenja" type="TModel"/>
-                <xs:element name="pozivNaBrojOdobrenja" type="TPozivNaBroj"/>
-                <xs:element name="iznos">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:fractionDigits value="2"/>
-                            <xs:totalDigits value="15"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="sifraValute">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="3"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
     <xs:simpleType name="TModel">
         <xs:restriction base="xs:string">
             <xs:length value="2"/>
@@ -77,4 +13,263 @@
             <xs:length value="20"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:element name="poruka">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="MT102" type="MT102"/>
+                <xs:element name="MT103" type="MT102"/>
+                <xs:element name="MT900" type="MT900"/>
+                <xs:element name="MT910" type="MT910"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType abstract="true" name="TPoruka">
+        <xs:sequence>
+            <xs:element name="ID"/>
+        </xs:sequence>
+        <xs:attribute name="tip">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="MT"/>
+                    <xs:length value="3"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MT102">
+        <xs:complexContent>
+            <xs:extension base="TPoruka">
+                <xs:sequence>
+                    <xs:element name="SWIFTKodBankeDuznika" type="xws:ТSWIFTKod"> </xs:element>
+                    <xs:element name="obracunskiRacunBanke" type="xws:TObracunskiRacunBanke"> </xs:element>
+                    <xs:element name="SWIFTKodBankePoverioca" type="xws:ТSWIFTKod"> </xs:element>
+                    <xs:element name="obracunskiRacunBankePoverioca"
+                        type="xws:TObracunskiRacunBanke"> </xs:element>
+                    <xs:element name="ukupanIznos">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:decimal">
+                                <xs:totalDigits value="15"/>
+                                <xs:fractionDigits value="2"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="sifraValute">
+                        <xs:simpleType>
+                            <xs:restriction base="xws:TSifraValute"> </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="datumValute" type="xs:date"/>
+                    <xs:element name="datum" type="xs:date"/>
+                    <xs:element name="uplate">
+                        <xs:complexType>
+                            <xs:sequence maxOccurs="unbounded">
+                                <xs:element name="IDNalogaZaPlacanje">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="50"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="duznik">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="255"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="svrhaPlacanja">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="255"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="primalac">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="255"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="datumNaloga" type="xs:date"/>
+                                <xs:element name="racunDuznika">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="18"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="modelZaduzenja">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:integer">
+                                            <xs:totalDigits value="2"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="pozivNaBrojZaduzenja">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="20"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="racunPoverioca">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="18"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="modelOdobrenja">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:integer">
+                                            <xs:totalDigits value="2"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="pozivNaBrojOdobrenja">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="20"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="iznos">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:decimal">
+                                            <xs:totalDigits value="15"/>
+                                            <xs:fractionDigits value="2"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="sifraValute">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:length value="3"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MT103">
+        <xs:complexContent>
+            <xs:extension base="TPoruka">
+                <xs:sequence>
+                    <xs:element name="SWIFTKodBankeDuznika" type="xws:ТSWIFTKod"> </xs:element>
+                    <xs:element name="obracunskiRacunBanke" type="xws:TObracunskiRacunBanke"> </xs:element>
+                    <xs:element name="SWIFTKodBankePoverioca" type="xws:ТSWIFTKod"> </xs:element>
+                    <xs:element name="obracunskiRacunBankePoverioca"
+                        type="xws:TObracunskiRacunBanke"> </xs:element>
+                    <xs:element name="datumValute" type="xs:date"/>
+                    <xs:element name="duznik">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="255"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="svrhaPlacanja">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="255"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="primalac">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="255"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="datumNaloga" type="xs:date"/>
+                    <xs:element name="racunDuznika">
+                        <xs:simpleType>
+                            <xs:restriction base="xws:TRacun"/>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="modelZaduzenja" type="TModel"/>
+                    <xs:element name="pozivNaBroj" type="TPozivNaBroj"/>
+                    <xs:element name="racunPoverioca" type="xws:TRacun"/>
+                    <xs:element name="modelOdobrenja" type="TModel"/>
+                    <xs:element name="pozivNaBrojOdobrenja" type="TPozivNaBroj"/>
+                    <xs:element name="iznos">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:decimal">
+                                <xs:fractionDigits value="2"/>
+                                <xs:totalDigits value="15"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="sifraValute">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:length value="3"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MT900">
+        <xs:complexContent>
+            <xs:extension base="TPoruka">
+                <xs:sequence>
+                    <xs:element name="SWIFTKodBankeDuznika" type="xws:TStavkaPreseka"/>
+                    <xs:element name="obracunskiRacunBankeDuznika" type="xws:TObracunskiRacunBanke"/>
+                    <xs:element name="IdPorukeNaloga">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="50"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="datumValute" type="xs:date"/>
+                    <xs:element name="iznos">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:decimal">
+                                <xs:fractionDigits value="2"/>
+                                <xs:totalDigits value="15"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="sifraValute" type="xws:TSifraValute"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MT910">
+        <xs:complexContent>
+            <xs:extension base="TPoruka">
+                <xs:sequence>
+                    <xs:element name="SWIFTKodBankePoverioca" type="xws:TStavkaPreseka"/>
+                    <xs:element name="obracunskiRacunBankePoverioca"
+                        type="xws:TObracunskiRacunBanke"/>
+                    <xs:element name="IdPorukeNaloga">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="50"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="datumValute" type="xs:date"/>
+                    <xs:element name="iznos">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:decimal">
+                                <xs:fractionDigits value="2"/>
+                                <xs:totalDigits value="15"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="sifraValute" type="xws:TSifraValute"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>
