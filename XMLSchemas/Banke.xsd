@@ -9,7 +9,7 @@
                 <xs:element name="datum" type="xs:date"/>
                 <xs:element name="redniBrojPreseka">
                     <xs:simpleType>
-                        <xs:restriction base="xs:int">
+                        <xs:restriction base="xs:positiveInteger">
                             <xs:totalDigits value="2"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -18,75 +18,74 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="nalogZaPrenos" type="xws:TStavkaPreseka"> </xs:element>
-    <xs:element name="zaglavljePreseka">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="brojRacuna" type="xws:TRacun"/>
-                <xs:element name="datumNaloga" type="xs:date"/>
-                <xs:element name="brojPreseka">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:int">
-                            <xs:totalDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="prethodnoStanje">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="BrojPromenaUKorist">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:int">
-                            <xs:totalDigits value="6"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="UkupnoUKorist">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="BrojPromenaNaTeret">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:int">
-                            <xs:totalDigits value="6"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="UkupnoNaTeret">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="novoStanje">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
     <xs:element name="presek">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="zaglavljePreseka"/>
+                <xs:element name="zaglavlje">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="brojRacuna" type="xws:TRacun"/>
+                            <xs:element name="datumNaloga" type="xs:date"/>
+                            <xs:element name="brojPreseka">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:positiveInteger">
+                                        <xs:totalDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="prethodnoStanje">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="15"/>
+                                        <xs:fractionDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="BrojPromenaUKorist">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:int">
+                                        <xs:totalDigits value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="UkupnoUKorist">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="15"/>
+                                        <xs:fractionDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="BrojPromenaNaTeret">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:int">
+                                        <xs:totalDigits value="6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="UkupnoNaTeret">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="15"/>
+                                        <xs:fractionDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="novoStanje">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:decimal">
+                                        <xs:totalDigits value="15"/>
+                                        <xs:fractionDigits value="2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element maxOccurs="1" name="stavkePreseka">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="nalogZaPrenos"
+                            <xs:element maxOccurs="unbounded" minOccurs="0" name="stavka"
                                 type="xws:TStavkaPreseka"/>
                         </xs:sequence>
                     </xs:complexType>
