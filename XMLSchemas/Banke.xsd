@@ -17,7 +17,6 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="nalogZaPrenos" type="xws:TStavkaPreseka"> </xs:element>
     <xs:element name="presek">
         <xs:complexType>
             <xs:sequence>

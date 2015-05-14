@@ -15,8 +15,8 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element name="dobavljac" type="xws:TKlijent"/>
-                            <xs:element name="kupac" type="xws:TKlijent"/>
+                            <xs:element name="dobavljac" type="xws:TFirma"/>
+                            <xs:element name="kupac" type="xws:TFirma"/>
                             <xs:element name="brojRacuna">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:positiveInteger">
