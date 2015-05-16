@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="PoslovnaXWS/services/banka"
+    xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ws="PoslovnaXWS/services/banka"
+    xmlns:xws_poruke="PoslovnaXWS/Poruke"
+    xmlns:xws="PoslovnaXWS/Common"
+    xmlns:xws_banke="PoslovnaXWS/Banke"> 
+    <wsdl:types>
+        <xs:schema>
+            <xs:import namespace="PoslovnaXWS/Poruke" schemaLocation="Poruke.xsd"/>
+        </xs:schema>
+        <xs:schema>
+            <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
+        </xs:schema>
+        <xs:schema>
+            <xs:import namespace="PoslovnaXWS/Banke" schemaLocation="Banke.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="sendMT102">
+        <wsdl:part name = "mt102" type = "xws_poruke:MT102"/>
+    </wsdl:message>
+    <wsdl:message name="sendMT103">
+        <wsdl:part name = "mt103" type = "xws_poruke:MT103"/>
+    </wsdl:message>
+    
+    <wsdl:portType name="BankaPort">
+        <wsdl:operation name="sendMT102">
+            <wsdl:output message="ws:sendMT102"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendMT103">
+            <wsdl:output message="ws:sendMT103"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="BankaServiceSoapBinding" type="ws:BankaPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        
+        <wsdl:operation name="sendMT102">
+            <soap:operation soapAction=""/>
+            <wsdl:output>
+                <soap:body use="literal" namespace="PoslovnaXWS/Poruke"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+        <wsdl:operation name="sendMT103">
+            <soap:operation soapAction=""/>
+            <wsdl:output>
+                <soap:body use="literal" namespace="PoslovnaXWS/Poruke"/>
+            </wsdl:output>
+        </wsdl:operation>
+        
+    </wsdl:binding>
+
+    <wsdl:service name="BankaService">
+        <wsdl:port name="BankaPort" binding="ws:BankaServiceSoapBinding">
+            <soap:address location="http://localhost:8080/PoslovnaXWS/banke"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
