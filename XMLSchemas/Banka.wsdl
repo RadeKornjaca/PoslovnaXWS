@@ -21,17 +21,27 @@
 			<xs:import namespace="PoslovnaXWS/Fakture" schemaLocation="Fakture.xsd" />
 		</xs:schema>
 	</wsdl:types>
-    <wsdl:types>
-        <xs:schema>
-            <xs:import namespace="PoslovnaXWS/Poruke" schemaLocation="Poruke.xsd"/>
-        </xs:schema>
-        <xs:schema>
-            <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
-        </xs:schema>
-        <xs:schema>
-            <xs:import namespace="PoslovnaXWS/Banke" schemaLocation="Banke.xsd"/>
-        </xs:schema>
-    </wsdl:types>
+    
+    
+    <!-- Message definitions -->
+    
+    <wsdl:message name="sendMT102Response">
+		<wsdl:part name="mt102" element="xws_poruke:MT102"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="sendMT102Request">
+	</wsdl:message>
+
+	<wsdl:message name="sendMT103Response">
+		<wsdl:part name="mt103" element="xws_poruke:MT103"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="sendMT103Request">
+	</wsdl:message>
+
+	<wsdl:message name="zahtevZaIzvodResponse">
+		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="zahtevZaIzvodRequest">
+	</wsdl:message>
     
     <wsdl:message name="receiveMT900">
         <wsdl:part name = "mt900" type = "xws_poruke:MT9"/>
@@ -39,6 +49,9 @@
     <wsdl:message name="receiveMT910">
         <wsdl:part name = "mt910" type = "xws_poruke:MT9"/>
     </wsdl:message>
+    
+    
+    <!-- Port type and operations definitions -->
     
     <wsdl:portType name="BankaPort">
         <wsdl:operation name="sendMT102">
@@ -56,27 +69,8 @@
         </wsdl:operation>
     </wsdl:portType>
     
-
-<!-- Operacije moraju da imaju i input i output (ne znam zašto). Ako operacija koristi samo output,
-	onda joj input message nema part deo.  -->
-	
-	<wsdl:message name="sendMT102Response">
-		<wsdl:part name="mt102" element="xws_poruke:MT102"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="sendMT102Request">
-	</wsdl:message>
-
-	<wsdl:message name="sendMT103Response">
-		<wsdl:part name="mt103" element="xws_poruke:MT103"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="sendMT103Request">
-	</wsdl:message>
-
-	<wsdl:message name="zahtevZaIzvodResponse">
-		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="zahtevZaIzvodRequest">
-	</wsdl:message>
+	<!-- Operacije moraju da imaju i input i output (ne znam zašto). Ako operacija koristi samo output,
+		onda joj input message nema part deo.  -->
 
 	<wsdl:portType name="BankaServiceMessages">
 		<wsdl:operation name="sendMT102" parameterOrder="nmtokens">
@@ -92,6 +86,9 @@
 			<wsdl:input message="ws:zahtevZaIzvodRequest" />
 		</wsdl:operation>
 	</wsdl:portType>
+
+	
+	<!-- WSDL binding -->
 
 	<wsdl:binding name="BankaServiceBinding" type="ws:BankaServiceMessages">
 		<soap:binding style="document"
