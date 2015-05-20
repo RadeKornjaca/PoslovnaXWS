@@ -138,4 +138,16 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="status">
+        <xs:sequence>
+            <xs:element name="opis">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="kod" type="xs:int"/>
+    </xs:complexType>
 </xs:schema>

@@ -13,20 +13,27 @@
         </xs:schema>
     </wsdl:types>
         <wsdl:message name="sendMT900">
-          <wsdl:part name="mt900" type="xws_poruke:MT9"/>
+          <wsdl:part name="mt900" element="xws_poruke:MT900" />
         </wsdl:message>
         <wsdl:message name="sendMT910">
-          <wsdl:part name="mt910" type="xws_poruke:MT9"/>
+          <wsdl:part name="mt910" element="xws_poruke:MT910" />
         </wsdl:message>
     
         <wsdl:message name="receiveMT102">
-            <wsdl:part name="mt102" type="xws_poruke:MT102"/>
+            <wsdl:part name="mt102" element="xws_poruke:MT102" />
         </wsdl:message>
         <wsdl:message name="receiveMT103">
-            <wsdl:part name="mt103" type="xws_poruke:MT103"/>
+            <wsdl:part name="mt103" element="xws_poruke:MT103" />
         </wsdl:message>
-    
-    <wsdl:portType name="CentralnaBankaPort">
+        
+
+        <wsdl:message name="receiveMT102Response">
+        	<wsdl:part name="mt102Response" type="xws:status"/>
+        </wsdl:message>
+        <wsdl:message name="receiveMT103Response">
+        	<wsdl:part name="mt103Response" type="xws:status"></wsdl:part>
+        </wsdl:message>
+        <wsdl:portType name="CentralnaBankaPort">
         <wsdl:operation name="sendMT900">
             <wsdl:output message="ws:sendMT900"/>
         </wsdl:operation>
@@ -36,9 +43,11 @@
         
         <wsdl:operation name="receiveMT102">
             <wsdl:input message="ws:receiveMT102"/>
+            <wsdl:output message="ws:receiveMT102Response"/>
         </wsdl:operation>
         <wsdl:operation name="receiveMT103">
             <wsdl:input message="ws:receiveMT103"/>
+            <wsdl:output message="ws:receiveMT103Response"></wsdl:output>
         </wsdl:operation>
     </wsdl:portType>
     
@@ -75,6 +84,6 @@
         
     </wsdl:binding><wsdl:service name="CentralnaBankaService">
         <wsdl:port name="CentralnaBankaPort" binding="ws:CentralnaBankaServiceSoapBinding">
-            <soap:address location="http://localhost:8080/PoslovnaXWS/CentralnaBanka"/>
+            <soap:address location="http://localhost:8081/PoslovnaXWS/CentralnaBanka"/>
         </wsdl:port>
     </wsdl:service></wsdl:definitions>
