@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="PoslovnaXWS/Common" xmlns="PoslovnaXWS/Common">
+    <xs:simpleType name="TRacun">
+        <xs:restriction base="xs:string">
+            <xs:length value="18"/>
+            <xs:pattern value="[0-9]{3}-[0-9]{13}-[0-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="TStavkaPreseka">
+        <xs:sequence>
+            <xs:element name="duznik" type="TKlijent"/>
+            <xs:element name="svrhaPlacanja">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                        <xs:minLength value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="primalac" type="TKlijent"/>
+            <xs:element name="datumNaloga" type="xs:date"/>
+            <xs:element name="datumValute" type="xs:date"/>
+            <xs:element name="iznos">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="15"/>
+                        <xs:fractionDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="smer">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ТSWIFTKod">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{6}[A-Z0-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TOznakaValute">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="TKlijent" abstract="true">
+        <xs:sequence>
+            <xs:element name="naziv">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="racun" type="TRacun"/>
+            <xs:element name="model">
+                <xs:simpleType>
+                    <xs:restriction base="xs:positiveInteger">
+                        <xs:totalDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="pozivNaBroj">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[A-Za-z]{1,20}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TNalog">
+        <xs:sequence>
+            <xs:element name="id">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="duznik" type="TKlijent"/>
+            <xs:element name="svrhaPlacanja">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="primalac" type="TKlijent"/>
+            <xs:element name="datumNaloga" type="xs:date"/>
+            <xs:element name="datumValute" type="xs:date"/>
+            <xs:element name="iznos">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="15"/>
+                        <xs:fractionDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="oznakaValute" type="TOznakaValute"/>
+            <xs:element name="hitno" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TBanka">
+        <xs:complexContent>
+            <xs:extension base="TKlijent">
+                <xs:sequence>
+                    <xs:element name="swiftKod" type="ТSWIFTKod"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TFirma">
+        <xs:complexContent>
+            <xs:extension base="TKlijent">
+                <xs:sequence>
+                    <xs:element name="pib">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="11"/>
+                                <xs:pattern value="[A-Za-z0-9]{11}"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="adresa">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="255"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="status">
+        <xs:sequence>
+            <xs:element name="opis">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="kod" type="xs:int"/>
+    </xs:complexType>
+</xs:schema>
