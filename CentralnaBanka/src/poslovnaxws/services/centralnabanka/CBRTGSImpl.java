@@ -35,11 +35,11 @@ public class CBRTGSImpl implements CBRTGS {
     /* (non-Javadoc)
      * @see poslovnaxws.services.centralnabanka.CBRTGS#receiveMT103RTGS(poslovnaxws.poruke.MT103  mt103 )*
      */
-    public poslovnaxws.common.Status receiveMT103RTGS(poslovnaxws.poruke.MT103 mt103) { 
+    public poslovnaxws.common.StatusWrapper receiveMT103RTGS(poslovnaxws.poruke.MT103Wrapper mt103) { 
         LOG.info("Executing operation receiveMT103RTGS");
         System.out.println(mt103);
         try {
-            poslovnaxws.common.Status _return = new poslovnaxws.common.Status();
+            poslovnaxws.common.StatusWrapper _return = new poslovnaxws.common.StatusWrapper();
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();
@@ -50,11 +50,11 @@ public class CBRTGSImpl implements CBRTGS {
     /* (non-Javadoc)
      * @see poslovnaxws.services.centralnabanka.CBRTGS#receiveMT102RTGS(poslovnaxws.poruke.MT102  mt102 )*
      */
-    public poslovnaxws.common.Status receiveMT102RTGS(poslovnaxws.poruke.MT102 mt102) { 
+    public poslovnaxws.common.StatusWrapper receiveMT102RTGS(poslovnaxws.poruke.MT102Wrapper mt102) { 
         LOG.info("Executing operation receiveMT102RTGS");
         System.out.println(mt102);
         try {
-            poslovnaxws.common.Status _return = new poslovnaxws.common.Status();
+            poslovnaxws.common.StatusWrapper _return = new poslovnaxws.common.StatusWrapper();
             return _return;
         } catch (java.lang.Exception ex) {
             ex.printStackTrace();

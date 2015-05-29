@@ -50,16 +50,16 @@ public final class CBRTGS_CBRTGSPort_Client {
         
         {
         System.out.println("Invoking receiveMT103RTGS...");
-        poslovnaxws.poruke.MT103 _receiveMT103RTGS_mt103 = new poslovnaxws.poruke.MT103();
-        poslovnaxws.common.Status _receiveMT103RTGS__return = port.receiveMT103RTGS(_receiveMT103RTGS_mt103);
+        poslovnaxws.poruke.MT103Wrapper _receiveMT103RTGS_mt103 = new poslovnaxws.poruke.MT103Wrapper();
+        poslovnaxws.common.StatusWrapper _receiveMT103RTGS__return = port.receiveMT103RTGS(_receiveMT103RTGS_mt103);
         System.out.println("receiveMT103RTGS.result=" + _receiveMT103RTGS__return);
 
 
         }
         {
         System.out.println("Invoking receiveMT102RTGS...");
-        poslovnaxws.poruke.MT102 _receiveMT102RTGS_mt102 = new poslovnaxws.poruke.MT102();
-        poslovnaxws.common.Status _receiveMT102RTGS__return = port.receiveMT102RTGS(_receiveMT102RTGS_mt102);
+        poslovnaxws.poruke.MT102Wrapper _receiveMT102RTGS_mt102 = new poslovnaxws.poruke.MT102Wrapper();
+        poslovnaxws.common.StatusWrapper _receiveMT102RTGS__return = port.receiveMT102RTGS(_receiveMT102RTGS_mt102);
         System.out.println("receiveMT102RTGS.result=" + _receiveMT102RTGS__return);
 
 

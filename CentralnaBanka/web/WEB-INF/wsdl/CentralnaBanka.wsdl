@@ -21,12 +21,6 @@
 	</wsdl:types>
 
 	<!-- Message definitions -->
-	<wsdl:message name="sendMT900">
-		<wsdl:part name="mt900" element="xws_poruke:MT900" />
-	</wsdl:message>
-	<wsdl:message name="sendMT910">
-		<wsdl:part name="mt910" element="xws_poruke:MT910" />
-	</wsdl:message>
 
 	<wsdl:message name="sendMT900Request" />
 	<wsdl:message name="sendMT910Request" />
@@ -46,17 +40,6 @@
 	</wsdl:message>
 
 	<!-- Port type definitions -->
-	<wsdl:portType name="CBAcknlowledge">
-		<wsdl:operation name="sendMT900">
-			<wsdl:output message="ws:sendMT900" />
-			<wsdl:input message="ws:sendMT900Request" />
-		</wsdl:operation>
-		<wsdl:operation name="sendMT910">
-			<wsdl:output message="ws:sendMT910" />
-			<wsdl:input message="ws:sendMT910Request" />
-		</wsdl:operation>
-
-	</wsdl:portType>
 
 	<wsdl:portType name="CBRTGS">
 		<wsdl:operation name="receiveMT102_RTGS">
@@ -81,31 +64,6 @@
 	</wsdl:portType>
 
 	<!-- Binding definitions -->
-	<wsdl:binding name="CBAcknlowledgeBinding" type="ws:CBAcknlowledge">
-		<soap:binding style="document"
-			transport="http://schemas.xmlsoap.org/soap/http" />
-
-		<wsdl:operation name="sendMT900">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-
-		<wsdl:operation name="sendMT910">
-			<soap:operation soapAction="" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-
-	</wsdl:binding>
 
 	<wsdl:binding name="CBRTGSBinding" type="ws:CBRTGS">
 		<soap:binding style="document"
@@ -160,9 +118,6 @@
 
 	<!-- Service definition -->
 	<wsdl:service name="CBService">
-		<wsdl:port name="CBAcknlowledgePort" binding="ws:CBAcknlowledgeBinding">
-			<soap:address location="http://localhost:8080/PoslovnaXWS/CBAcknlowledge" />
-		</wsdl:port>
 		<wsdl:port name="CBRTGSPort" binding="ws:CBRTGSBinding">
 			<soap:address location="http://localhost:8080/PoslovnaXWS/CBRTGS" />
 		</wsdl:port>

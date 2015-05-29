@@ -1,3 +1,8 @@
 /gen/*
 /dist/*
+/lib/*
+/build/*
 /bin/*
+build.properties
+build.xml
+.project
