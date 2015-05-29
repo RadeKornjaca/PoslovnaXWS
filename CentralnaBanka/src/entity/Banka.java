@@ -9,7 +9,6 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import initdb.InitBean;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import poslovnaxws.common.TBanka;
 
 /** @pdOid 116f65c3-5b1e-4bfc-8fa0-6ea419919fd8 */
 @Entity
@@ -35,7 +36,7 @@ public class Banka {
 	private java.lang.String naziv;
 	/** @pdOid 41926a48-af5b-49d3-8d34-e616f01423b5 */
 	@Column(name = "sifra", unique = true, nullable = false)
-	private double sifra;
+	private int sifra;
 
 	/**
 	 * @pdRoleInfo migr=no name=RacunBanke assc=racunBanke
@@ -45,8 +46,16 @@ public class Banka {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "banka")
 	private java.util.Collection<RacunBanke> racunBanke;
 
+	public Banka(){
+		
+	}
 	
-	
+	public Banka(TBanka banka) {
+		this.naziv = banka.getNaziv();
+		this.swiftKod = banka.getSwiftKod();
+		this.sifra = banka.getSifra();
+	}
+
 	public long getBankaId() {
 		return bankaId;
 	}
@@ -75,7 +84,7 @@ public class Banka {
 		return sifra;
 	}
 
-	public void setSifra(double sifra) {
+	public void setSifra(int sifra) {
 		this.sifra = sifra;
 	}
 

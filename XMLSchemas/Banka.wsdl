@@ -1,153 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="PoslovnaXWS/services/banka" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="PoslovnaXWS/services/banka" xmlns:xws_poruke="PoslovnaXWS/Poruke" xmlns:xws="PoslovnaXWS/Common" xmlns:xws_banke="PoslovnaXWS/Banke" xmlns:xws_fakture="PoslovnaXWS/Fakture">
+<wsdl:definitions targetNamespace="PoslovnaXWS/services/banka"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ws="PoslovnaXWS/services/banka" xmlns:xws_poruke="PoslovnaXWS/Poruke"
+	xmlns:xws="PoslovnaXWS/Common" xmlns:xws_banke="PoslovnaXWS/Banke"
+	xmlns:xws_fakture="PoslovnaXWS/Fakture">
+
+	<!-- Types definitions -->
+
 	<wsdl:types>
 		<xs:schema>
-			<xs:import namespace="PoslovnaXWS/Poruke" schemaLocation="Poruke.xsd"/>
+			<xs:import namespace="PoslovnaXWS/Poruke" schemaLocation="../xsd/Poruke.xsd" />
 		</xs:schema>
 		<xs:schema>
-			<xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
+			<xs:import namespace="PoslovnaXWS/Common" schemaLocation="../xsd/Common.xsd" />
 		</xs:schema>
 		<xs:schema>
-			<xs:import namespace="PoslovnaXWS/Banke" schemaLocation="Banke.xsd"/>
+			<xs:import namespace="PoslovnaXWS/Banke" schemaLocation="../xsd/Banke.xsd" />
 		</xs:schema>
 		<xs:schema>
-			<xs:import namespace="PoslovnaXWS/Fakture" schemaLocation="Fakture.xsd"/>
+			<xs:import namespace="PoslovnaXWS/Fakture" schemaLocation="../xsd/Fakture.xsd" />
 		</xs:schema>
-    </wsdl:types>
-    
-    
-    <!-- Message definitions -->
-    
-    <wsdl:message name="sendMT102Response">
-		<wsdl:part name="mt102" element="xws_poruke:MT102"/>
-	</wsdl:message>
-	<wsdl:message name="sendMT102Request">
+	</wsdl:types>
+
+
+	<!-- Message definitions -->
+
+	<wsdl:message name="recieveMT102Request">
+		<wsdl:part name="mt102" element="xws_poruke:MT102" />
 	</wsdl:message>
 
-	<wsdl:message name="sendMT103Response">
-		<wsdl:part name="mt103" element="xws_poruke:MT103"/>
-	</wsdl:message>
-	<wsdl:message name="sendMT103Request">
+	<wsdl:message name="recieveMT103Request">
+		<wsdl:part name="mt103" element="xws_poruke:MT103" />
 	</wsdl:message>
 
 	<wsdl:message name="zahtevZaIzvodResponse">
-		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod"/>
+		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod" />
 	</wsdl:message>
+
 	<wsdl:message name="zahtevZaIzvodRequest">
 	</wsdl:message>
-    
-    <wsdl:message name="receiveMT900">
-        <wsdl:part name="mt900" element="xws_poruke:MT900" />
-    </wsdl:message>
-    <wsdl:message name="receiveMT910">
-        <wsdl:part name="mt910" element="xws_poruke:MT910" />
-    </wsdl:message>
-    
-    
-    <!-- Port type and operations definitions -->
-    <!-- ovo ne treba
-    <wsdl:portType name="BankaPort">
-        <wsdl:operation name="sendMT102">
-            <wsdl:output message="ws:sendMT102"></wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="sendMT103">
-            <wsdl:output message="ws:sendMT103"></wsdl:output>
-        </wsdl:operation>
-        
-        <wsdl:operation name="receiveMT900">
-            <wsdl:input message="ws:receiveMT900"></wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="receiveMT910">
-            <wsdl:input message="ws:receiveMT910"></wsdl:input>
-        </wsdl:operation>
-    </wsdl:portType>
-    -->
-	<!-- Operacije moraju da imaju i input i output (ne znam zašto). Ako operacija koristi samo output,
-		onda joj input message nema part deo.  -->
 
-	<wsdl:message name="receiveMT900Response">
+	<wsdl:message name="receiveMT900">
+		<wsdl:part name="mt900" element="xws_poruke:MT900" />
+	</wsdl:message>
 
+	<wsdl:message name="receiveMT910">
+		<wsdl:part name="mt910" element="xws_poruke:MT910" />
 	</wsdl:message>
-	<wsdl:message name="receiveMT900Response1">
-		<wsdl:part name="mt900Repsonse" type="xws:status"></wsdl:part>
+
+	<wsdl:message name="notificationMessage">
+		<wsdl:part name="notification" element="xws:status" />
 	</wsdl:message>
-	<wsdl:message name="receiveMT910Response">
-		<wsdl:part name="mt900Response" type="xws:status"></wsdl:part>
-	</wsdl:message>
+
+
+	<!-- Port type and operations definitions -->
+
 	<wsdl:portType name="BankaServiceMessages">
-		<wsdl:operation name="sendMT102" parameterOrder="nmtokens">
-			<wsdl:output message="ws:sendMT102Response"/>
-			<wsdl:input message="ws:sendMT102Request"/>
-		</wsdl:operation>
-		<wsdl:operation name="sendMT103" parameterOrder="nmtokens">
-			<wsdl:output message="ws:sendMT103Response"/>
-			<wsdl:input message="ws:sendMT103Request"/>
-		</wsdl:operation>
-		<wsdl:operation name="zahtevZaIzvod" parameterOrder="nmtokens">
-			<wsdl:output message="ws:zahtevZaIzvodResponse"/>
-			<wsdl:input message="ws:zahtevZaIzvodRequest"/>
-		</wsdl:operation><wsdl:operation name="receiveMT900" parameterOrder="nmtokens">
-			
-			<wsdl:input message="ws:receiveMT900"/>
 
-			<wsdl:output message="ws:receiveMT900Response1"></wsdl:output>
-</wsdl:operation><wsdl:operation name="receiveMT910" parameterOrder="nmtokens">
-			
-			<wsdl:input message="ws:receiveMT910"/>
-			<wsdl:output message="ws:receiveMT910Response"></wsdl:output>
-</wsdl:operation>
+		<wsdl:operation name="zahtevZaIzvod" parameterOrder="nmtokens">
+			<wsdl:output message="ws:zahtevZaIzvodResponse" />
+			<wsdl:input message="ws:zahtevZaIzvodRequest" />
+			<wsdl:fault name="zahtevZaIzvodError" message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT900" parameterOrder="nmtokens">
+			<wsdl:input message="ws:receiveMT900" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT910" parameterOrder="nmtokens">
+			<wsdl:input message="ws:receiveMT910" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT102" parameterOrder="nmtokens">
+			<wsdl:input message="ws:recieveMT102Request" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT103" parameterOrder="nmtokens">
+			<wsdl:input message="ws:recieveMT103Request" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
 	</wsdl:portType>
 
-	
+
 	<!-- WSDL binding -->
 
 	<wsdl:binding name="BankaServiceBinding" type="ws:BankaServiceMessages">
-		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-		<wsdl:operation name="sendMT102">
-			<soap:operation soapAction="" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="sendMT103">
-			<soap:operation soapAction="" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-		</wsdl:operation>
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
 		<wsdl:operation name="zahtevZaIzvod">
-			<soap:operation soapAction="" style="document"/>
+			<soap:operation soapAction="" style="document" />
 			<wsdl:input>
-				<soap:body use="literal"/>
+				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output>
-				<soap:body use="literal"/>
+				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		
+
 		<wsdl:operation name="receiveMT900">
-            <soap:operation soapAction=""/>
-            <wsdl:input>
-                <soap:body use="literal" namespace="PoslovnaXWS/Poruke"/>
-            </wsdl:input>
-        </wsdl:operation>
-        
-        <wsdl:operation name="receiveMT910">
-            <soap:operation soapAction=""/>
-            <wsdl:input>
-                <soap:body use="literal" namespace="PoslovnaXWS/Poruke"/>
-            </wsdl:input>
-        </wsdl:operation>
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT910">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			</wsdl:operation>
+
+			<wsdl:operation name="receiveMT102">
+				<soap:operation soapAction="" style="document" />
+				<wsdl:input>
+					<soap:body use="literal" />
+				</wsdl:input>
+				<wsdl:output>
+					<soap:body use="literal" />
+				</wsdl:output>
+			</wsdl:operation>
+
+			<wsdl:operation name="receiveMT103">
+				<soap:operation soapAction="" style="document" />
+				<wsdl:input>
+					<soap:body use="literal" />
+				</wsdl:input>
+				<wsdl:output>
+					<soap:body use="literal" />
+				</wsdl:output>
+			</wsdl:operation>
+
 	</wsdl:binding>
+
+	<!-- Service definitions -->
+
 	<wsdl:service name="BankaService">
 		<wsdl:port name="BankaServicePort" binding="ws:BankaServiceBinding">
-			<soap:address location="http://localhost:8080/BankaService"/>
+			<soap:address location="http://localhost:8080/BankaService" />
 		</wsdl:port>
 	</wsdl:service>
+
 </wsdl:definitions>

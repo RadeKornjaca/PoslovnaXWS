@@ -10,6 +10,9 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Date;
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +21,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import poslovnaxws.common.TBanka;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
@@ -50,7 +55,11 @@ public class RacunBanke {
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBanke")
-	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna;
+	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna
+	 = new HashSet<DnevnoStanjeRacuna>();
+	
+	@OneToMany
+	private java.util.Collection<Mt9xy> mt9xy = new HashSet<Mt9xy>();
 	/**
 	 * @pdRoleInfo migr=no name=Mt9xy assc=obracunskiRacun
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -76,6 +85,19 @@ public class RacunBanke {
 		if (dnevnoStanjeRacuna == null)
 			dnevnoStanjeRacuna = new java.util.HashSet<DnevnoStanjeRacuna>();
 		return dnevnoStanjeRacuna;
+	}
+	
+	public RacunBanke(){
+		
+	}
+	
+	public RacunBanke(TBanka banka){
+		this.aktivan = true;
+		this.banka = new Banka(banka);
+		this.brojRacuna = banka.getRacun();
+		this.datumOtvaranja = new Date();
+		this.likvidan = true;
+		this.banka.addRacunBanke(this);
 	}
 
 	public long getIdBanke() {

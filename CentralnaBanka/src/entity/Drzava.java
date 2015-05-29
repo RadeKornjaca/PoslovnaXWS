@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.common.TDrzava;
+import poslovnaxws.common.TNaseljenoMesto;
+
 /** @pdOid d66bf4c9-7b74-47ab-ae68-713217add753 */
 @Entity
 @Table(name = "drzava")
@@ -40,7 +43,13 @@ public class Drzava {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "drzava")
 	private java.util.Collection<NaseljenoMesto> naseljenoMesto;
 
-	
+	public Drzava(TDrzava drzava){
+		this.nazivDrzave = drzava.getNazivDrzave();
+		this.sifraDrzave = drzava.getSifraDrzave();
+		for (TNaseljenoMesto naseljenoMesto2 : drzava.getNaseljenaMesta().getNaseljenoMesto()) {
+			naseljenoMesto.add(new NaseljenoMesto(naseljenoMesto2));
+		}
+	}
 	
 	public long getIdDrzave() {
 		return idDrzave;

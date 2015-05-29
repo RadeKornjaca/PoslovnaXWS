@@ -9,12 +9,19 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import poslovnaxws.common.TBanka;
+import poslovnaxws.common.TNalog;
+import poslovnaxws.poruke.MT102;
+import poslovnaxws.poruke.MT103;
 
 /** @pdOid f45025a4-1a2c-4311-a8d2-60cc9bf412bf */
 @Entity
@@ -43,20 +50,59 @@ public class Mt10x extends Poruka {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "mt10x")
 	private java.util.Collection<StavkaPoruke> stavkaPoruke;
 	/**
-	 * @pdRoleInfo migr=no name=Mt9xy assc=porukaNaloga coll=java.util.Collection
-	 *             impl=java.util.HashSet mult=0..* side=A
+	 * @pdRoleInfo migr=no name=Mt9xy assc=porukaNaloga
+	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
+	 *             side=A
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "mt10x")
 	private java.util.Collection<Mt9xy> mt9xy;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_banke", nullable = false)
 	private RacunBanke racunBankePoverioca;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_banke", nullable = false)
 	private RacunBanke racunBankeDuznika;
+
+	public Mt10x(MT102 mt102) {
+		TBanka duznik = mt102.getBankaDuznik();
+		TBanka poverioc = mt102.getBankaPoverioc();
+		List<TNalog> uplate = mt102.getUplate().getUplata();
+		this.setVrsta(102);
+		this.datumValutePoruke = mt102.getDatumValute().toGregorianCalendar()
+				.getTime();
+		this.racunBankeDuznika = new RacunBanke(duznik);
+		this.racunBankePoverioca = new RacunBanke(poverioc);
+
+		this.sifraValutePoruke = mt102.getSifraValute();
+		this.statusPoruke = 1; // Na cekanju
+		this.svrhaPlacanja = mt102.getUplate().getUplata().get(0)
+				.getSvrhaPlacanja();
+		
+		for (TNalog tNalog : uplate) {
+			Nalog nalog = new Nalog(tNalog);
+			this.stavkaPoruke.add(new StavkaPoruke(1,1,this,nalog));
+		}
+		this.ukupanIznos = mt102.getUkupanIznos().doubleValue();
+		duznik.getRacun();
+
+	}
 	
+	public Mt10x(MT103 mt103){
+		TBanka duznik = mt103.getBankaDuznik();
+		TBanka poverioc = mt103.getBankaPoverioc();
+		TNalog uplata = mt103.getUplata();
+		this.setVrsta(103);
+		this.datumValutePoruke = mt103.getUplata().getDatumValute().toGregorianCalendar().getTime();
+		this.racunBankeDuznika = new RacunBanke(duznik);
+		this.racunBankePoverioca = new RacunBanke(poverioc);
+		this.sifraValutePoruke = uplata.getOznakaValute();
+		this.svrhaPlacanja = uplata.getSvrhaPlacanja();
+		this.ukupanIznos = uplata.getIznos().doubleValue();
+		this.stavkaPoruke.add(new StavkaPoruke(1,1,this,new Nalog(mt103.getUplata())));
+	}
+
 	public java.lang.String getSvrhaPlacanja() {
 		return svrhaPlacanja;
 	}

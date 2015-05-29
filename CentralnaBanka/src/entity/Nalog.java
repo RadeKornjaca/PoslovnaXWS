@@ -19,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.common.TKlijent;
+import poslovnaxws.common.TNalog;
+
 /** @pdOid 8b4e0f96-2ad2-4d40-88eb-e2c4a5cd282d */
 @Entity
 @Table(name = "nalog")
@@ -45,13 +48,13 @@ public class Nalog {
 	private java.lang.String pozivNaBrojZaduzenja;
 	/** @pdOid 2efa1e99-fca1-4e57-9d3e-8352ec653ca2 */
 	@Column(name = "broj_racuna_duznika", unique = false, nullable = false)
-	private double brojRacunaDuznika;
+	private String brojRacunaDuznika;
 	/** @pdOid 5f436594-cd01-4441-8ad8-89d0362e6bdc */
 	@Column(name = "poziv_na_broj", unique = false, nullable = false)
 	private java.lang.String pozivNaBrojOdobrenja;
 	/** @pdOid d4c35616-57fc-4c62-87ac-89784b0ab1ba */
 	@Column(name = "broj_racuna_poverioca", unique = false, nullable = false)
-	private double brojRacunaPoverioca;
+	private String brojRacunaPoverioca;
 	/** @pdOid 37e37ec0-9c5b-466b-8345-7284758251d8 */
 	@Column(name = "iznos", unique = false, nullable = false)
 	private double iznos;
@@ -95,6 +98,30 @@ public class Nalog {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
 	private java.util.Collection<StavkaPoruke> stavkaPoruke;
 	
+	public Nalog(TNalog nalog) {
+		TKlijent duznik = nalog.getDuznik();
+		TKlijent poverilac = nalog.getPrimalac();
+		
+		this.brojRacunaDuznika = duznik.getRacun();
+		this.brojRacunaPoverioca = poverilac.getRacun();
+		
+		this.datumNaloga = nalog.getDatumNaloga().toGregorianCalendar().getTime();
+		this.hitno = nalog.isHitno();
+		
+		this.iznos = nalog.getIznos().doubleValue();
+		this.modelOdobrenja = poverilac.getModel().toString();
+		this.modelZaduzenja = duznik.getModel().toString();
+		this.naseljenoMesto = new NaseljenoMesto(nalog.getNaseljenoMesto());
+		this.nazivDuznika = duznik.getNaziv();
+		this.nazivPoverioca = poverilac.getNaziv();
+		this.pozivNaBrojOdobrenja = poverilac.getPozivNaBroj();
+		this.pozivNaBrojZaduzenja = duznik.getPozivNaBroj();
+		this.sifraValute = nalog.getOznakaValute();
+		this.status = 1; //Na cekanju
+		this.svrhaPlacanja = nalog.getSvrhaPlacanja();
+		
+	}
+
 	public long getIdNaloga() {
 		return idNaloga;
 	}
@@ -143,11 +170,11 @@ public class Nalog {
 		this.pozivNaBrojZaduzenja = pozivNaBrojZaduzenja;
 	}
 
-	public double getBrojRacunaDuznika() {
+	public String getBrojRacunaDuznika() {
 		return brojRacunaDuznika;
 	}
 
-	public void setBrojRacunaDuznika(double brojRacunaDuznika) {
+	public void setBrojRacunaDuznika(String brojRacunaDuznika) {
 		this.brojRacunaDuznika = brojRacunaDuznika;
 	}
 
@@ -159,11 +186,11 @@ public class Nalog {
 		this.pozivNaBrojOdobrenja = pozivNaBrojOdobrenja;
 	}
 
-	public double getBrojRacunaPoverioca() {
+	public String getBrojRacunaPoverioca() {
 		return brojRacunaPoverioca;
 	}
 
-	public void setBrojRacunaPoverioca(double brojRacunaPoverioca) {
+	public void setBrojRacunaPoverioca(String brojRacunaPoverioca) {
 		this.brojRacunaPoverioca = brojRacunaPoverioca;
 	}
 

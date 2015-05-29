@@ -19,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.common.TNalog;
+import poslovnaxws.common.TNaseljenoMesto;
+
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
 @Entity
 @Table(name = "naseljenoMesto")
@@ -45,6 +48,16 @@ public class NaseljenoMesto {
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "naseljenoMesto")
 	private java.util.Collection<Nalog> nalog;
+	
+	public NaseljenoMesto(TNaseljenoMesto naseljenoMesto){
+		this.drzava = new Drzava(naseljenoMesto.getDrzava());
+		this.nazivMesta = naseljenoMesto.getNazivMesta();
+		this.sifraMesta = naseljenoMesto.getSifraMesta();
+		for (TNalog nalog2 : naseljenoMesto.getNalozi().getNalog()) {
+			nalog.add(new Nalog(nalog2));
+		}
+		
+	}
 	
 	public long getIdMesta() {
 		return idMesta;
