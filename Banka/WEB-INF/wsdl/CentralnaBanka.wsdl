@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="PoslovnaXWS/services/centralnaBanka"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ws="PoslovnaXWS/services/centralnaBanka" xmlns:xws_poruke="PoslovnaXWS/Poruke"
+	xmlns:xws="PoslovnaXWS/Common" xmlns:xws_banke="PoslovnaXWS/Banke">
+
+	<!-- Types definitions -->
+	<wsdl:types>
+		<xs:schema>
+			<xs:import namespace="PoslovnaXWS/Poruke" schemaLocation="../xsd/Poruke.xsd" />
+		</xs:schema>
+		<xs:schema>
+			<xs:import namespace="PoslovnaXWS/Common" schemaLocation="../xsd/Common.xsd" />
+		</xs:schema>
+		<xs:schema>
+			<xs:import namespace="PoslovnaXWS/Banke" schemaLocation="../xsd/Banke.xsd" />
+		</xs:schema>
+	</wsdl:types>
+
+	<!-- Message definitions -->
+
+	<wsdl:message name="sendMT900Request" />
+	<wsdl:message name="sendMT910Request" />
+
+	<wsdl:message name="receiveMT102">
+		<wsdl:part name="mt102" element="xws_poruke:MT102" />
+	</wsdl:message>
+	<wsdl:message name="receiveMT103">
+		<wsdl:part name="mt103" element="xws_poruke:MT103" />
+	</wsdl:message>
+
+	<wsdl:message name="receiveMT102Response">
+		<wsdl:part name="mt102Response" element="xws:status" />
+	</wsdl:message>
+	<wsdl:message name="receiveMT103Response">
+		<wsdl:part name="mt103Response" element="xws:status"></wsdl:part>
+	</wsdl:message>
+
+	<!-- Port type definitions -->
+
+	<wsdl:portType name="CBRTGS">
+		<wsdl:operation name="receiveMT102_RTGS">
+			<wsdl:input message="ws:receiveMT102" />
+			<wsdl:output message="ws:receiveMT102Response" />
+		</wsdl:operation>
+		<wsdl:operation name="receiveMT103_RTGS">
+			<wsdl:input message="ws:receiveMT103" />
+			<wsdl:output message="ws:receiveMT103Response"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="CBClearing">
+		<wsdl:operation name="receiveMT102_Clearing">
+			<wsdl:input message="ws:receiveMT102" />
+			<wsdl:output message="ws:receiveMT102Response" />
+		</wsdl:operation>
+		<wsdl:operation name="receiveMT103_Clearing">
+			<wsdl:input message="ws:receiveMT103" />
+			<wsdl:output message="ws:receiveMT103Response"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- Binding definitions -->
+
+	<wsdl:binding name="CBRTGSBinding" type="ws:CBRTGS">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="receiveMT102_RTGS">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT103_RTGS">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+
+	<wsdl:binding name="CBClearingBinding" type="ws:CBClearing">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="receiveMT102_Clearing">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveMT103_Clearing">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- Service definition -->
+	<wsdl:service name="CBService">
+		<wsdl:port name="CBRTGSPort" binding="ws:CBRTGSBinding">
+			<soap:address location="http://localhost:8080/PoslovnaXWS/CBRTGS" />
+		</wsdl:port>
+		<wsdl:port name="CBClearingPort" binding="ws:CBClearingBinding">
+			<soap:address location="http://localhost:8080/PoslovnaXWS/CBClearing" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
