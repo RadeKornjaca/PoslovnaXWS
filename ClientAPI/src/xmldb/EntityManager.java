@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -26,9 +27,10 @@ public class EntityManager<T, ID extends Serializable> {
 	/*
 	 * Izbaciti u XML/properties konfiguraciju
 	 */
-	public static final String REST_URL = "http://localhost:8080/BaseX75/rest/";
-
-	public static final String BASEX_CONTEXT_PATH = "org.basex.rest";
+	//public static final String REST_URL = ResourceBundle.getBundle("basex").getString("rest.url");
+	public static final String REST_URL = "http://localhost:8984/rest/";
+	
+	public static final String BASEX_CONTEXT_PATH = "entity.result";
 	
 	private String schemaName;
 	
@@ -47,6 +49,8 @@ public class EntityManager<T, ID extends Serializable> {
 	public EntityManager(String schemaName, String contextPath) throws JAXBException {
 		setSchemaName(schemaName);
 		setContextPath(contextPath);
+		
+		System.out.println(schemaName + " " + contextPath);
 		
 		context = JAXBContext.newInstance(contextPath);
 		marshaller = context.createMarshaller();

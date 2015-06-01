@@ -10,6 +10,7 @@ package entity.fakture;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -124,7 +125,7 @@ import javax.xml.bind.annotation.XmlType;
     "umanjenoZarabat",
     "ukupanPorez"
 })
-public class TStavkaFakture {
+public class TStavkaFakture extends Identifiable{
 
     @XmlElement(name = "RedniBroj", required = true)
     protected BigInteger redniBroj;
@@ -386,5 +387,17 @@ public class TStavkaFakture {
     public void setUkupanPorez(BigDecimal value) {
         this.ukupanPorez = value;
     }
+
+	@Override
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setId(Long value) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
