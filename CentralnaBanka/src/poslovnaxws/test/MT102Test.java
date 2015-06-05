@@ -125,7 +125,7 @@ public class MT102Test {
 		wrapper.setWrappedParameter(mt102);
 
 		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter());
+		System.out.println("response: " + response.getWrappedParameter().getKod());
 
 	}
 
