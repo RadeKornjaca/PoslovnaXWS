@@ -49,6 +49,10 @@ public class NaseljenoMesto {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "naseljenoMesto")
 	private java.util.Collection<Nalog> nalog;
 	
+	public NaseljenoMesto(){
+		
+	}
+	
 	public NaseljenoMesto(TNaseljenoMesto naseljenoMesto){
 		this.drzava = new Drzava(naseljenoMesto.getDrzava());
 		this.nazivMesta = naseljenoMesto.getNazivMesta();

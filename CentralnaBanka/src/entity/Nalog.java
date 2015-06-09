@@ -98,6 +98,10 @@ public class Nalog {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
 	private java.util.Collection<StavkaPoruke> stavkaPoruke;
 	
+	public Nalog(){
+		
+	}
+	
 	public Nalog(TNalog nalog) {
 		TKlijent duznik = nalog.getDuznik();
 		TKlijent poverilac = nalog.getPrimalac();

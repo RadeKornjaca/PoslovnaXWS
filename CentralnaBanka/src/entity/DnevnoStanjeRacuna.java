@@ -54,6 +54,9 @@ public class DnevnoStanjeRacuna {
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "dnevnoStanjeRacuna")
 	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
 	
+	public DnevnoStanjeRacuna(){
+		
+	}
 	public long getIdDnevnogStanja() {
 		return idDnevnogStanja;
 	}

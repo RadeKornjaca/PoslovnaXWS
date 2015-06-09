@@ -65,6 +65,10 @@ public class Mt10x extends Poruka {
 	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_banke", nullable = false)
 	private RacunBanke racunBankeDuznika;
 
+	public Mt10x(){
+		
+	}
+	
 	public Mt10x(MT102 mt102) {
 		TBanka duznik = mt102.getBankaDuznik();
 		TBanka poverioc = mt102.getBankaPoverioc();

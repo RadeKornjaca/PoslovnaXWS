@@ -32,6 +32,10 @@ public abstract class Poruka {
 	@Column(name = "datum_poruke", unique = false, nullable = false)
 	private java.util.Date datumPoruke;
 	
+	public Poruka(){
+		
+	}
+	
 	public long getIdPoruke() {
 		return idPoruke;
 	}

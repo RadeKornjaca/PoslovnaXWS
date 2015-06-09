@@ -19,8 +19,12 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /** @pdOid 116f65c3-5b1e-4bfc-8fa0-6ea419919fd8 */
 @Entity
+@JsonInclude(Include.NON_NULL)
 @Table(name = "banka")
 public class Banka {
 	/** @pdOid 8a3e2bdd-c487-4f49-a63a-9f19b52e9ff9 */
