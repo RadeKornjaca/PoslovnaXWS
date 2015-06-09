@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,6 +26,7 @@ import poslovnaxws.common.TNaseljenoMesto;
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
 @Entity
 @Table(name = "naseljenoMesto")
+@NamedQuery(name = "findNaseljenoMesto", query="Select n from NaseljenoMesto n where n.nazivMesta like :nazivMesta")
 public class NaseljenoMesto {
 	/** @pdOid 6af7346e-67b5-4494-91d7-95941222c0cd */
 	@Id
