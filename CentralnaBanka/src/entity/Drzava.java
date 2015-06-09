@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,6 +24,7 @@ import poslovnaxws.common.TNaseljenoMesto;
 /** @pdOid d66bf4c9-7b74-47ab-ae68-713217add753 */
 @Entity
 @Table(name = "drzava")
+@NamedQuery(name = "findBanka", query="Select d from Drzava d where d.nazivDrzave like :naziv")
 public class Drzava {
 	/** @pdOid a55cf1cc-a239-4b44-8263-5ccf47261c30 */
 	@Id
