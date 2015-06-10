@@ -20,7 +20,6 @@
 	<jaxws:endpoint id="clearing" address="/CBClearing"
 		implementor="poslovnaxws.services.centralnabanka.CBClearingImpl"
 		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
-
 	<bean id="restClent" class="poslovnaxws.services.centralnabanka.CBClientService" />
 
 	<jaxrs:server id="restService" address="/restService">
@@ -31,7 +30,6 @@
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
 		</jaxrs:providers>
 	</jaxrs:server>
-
 </beans>
   
 
