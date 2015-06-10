@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
+import util.EntityInfoUtil;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @Table(name = "banka")
 @NamedQuery(name = "findBanka", query="Select b from Banka b where b.naziv like :naziv")
-public class Banka {
+public class Banka{
 	/** @pdOid 8a3e2bdd-c487-4f49-a63a-9f19b52e9ff9 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

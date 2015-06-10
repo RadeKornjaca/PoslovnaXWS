@@ -22,12 +22,13 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TNaseljenoMesto;
+import util.EntityInfoUtil;
 
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
 @Entity
 @Table(name = "naseljenoMesto")
 @NamedQuery(name = "findNaseljenoMesto", query="Select n from NaseljenoMesto n where n.nazivMesta like :nazivMesta")
-public class NaseljenoMesto {
+public class NaseljenoMesto{
 	/** @pdOid 6af7346e-67b5-4494-91d7-95941222c0cd */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

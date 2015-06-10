@@ -20,11 +20,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import util.EntityInfoUtil;
+
 /** @pdOid 4e03db37-cf8e-49d4-a795-92a43c20cb39 */
 @Entity
 @Table(name = "dnevnoStanjeRacuna")
 @NamedQuery(name = "findDnevnoStanjeRacuna", query="Select d from DnevnoStanjeRacuna d where d.datum like :datum")
-public class DnevnoStanjeRacuna {
+public class DnevnoStanjeRacuna{
 	/** @pdOid 61879e33-25d4-4972-85e1-0acd180d8b91 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

@@ -21,11 +21,12 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TKlijent;
 import poslovnaxws.common.TNalog;
+import util.EntityInfoUtil;
 
 /** @pdOid 8b4e0f96-2ad2-4d40-88eb-e2c4a5cd282d */
 @Entity
 @Table(name = "nalog")
-public class Nalog {
+public class Nalog{
 	/** @pdOid f319aa07-d806-46da-ba81-1b7afa9db2a7 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

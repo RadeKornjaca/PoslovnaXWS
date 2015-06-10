@@ -15,11 +15,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import util.EntityInfoUtil;
+
 /** @pdOid e4573f75-49fa-46a0-8c33-c940152ac38d */
 @Entity
 @Table(name = "poruka")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Poruka {
+public abstract class Poruka{
 	/** @pdOid 0e5481d8-2ce7-48b7-bd2d-8fba2a6a39d0 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

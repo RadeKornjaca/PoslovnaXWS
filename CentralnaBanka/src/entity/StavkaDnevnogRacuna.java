@@ -15,10 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import util.EntityInfoUtil;
+
 /** @pdOid 6caabe43-5559-4260-83d1-3b295eaee9c0 */
 @Entity
 @Table(name = "stavka_dnevnog_racuna")
-public class StavkaDnevnogRacuna {
+public class StavkaDnevnogRacuna{
 	/** @pdOid dbfb0048-3413-4169-9672-cdfe412d1a56 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

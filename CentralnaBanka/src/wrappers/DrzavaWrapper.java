@@ -1,5 +1,7 @@
 package wrappers;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,6 +9,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import util.EntityInfoUtil;
+import util.MetaData;
 import entity.Drzava;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,14 +18,26 @@ import entity.Drzava;
 public class DrzavaWrapper {
 
 	@XmlElement(name = "data")
-	private List<Drzava> wrappedElement;
+	private List<Drzava> wrappedElement = new ArrayList<Drzava>();
+	
+	@XmlElement(name = "meta")
+	private List<MetaData> meta = new ArrayList<MetaData>();
 
-	public List<Drzava> getWrappedParameter() {
+	public List<MetaData> getMeta() {
+		return meta;
+	}
+	public List<Drzava> getWrappedElement() {
 		return wrappedElement;
 	}
 
-	public void setWrappedParameter(List<Drzava> wrappedElement) {
+	public void setWrappedElement(List<Drzava> wrappedElement) {
 		this.wrappedElement = wrappedElement;
+		meta = EntityInfoUtil.getFields(Drzava.class);
+		
+	}
+
+	public void setMeta(List<MetaData> meta) {
+		this.meta = meta;
 	}
 
 }

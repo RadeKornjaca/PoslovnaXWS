@@ -23,11 +23,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
+import util.EntityInfoUtil;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
 @Table(name="racunBanke")
-public class RacunBanke {
+public class RacunBanke{
 	/** @pdOid c725a61b-9fa6-4298-8db6-3e5bd6931f67 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

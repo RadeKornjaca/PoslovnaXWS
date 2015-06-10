@@ -97,7 +97,7 @@ public class CBClientService {
 		 * ret.setWrappedParameter(list);
 		 */
 		
-		ret.setWrappedParameter(drzavaDao.findAll());
+		ret.setWrappedElement(drzavaDao.findAll());
 		return ret;
 	}
 

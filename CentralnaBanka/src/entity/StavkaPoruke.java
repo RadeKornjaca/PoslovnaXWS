@@ -16,11 +16,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
+import util.EntityInfoUtil;
 
 /** @pdOid 5d29b62b-f62a-47c9-a2ad-d2b49071a6ff */
 @Entity
 @Table(name = "stavka_poruke")
-public class StavkaPoruke {
+public class StavkaPoruke{
 	/** @pdOid 3a9484bd-861e-46c6-a48e-d9f6b40b49e2 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
