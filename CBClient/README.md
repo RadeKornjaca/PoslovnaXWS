@@ -1,12 +1,16 @@
-# gen
+# CBClient
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.11.1.
+Angular klijent za centralnu banku.
 
-## Build & development
+# Priprema aplikacije
 
-Run `grunt` for building and `grunt serve` for preview.
+Nakon kloniranja repozitorijuma potrebno je u terminalu izvršiti sledeću komandu:
 
-## Testing
+```npm install```
 
-Running `grunt test` will run the unit tests with karma.
+# Pokretanje aplikacije
+
+U Gruntfile.js postaviti dist atribut na putanju do tomcat direktorijuma. Nakon toga u terminalu izvršiti sledeću komandu:
+
+```grunt --force build```
+
