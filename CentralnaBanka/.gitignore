@@ -4,5 +4,5 @@
 /build/*
 /bin/*
 build.properties
-build.xml
+.classpath
 .project
