@@ -38,6 +38,10 @@ public class StavkaDnevnogRacuna {
 	@ManyToOne
 	@JoinColumn(name = "id_naloga", referencedColumnName = "id_naloga", nullable = false)
 	private Nalog nalog;
+	
+	public StavkaDnevnogRacuna(){
+		
+	}
 
 	public long getIdStavkeRacuna() {
 		return idStavkeRacuna;

@@ -25,11 +25,11 @@ public class StavkaPoruke {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_stavke_poruke", unique = true, nullable = false)
-	public long idStavkePoruke;
+	private long idStavkePoruke;
 	/** @pdOid fa0457c0-a16f-4efe-ba23-c1c65c64976a */
 
 	@Column(name = "redni_broj_stavke", unique = true, nullable = false)
-	public double redniBrojStavke;
+	private double redniBrojStavke;
 
 	@ManyToOne
 	@JoinColumn(name = "id_poruke", referencedColumnName = "id_poruke", nullable = false)
@@ -39,6 +39,9 @@ public class StavkaPoruke {
 	@JoinColumn(name = "id_naloga", referencedColumnName = "id_naloga", nullable = false)
 	private Nalog nalog;
 
+	public StavkaPoruke(){
+		
+	}
 	public StavkaPoruke(long idStavkePoruke, double redniBrojStavke,
 			Mt10x mt10x, Nalog nalog) {
 		super();

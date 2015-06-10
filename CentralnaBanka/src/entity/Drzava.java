@@ -45,6 +45,9 @@ public class Drzava {
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "drzava")
 	private java.util.Collection<NaseljenoMesto> naseljenoMesto;
 
+	public Drzava(){
+		
+	}
 	public Drzava(TDrzava drzava){
 		this.nazivDrzave = drzava.getNazivDrzave();
 		this.sifraDrzave = drzava.getSifraDrzave();

@@ -20,8 +20,12 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /** @pdOid 116f65c3-5b1e-4bfc-8fa0-6ea419919fd8 */
 @Entity
+@JsonInclude(Include.NON_NULL)
 @Table(name = "banka")
 @NamedQuery(name = "findBanka", query="Select b from Banka b where b.naziv like :naziv")
 public class Banka {

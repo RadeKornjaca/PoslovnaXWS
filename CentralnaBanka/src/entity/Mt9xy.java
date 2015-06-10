@@ -31,6 +31,10 @@ public class Mt9xy extends Poruka {
 	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_banke", nullable = true)
 	private RacunBanke racunBankePoverioca;
 
+	public Mt9xy(){
+		
+	}
+	
 	public Mt9xy(MT900 mt900) {
 		this.setDatumPoruke(mt900.getDatumValute().toGregorianCalendar()
 				.getTime());
