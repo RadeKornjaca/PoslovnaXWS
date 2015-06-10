@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faktura xmlns="PoslovnaXWS/Fakture"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="/home/rade/Desktop/PoslovnaXWS/XMLSchemas/Fakture.xsd">
+    <zaglavlje>
+        <id></id>
+        <dobavljac>
+            <naziv xmlns="PoslovnaXWS/Common">Avakari bato</naziv>
+            <racun xmlns="PoslovnaXWS/Common">111-1111111111111-11</racun>
+            <model xmlns="PoslovnaXWS/Common">12</model>
+            <pozivNaBroj xmlns="PoslovnaXWS/Common">asdasd</pozivNaBroj>
+            <pib xmlns="PoslovnaXWS/Common">12314143542</pib>
+            <adresa xmlns="PoslovnaXWS/Common">ZIGI DIGI</adresa>
+        </dobavljac>
+        <kupac>
+            <naziv xmlns="PoslovnaXWS/Common">Suć pule</naziv>
+            <racun xmlns="PoslovnaXWS/Common">222-2222222222222-22</racun>
+            <model xmlns="PoslovnaXWS/Common">34</model>
+            <pozivNaBroj xmlns="PoslovnaXWS/Common">fhghgh</pozivNaBroj>
+            <pib xmlns="PoslovnaXWS/Common">24543673453</pib>
+            <adresa xmlns="PoslovnaXWS/Common">DUGA DAGA</adresa>
+        </kupac>
+        <brojRacuna>1</brojRacuna>
+        <datumRacuna>2015-06-01</datumRacuna>
+        <vrednostRobe>123</vrednostRobe>
+        <vrednostUsluge>123</vrednostUsluge>
+        <ukupnoRobaIUsluge>34</ukupnoRobaIUsluge>
+        <ukupanRabat>43</ukupanRabat>
+        <ukupanPorez>13</ukupanPorez>
+        <oznakaValute>RSD</oznakaValute>
+        <iznosZaUplatu>324</iznosZaUplatu>
+        <uplataNaRacun>111-1111111111111-11</uplataNaRacun>
+        <datumValute>2015-06-01</datumValute>
+    </zaglavlje>
+    <stavkeFakture>
+        <stavkaFakture>
+            <RedniBroj>1</RedniBroj>
+            <NazivUsluge>Bleja</NazivUsluge>
+            <Kolicina>123</Kolicina>
+            <JedinicaMere>kg</JedinicaMere>
+            <JedinicnaCena>23</JedinicnaCena>
+            <Vrednost>345</Vrednost>
+            <ProcenatRabata>4</ProcenatRabata>
+            <IznosRabata>12</IznosRabata>
+            <UmanjenoZarabat>43</UmanjenoZarabat>
+            <UkupanPorez>23</UkupanPorez>
+        </stavkaFakture>
+    </stavkeFakture>
+</faktura>

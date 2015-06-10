@@ -22,7 +22,6 @@ import org.xml.sax.SAXParseException;
 
 import poslovnaxws.common.NalogWrapper;
 import poslovnaxws.common.StatusWrapper;
-import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
 

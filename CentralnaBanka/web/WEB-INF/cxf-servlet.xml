@@ -20,6 +20,12 @@
 	<jaxws:endpoint id="clearing" address="/CBClearing"
 		implementor="poslovnaxws.services.centralnabanka.CBClearingImpl"
 		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
+		
+	<jaxws:endpoint id="rtgs" address="/CBRTGS"
+		implementor="poslovnaxws.services.centralnabanka.CBRTGSImpl"
+		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
+		
+		
 	<bean id="restClent" class="poslovnaxws.services.centralnabanka.CBClientService" />
 
 	<jaxrs:server id="restService" address="/restService">
