@@ -5,6 +5,7 @@ import javax.naming.NamingException;
 
 /**
  * Klasa za dobavljanje EJB preko JNDI lookup-a.
+ * 
  * @author Paulius Matulionis
  *
  */
@@ -29,10 +30,33 @@ public class JndiUtils {
 	 */
 	public static final String MT10X_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "Mt10xDaoBean!session.dao.Mt10xDaoLocal";
-	
+
 	public static final String DRZAVA_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "DrzavaDaoBean!session.dao.DrzavaDaoLocal";
 
+	public static final String BANKA_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "BankaDaoBean!session.dao.BankaDaoLocal";
+	
+	public static final String DNEVNO_STANJE_RACUNA_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "DnevnoStanjeRacunaDaoBean!session.dao.DnevnoStanjeRacunaDaoLocal";
+	
+	public static final String NALOG_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "NalogDaoBean!session.dao.NalogDaoLocal";
+	
+	public static final String NASELJENO_MESTO_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "NaseljenoMestoDaoBean!session.dao.NaseljenoMestoDaoLocal";
+
+	public static final String PORUKA_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "PorukaDaoBean!session.dao.PorukaDaoLocal";
+	
+	public static final String RACUN_BANKE_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "RacunBankeDaoBean!session.dao.RacunBankeDaoLocal";
+	
+	public static final String STAVKA_DNEVNOG_RACUNA_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "StavkaDnevnogRacunaDaoBean!session.dao.StavkaDnevnogRacunaDaoLocal";
+	
+	public static final String STAVKA_PORUKE_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "StavkaPorukeDaoBean!session.dao.StavkaPorukeDaoLocal";
 	/**
 	 * Gets local EJB from JNDI.
 	 *
@@ -42,13 +66,14 @@ public class JndiUtils {
 	 *            generic object
 	 * @return local EJB object loaded from JNDI
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T getLocalEJB(String jndiName) {
 		try {
 			InitialContext context = new InitialContext();
 			return (T) context.lookup(jndiName);
 		} catch (NamingException e) {
-			System.out.println(
-					"Naming exception occurred while trying to load EJB from JNDI with JNDI name: "
+			System.out
+					.println("Naming exception occurred while trying to load EJB from JNDI with JNDI name: "
 							+ jndiName);
 			throw new RuntimeException(
 					"Naming exception occurred while trying to load EJB from JNDI with JNDI name: "

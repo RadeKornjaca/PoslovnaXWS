@@ -15,9 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import poslovnaxws.common.TNalog;
-import util.EntityInfoUtil;
-
 /** @pdOid 5d29b62b-f62a-47c9-a2ad-d2b49071a6ff */
 @Entity
 @Table(name = "stavka_poruke")
