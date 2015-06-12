@@ -32,7 +32,7 @@ import poslovnaxws.common.TNaseljenoMesto;
 
 @Entity
 @Table(name = "drzava")
-@NamedQuery(name = "findBanka", query = "Select d from Drzava d where d.nazivDrzave like :naziv")
+@NamedQuery(name = "findDrzava", query = "Select d from Drzava d where d.nazivDrzave like :naziv")
 public class Drzava {
 	/** @pdOid a55cf1cc-a239-4b44-8263-5ccf47261c30 */
 	@Id

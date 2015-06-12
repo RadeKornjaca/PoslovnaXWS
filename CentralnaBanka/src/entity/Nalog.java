@@ -21,7 +21,6 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TKlijent;
 import poslovnaxws.common.TNalog;
-import util.EntityInfoUtil;
 
 /** @pdOid 8b4e0f96-2ad2-4d40-88eb-e2c4a5cd282d */
 @Entity

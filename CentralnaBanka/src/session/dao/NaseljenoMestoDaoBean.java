@@ -1,9 +1,13 @@
 package session.dao;
 
+import javax.ejb.Local;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import entity.NaseljenoMesto;
 
+@Stateless
+@Local(NaseljenoMestoDaoLocal.class)
 public class NaseljenoMestoDaoBean extends GenericDaoBean<NaseljenoMesto, Integer> implements NaseljenoMestoDaoLocal{
 
 	@Override

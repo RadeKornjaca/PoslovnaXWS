@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
-import util.EntityInfoUtil;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
