@@ -1,8 +1,4 @@
 /gen/*
 /dist/*
-/lib/*
 /build/*
 /bin/*
-build.properties
-.classpath
-.project
