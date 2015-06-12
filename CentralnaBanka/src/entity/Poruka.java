@@ -15,8 +15,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import util.EntityInfoUtil;
-
 /** @pdOid e4573f75-49fa-46a0-8c33-c940152ac38d */
 @Entity
 @Table(name = "poruka")

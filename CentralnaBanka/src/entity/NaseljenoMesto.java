@@ -22,7 +22,6 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TNaseljenoMesto;
-import util.EntityInfoUtil;
 
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
 @Entity

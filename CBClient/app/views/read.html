@@ -1,0 +1,17 @@
+<!--Polja su opisana u $scope.meta, a sami podaci su u $scope.data-->
+<h1> Države </h1>
+<table class="table table-hover">
+	<!-- Za svako polje entiteta, napravi header. -->
+	<thead>
+		<th ng-repeat="metaItem in meta">
+			{{metaItem.name}}
+		</th>
+	</thead>
+	<!-- Za svaki dobavljeni entitet, pristupi 
+		svim njegovim poljima -->
+	<tr ng-repeat="entry in entries">
+		<td ng-repeat="metaItem in meta">
+			{{entry[metaItem.name]}}
+		</td>
+	</tr>
+</table>

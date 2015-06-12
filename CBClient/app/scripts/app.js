@@ -32,7 +32,39 @@
     controller: 'AllMessagesCtrl'
   })
   .when('/drzave', {
-    templateUrl: 'views/drzave.html',
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/banke', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/dnevnaStanjaRacuna', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/nalozi', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/naseljenaMesta', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/poruke', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/racuniBanaka', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/stavkeDnevnogRacuna', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/stavkePoruka', {
+    templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
   .otherwise({
