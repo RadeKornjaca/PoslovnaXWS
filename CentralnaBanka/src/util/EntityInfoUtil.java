@@ -11,15 +11,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
- * Klasa sadrži metodu koja vraæa polja entiteta u bazi podataka.
- * Neophodna je jer spoljna klasa ne može da pristupi privatnim atributima.
+ * Klasa sadrÅ¾i metodu koja vraÄ‡a polja entiteta u bazi podataka.
+ * Neophodna je jer spoljna klasa ne moÅ¾e da pristupi privatnim atributima.
  * @author Tim 5
  *
  */
 
 public final class EntityInfoUtil {
 	/**
-	 * Vraæa atribute anotirane entity anotacijama. Ovi atributi predstavljaju
+	 * VraÄ‡a atribute anotirane entity anotacijama. Ovi atributi predstavljaju
 	 * polja entiteta u bazi podataka. Anotacije uzete u obzir:
 	 * <ul>
 	 * <li>@Column</li>

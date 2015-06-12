@@ -60,8 +60,18 @@ public class FakturaService {
 		
 		//TODO: potrebna posebna metoda koja implementira biznis logiku u DAO sloju
 		//upit: "pronadji sve fakture ciji dobavljac ima id"
+		List<Faktura> fakture = null;
+		try {
+			fakture = fakturaDao.findAll();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		return new ArrayList<Faktura>();
+		return fakture;
 	}
 
 	@GET

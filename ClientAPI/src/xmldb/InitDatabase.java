@@ -9,8 +9,14 @@ import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
+
+/**
+ * Klasa dodaje po jednog poslovnog partnera i jednu fakturu u [praznu] XML bazu podataka
+ */
 public final class InitDatabase {
 	public static final String REST_URL = "http://localhost:8984/rest/";
+	
+	private static final String headerParameters[][] = {{"Accept", "text/xml"}, {"Content-Type", "application/xml"}};
 	
 	public static void init() throws Exception {
 		//	*****kreiranje kolekcije partnera*****
@@ -32,11 +38,12 @@ public final class InitDatabase {
 		
         System.out.println("\n");
         System.out.println("Sent HTTP PUT request to add bussiness partner");
-        //String inputFile = ClassLoader.getSystemResource("partner.xml").getFile();
+
         File input = new File("data/partner.xml");
         
-        PutMethod put = new PutMethod(REST_URL + "/partneri/1");
-        put.addRequestHeader("Accept" , "text/xml");
+        PutMethod put = new PutMethod(REST_URL + "/partneri");
+        put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
+        put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         RequestEntity entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
         put.setRequestEntity(entity);
         HttpClient httpclient = new HttpClient();
@@ -73,12 +80,13 @@ public final class InitDatabase {
         
         
         System.out.println("\n");
-        System.out.println("Sent HTTP PUT request to add bussiness partner");
-        //String inputFile = ClassLoader.getSystemResource("partner.xml").getFile();
+        System.out.println("Sent HTTP PUT request to add an invoice");
+
         input = new File("data/faktura.xml");
         
-        put = new PutMethod(REST_URL + "/fakture/1");
-        put.addRequestHeader("Accept" , "text/xml");
+        put = new PutMethod(REST_URL + "/fakture");
+        put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
+        put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
         put.setRequestEntity(entity);
         httpclient = new HttpClient();

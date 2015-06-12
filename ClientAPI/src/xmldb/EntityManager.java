@@ -50,8 +50,6 @@ public class EntityManager<T, ID extends Serializable> {
 		setSchemaName(schemaName);
 		setContextPath(contextPath);
 		
-		System.out.println(schemaName + " " + contextPath);
-		
 		context = JAXBContext.newInstance(contextPath);
 		marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -87,9 +85,11 @@ public class EntityManager<T, ID extends Serializable> {
 		
 		StringBuilder builder = new StringBuilder(REST_URL);
 		builder.append(schemaName);
-		builder.append("?query=collection('invoice')");
+		builder.append("?query=collection('" + schemaName + "')");
 		builder.append("&wrap=yes");
-
+		
+		System.out.println(builder.substring(0));
+		
 		url = new URL(builder.substring(0));
 		conn = (HttpURLConnection) url.openConnection();
 
