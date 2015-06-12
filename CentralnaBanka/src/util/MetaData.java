@@ -3,7 +3,7 @@ package util;
 import java.lang.reflect.Field;
 
 /**
- * Klasa MetaData opisuje imena atributa entiteta, njihove tipove i ogranièenja
+ * Klasa MetaData opisuje imena atributa entiteta, njihove tipove i ograniÄenja
  * nad tim atributima.
  * 
  * @author Lazar

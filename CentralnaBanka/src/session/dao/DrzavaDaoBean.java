@@ -11,7 +11,7 @@ public class DrzavaDaoBean extends GenericDaoBean<Drzava, Integer> implements Dr
 
 	@Override
 	public Drzava findDrzava(String naziv) {
-		Query q = em.createNamedQuery("findBanka");
+		Query q = em.createNamedQuery("findDrzava");
 		q.setParameter("naziv", naziv);
 		Drzava drzava = (Drzava) q.getSingleResult();
 		

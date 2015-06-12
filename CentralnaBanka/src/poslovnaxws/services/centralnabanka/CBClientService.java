@@ -90,7 +90,7 @@ public class CBClientService {
 
 		Mt10x poruka2 = new Mt10x();
 		poruka2.setIdPoruke(455);
-		poruka2.setSvrhaPlacanja("Novæaniceeeeeee!");
+		poruka2.setSvrhaPlacanja("Novcaniceeeeeee!");
 		list.add(poruka2);
 		System.out.println("Ajajajaj!");
 		
