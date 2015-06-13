@@ -47,9 +47,9 @@ public class MT102Test {
 
 			banka = service.getPort(portName, CBClearing.class);
 
-			testValidClearing();
+			//testValidClearing();
 
-			// testInvalid();
+			 testInvalid();
 
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
@@ -113,7 +113,7 @@ public class MT102Test {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 
 			 mt102 = (MT102) unmarshaller.unmarshal(new File(
-					"C:/Users/Lazar/Desktop/Faks/test.xml"));
+					"E:/Za faks/XML TESTOVI/testMT102Valid.xml"));
 
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
