@@ -166,7 +166,7 @@ public class CBClientService {
 		 * ret.setWrappedParameter(list);
 		 */
 		
-		ret.setWrappedElement(nalogDao.findAll());
+		ret.setWrappedElement(nalogDao.executeProcedure());
 		return ret;
 	}
 	
