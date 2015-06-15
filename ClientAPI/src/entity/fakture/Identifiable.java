@@ -4,7 +4,7 @@ package entity.fakture;
  * Olaksava implementaciju generickog data access object bean-a. 
  *
  */
-public abstract class Identifiable {
+public interface Identifiable {
 
 	public abstract Long getId();
 	

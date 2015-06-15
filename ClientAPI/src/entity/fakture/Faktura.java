@@ -142,7 +142,7 @@ import entity.common.TFirma;
     "stavkeFakture"
 })
 @XmlRootElement(name = "faktura")
-public class Faktura extends Identifiable{
+public class Faktura implements Identifiable{
 
     @XmlElement(required = true)
     protected Faktura.Zaglavlje zaglavlje;
@@ -735,19 +735,17 @@ public class Faktura extends Identifiable{
             this.datumValute = value;
         }
 
+        
     }
-
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return Long.parseLong(getZaglavlje().getId());
 	}
-
-	@Override
-	public void setId(Long value) {
-		// TODO Auto-generated method stub
 		
+	@Override
+	public void setId(Long id) {
+		getZaglavlje().setId(id.toString());
 	}
 
 }

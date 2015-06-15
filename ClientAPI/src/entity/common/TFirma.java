@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import entity.fakture.Identifiable;
+
 
 /**
  * <p>Java class for TFirma complex type.
@@ -53,9 +55,8 @@ import javax.xml.bind.annotation.XmlType;
     "adresa"
 })
 public class TFirma
-    extends TKlijent
+    extends TKlijent implements Identifiable
 {
-
     @XmlElement(required = true)
     protected String pib;
     @XmlElement(required = true)
@@ -108,5 +109,16 @@ public class TFirma
     public void setAdresa(String value) {
         this.adresa = value;
     }
+
+	@Override
+	public Long getId() {
+		return Long.parseLong(pib);
+	}
+
+	@Override
+	public void setId(Long value) {
+		this.pib = value.toString();
+		
+	}
 
 }

@@ -41,7 +41,7 @@ public final class InitDatabase {
 
         File input = new File("data/partner.xml");
         
-        PutMethod put = new PutMethod(REST_URL + "/partneri");
+        PutMethod put = new PutMethod(REST_URL + "/partneri/12314143542");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         RequestEntity entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
@@ -84,7 +84,7 @@ public final class InitDatabase {
 
         input = new File("data/faktura.xml");
         
-        put = new PutMethod(REST_URL + "/fakture");
+        put = new PutMethod(REST_URL + "/fakture/1");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");

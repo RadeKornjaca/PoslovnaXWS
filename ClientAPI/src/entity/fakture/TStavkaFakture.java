@@ -125,7 +125,7 @@ import javax.xml.bind.annotation.XmlType;
     "umanjenoZarabat",
     "ukupanPorez"
 })
-public class TStavkaFakture extends Identifiable{
+public class TStavkaFakture implements Identifiable{
 
     @XmlElement(name = "RedniBroj", required = true)
     protected BigInteger redniBroj;
@@ -390,14 +390,12 @@ public class TStavkaFakture extends Identifiable{
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return redniBroj.longValue();
 	}
 
 	@Override
-	public void setId(Long value) {
-		// TODO Auto-generated method stub
-		
+	public void setId(Long id) {
+		setRedniBroj(new BigInteger(id.toString()));
 	}
 
 }
