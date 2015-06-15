@@ -104,6 +104,7 @@
 
 	<target name="generate_classes" depends="initJaxB">
 		<xjc schema="${data.dir}/Fakture.xsd" destdir="${gen.dir}" />
+		<xjc schema="${data.dir}/Dobavljac.xsd" destdir="${gen.dir}" />
 	</target>
 
 	<!-- Main korak, odnosi se na deploy .war fajla na TomEE -->

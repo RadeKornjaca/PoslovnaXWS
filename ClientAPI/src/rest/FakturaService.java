@@ -18,9 +18,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 
+import sessionbeans.concrete.DobavljacDaoLocal;
 import sessionbeans.concrete.FakturaDaoLocal;
-import sessionbeans.concrete.TFirmaDaoLocal;
-import entity.common.TFirma;
+import entity.dobavljac.Dobavljac;
 import entity.fakture.Faktura;
 import entity.fakture.TStavkaFakture;
 
@@ -31,16 +31,33 @@ public class FakturaService {
 	private FakturaDaoLocal fakturaDao;
 
 	@EJB
-	private TFirmaDaoLocal tfirmaDao;
+	private DobavljacDaoLocal dobavljacDao;
 
 	public FakturaService() {
 
 	}
 
+	@GET
+	@Produces("application/xml")
+	public void getPartneri() {
+		try {
+			List<Dobavljac> dobavljaci = dobavljacDao.findAll();
+			for(Dobavljac d : dobavljaci) {
+				System.out.println(d.getPib());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
-	public Response addFaktura(@PathParam("id") String id, Faktura faktura) {
+	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) {
 		System.out.println("Invoking addFaktura!");
 
 		System.out.println("Id poslovnog partnera: " + id);
@@ -48,15 +65,15 @@ public class FakturaService {
 
 		Response response = Response.status(Status.BAD_REQUEST).build();
 
-		TFirma dobavljac = null;
+		Dobavljac dobavljac = null;
 		try {
-			dobavljac = tfirmaDao.findById(Long.parseLong(id));
+			dobavljac = dobavljacDao.findById(id);
 		} catch (NumberFormatException | JAXBException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		System.out.println(tfirmaDao);
+		System.out.println(dobavljacDao);
 		System.out.println(dobavljac);
 		
 		if(dobavljac != null){

@@ -32,7 +32,7 @@ public class FakturaDao extends GenericDao<Faktura, Long> implements
 		List<Faktura> result = new ArrayList<Faktura>();
 		
 		for(Faktura invoice : invoices) {
-			if(invoice.getZaglavlje().getDobavljac().getPib().equals(id)) {
+			if(invoice.getId().toString().equals(id)) {
 				result.add(invoice);
 			}
 		}

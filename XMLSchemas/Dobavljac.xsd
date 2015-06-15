@@ -3,5 +3,15 @@
     targetNamespace="PoslovnaXWS/Dobavljac" xmlns="PoslovnaXWS/Dobavljac"
     xmlns:xws="PoslovnaXWS/Common">
     <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
-    <xs:element name="dobavljac" type="xws:TFirma"/>
+    <xs:element name="dobavljac">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="xws:TFirma">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>
