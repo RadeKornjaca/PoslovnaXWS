@@ -24,14 +24,14 @@ public class ValidateTest {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 
 		 MT102 mt102 = (MT102) unmarshaller.unmarshal(new File(
-				"C:/Users/Lazar/Desktop/Faks/test.xml"));
+				"E:/Za faks/XML TESTOVI/testMT102Valid.xml"));
 		 JAXBSource source = new JAXBSource(jc, mt102);
 
 		SchemaFactory sf = SchemaFactory
 				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		Schema schema = sf
 				.newSchema(new File(
-						"C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/XMLSchemas/Poruke.xsd"));
+						"E:/Za faks/Projekti/PoslovnaXWS/XMLSchemas/Poruke.xsd"));
 		System.out.println(schema);
 
 		Validator validator = schema.newValidator();

@@ -30,7 +30,7 @@
 
 	<jaxrs:server id="restService" address="/restService">
 		<jaxrs:serviceBeans>
-			<ref bean="restClient" />
+			<ref bean="restClent" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />

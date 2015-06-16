@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="PoslovnaXWS/Dobavljac" xmlns="PoslovnaXWS/Dobavljac"
+    xmlns:xws="PoslovnaXWS/Common">
+    <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
+    <xs:element name="dobavljac">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="xws:TFirma">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

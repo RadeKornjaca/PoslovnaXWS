@@ -39,9 +39,9 @@ public final class InitDatabase {
         System.out.println("\n");
         System.out.println("Sent HTTP PUT request to add bussiness partner");
 
-        File input = new File("data/partner.xml");
+        File input = new File("data/dobavljac_test.xml");
         
-        PutMethod put = new PutMethod(REST_URL + "/partneri");
+        PutMethod put = new PutMethod(REST_URL + "/partneri/1");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         RequestEntity entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
@@ -82,9 +82,9 @@ public final class InitDatabase {
         System.out.println("\n");
         System.out.println("Sent HTTP PUT request to add an invoice");
 
-        input = new File("data/faktura.xml");
+        input = new File("data/faktura_test.xml");
         
-        put = new PutMethod(REST_URL + "/fakture");
+        put = new PutMethod(REST_URL + "/fakture/1");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");

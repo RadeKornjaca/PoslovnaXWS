@@ -1,8 +1,12 @@
 package session.dao;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+
+import org.omg.CORBA.FREE_MEM;
 
 import entity.Banka;
 @Stateless
@@ -17,5 +21,7 @@ public class BankaDaoBean extends GenericDaoBean<Banka, Integer> implements Bank
 		
 		return banka;
 	}
+	
+	
 
 }
