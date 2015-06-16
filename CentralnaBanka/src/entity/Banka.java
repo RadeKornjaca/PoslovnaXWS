@@ -86,7 +86,7 @@ public class Banka{
 		this.naziv = naziv;
 	}
 
-	public double getSifra() {
+	public int getSifra() {
 		return sifra;
 	}
 
