@@ -1,0 +1,10 @@
+<form class="form-horizontal">
+	<fieldset>
+		<legend>Edit</legend>
+		<!--Ne radi ako nije ng-repeat iz nekog razloga-->
+		<div ng-repeat="e in entry">
+		<content-items ng-model="e" meta="meta" submit="submit(e)"></content-items>
+		</div>
+		<button ng-click="bleja()">Bleja</button>
+	</fieldset>
+</form>

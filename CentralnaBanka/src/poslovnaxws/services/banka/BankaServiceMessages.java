@@ -43,7 +43,7 @@ public interface BankaServiceMessages {
 	@WebMethod
 	@WebResult(name = "status", targetNamespace = "PoslovnaXWS/Common", partName = "notification")
 	public poslovnaxws.common.StatusWrapper receiveMT900(
-			@WebParam(partName = "mt900", name = "MT900", targetNamespace = "PoslovnaXWS/Poruke") poslovnaxws.poruke.MT900Wrapper mt900Wrapper);
+			@WebParam(partName = "mt900", name = "MT900", targetNamespace = "PoslovnaXWS/Poruke") poslovnaxws.poruke.MT9xyWrapper mt900Wrapper);
 
 	@RequestWrapper(className = "poslovnaxws.poruke.MT102Wrapper")
 	@ResponseWrapper(className = "poslovnaxws.common.StatusWrapper")

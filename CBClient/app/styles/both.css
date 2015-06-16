@@ -38,7 +38,7 @@ body {
 }
 
 .container-narrow > hr {
-  margin: 30px 0;
+  margin: 35px 0;
 }
 
 /* Main marketing message and sign up button */
@@ -182,7 +182,7 @@ body {
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 250px;
+        padding-left: 10px;
     }
 
     #wrapper.toggled {

@@ -13,14 +13,24 @@ public class MetaData {
 
 	private String name;
 	private String type;
+	private Restriction restriction;
 
 	public MetaData() {
 
 	}
 
-	public MetaData(Field field) {
+	public MetaData(Field field, Restriction restriction) {
 		name = field.getName();
-		type = field.getType().getName();
+		type = field.getType().getSimpleName();
+		this.restriction = restriction;
+	}
+
+	public Restriction getRestriction() {
+		return restriction;
+	}
+
+	public void setRestriction(Restriction restriction) {
+		this.restriction = restriction;
 	}
 
 	public String getName() {
