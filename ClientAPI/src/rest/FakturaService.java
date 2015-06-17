@@ -36,23 +36,6 @@ public class FakturaService {
 	public FakturaService() {
 
 	}
-
-	@GET
-	@Produces("application/xml")
-	public void getPartneri() {
-		try {
-			List<Dobavljac> dobavljaci = dobavljacDao.findAll();
-			for(Dobavljac d : dobavljaci) {
-				System.out.println(d.getPib());
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	@POST
 	@Path("/{id}/fakture")
@@ -104,11 +87,12 @@ public class FakturaService {
 	@GET
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
-	public List<Faktura> getFakture(@PathParam("id") String id) {
+	public Response getFakture(@PathParam("id") String id) {
 		System.out.println("Invoking getFakture with id poslovnog partnera !");
 
 		System.out.println("Id poslovnog partnera: " + id);
 
+		Response response;
 		List<Faktura> fakture = null;
 
 		try {
@@ -120,19 +104,37 @@ public class FakturaService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(fakture != null) {
+			response = Response.ok(fakture).build();
+		}
+		else {
+			response = Response.status(Status.NOT_FOUND).build();
+		}
 
-		return fakture;
+		return response;
 	}
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}")
 	@Produces("application/xml")
-	public Faktura getFakturaFromDobavljac(
+	public Response getFakturaFromDobavljac(
 			@PathParam("id_dobavljaca") String idDobavljaca,
-			@PathParam("id_fakture") String idFakture) {
+			@PathParam("id_fakture") Long idFakture) {
 		System.out.println("Invoking getFakturaFromDobavljac");
-
-		return new Faktura();
+		
+		Response response;
+		Faktura faktura = fakturaDao.findFakturaById(idDobavljaca, idFakture);
+		
+		
+		if(faktura != null) {
+			response = Response.ok(faktura).build();
+		}
+		else {
+			response = Response.status(Status.NOT_FOUND).build();
+		}
+		
+		return response;
 	}
 
 	@GET
