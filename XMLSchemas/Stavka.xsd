@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="stavkaFakture" xmlns="stavkaFakture">
+    targetNamespace="PoslovnaXWS/stavkaFakture" xmlns="PoslovnaXWS/stavkaFakture">
     <xs:complexType name="TStavkaFakture">
         <xs:sequence>
             <xs:element name="RedniBroj">
@@ -82,5 +82,15 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:element name="stavka" type="TStavkaFakture"/>
+    <xs:element name="stavka">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="TStavkaFakture">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>
