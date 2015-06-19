@@ -83,15 +83,16 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="stavkeFakture">
-                    <xs:complexType>
-                        <xs:sequence maxOccurs="unbounded" minOccurs="1">
-                            <xs:element ref="stavkaFakture"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element ref="stavkeFakture"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:long" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="stavkeFakture">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="stavkaFakture"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="stavkaFakture">
