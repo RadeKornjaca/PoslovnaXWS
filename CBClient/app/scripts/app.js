@@ -31,43 +31,75 @@
     templateUrl: 'views/messages.html',
     controller: 'AllMessagesCtrl'
   })
-  .when('/drzave', {
+  .when('/drzava', {
+    templateUrl: 'views/read-edit.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/banka', {
+    templateUrl: 'views/read-edit.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/dnevnoStanjeRacuna', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/banke', {
+  .when('/nalog', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/dnevnaStanjaRacuna', {
+  .when('/naseljenoMesto', {
+    templateUrl: 'views/read-edit.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/poruka', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/nalozi', {
+  .when('/racunBanake', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/naseljenaMesta', {
+  .when('/stavkaDnevnogRacuna', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/poruke', {
+  .when('/stavkaPoruke', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/racuniBanaka', {
+  .when('/mt102', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/stavkeDnevnogRacuna', {
+  .when('/mt103', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/stavkePoruka', {
+  .when('/mt900', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
+  })
+  .when('/mt910', {
+    templateUrl: 'views/read.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/:id/drzava', {
+    templateUrl: 'views/edit.html',
+    controller: 'EditCtrl'
+  })
+  .when('/:id/naseljenoMesto', {
+    templateUrl: 'views/edit.html',
+    controller: 'EditCtrl'
+  })
+  .when('/:id/banka', {
+    templateUrl: 'views/edit.html',
+    controller: 'EditCtrl'
+  })
+    .when('/:id/banka', {
+    templateUrl: 'views/edit.html',
+    controller: 'EditCtrl'
   })
   .otherwise({
     redirectTo: '/'
-  });
+  })
 });

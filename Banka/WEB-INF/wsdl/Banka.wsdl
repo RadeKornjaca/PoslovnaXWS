@@ -37,10 +37,11 @@
 	</wsdl:message>
 
 	<wsdl:message name="zahtevZaIzvodResponse">
-		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod" />
+		<wsdl:part name="presek" element="xws_banke:presek" />
 	</wsdl:message>
 
 	<wsdl:message name="zahtevZaIzvodRequest">
+		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod" />
 	</wsdl:message>
 
 	<wsdl:message name="receiveMT900">
@@ -61,8 +62,8 @@
 	<wsdl:portType name="BankaServiceMessages">
 
 		<wsdl:operation name="zahtevZaIzvod" parameterOrder="nmtokens">
-			<wsdl:output message="ws:zahtevZaIzvodResponse" />
 			<wsdl:input message="ws:zahtevZaIzvodRequest" />
+			<wsdl:output message="ws:zahtevZaIzvodResponse" />
 			<wsdl:fault name="zahtevZaIzvodError" message="ws:notificationMessage" />
 		</wsdl:operation>
 

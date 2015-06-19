@@ -1,0 +1,54 @@
+<!--Polja su opisana u $scope.meta, a sami podaci su u $scope.data-->
+<p>
+	<div>
+
+		<div class="col-xs-8 ">
+			<div class="input-group">
+				<div class="input-group-btn search-panel">
+					<button type="button" class="btn btn-default">
+						<select ng-model="searchParams.field" ng-options="field.name for field in meta">
+							<option></option>
+						</select>
+					</button>
+				</div>
+				<input type="hidden" name="search_param" value="" id="search_param">         
+				<input type="text" class="form-control" placeholder="Pretraga..." ng-model="searchParams.term">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit" ng-click="search()">
+						<i class="glyphicon glyphicon-search"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+</p>
+<p>
+	<table class="table table-striped table-bordered table-hover">
+		<!-- Za svako polje entiteta, napravi header. -->
+		<th ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
+			<button class="btn btn-default" type="submit" ng-click="sort(metaItem.name)">
+				<b>{{metaItem.name}}</b> 
+				<i ng-show="sortList[metaItem.name]=='asc'" class="glyphicon glyphicon-menu-down"></i>
+				<i ng-show="sortList[metaItem.name]=='desc'" class="glyphicon glyphicon-menu-up"></i>
+			</button>
+		</th>
+	<!-- Za svaki dobavljeni entitet, pristupi 
+	svim njegovim poljima -->
+	<tr ng-repeat="entry in entries">
+		<!--ID se ne prikazuje-->
+		<td ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
+			<!-- Ako je link, stavi <a> -->
+			<div ng-if="metaItem.type == 'link' || metaItem.type == 'zoom'">
+				<a ng-href="{{entry[metaItem.name]}}">Detalji</a>
+			</div>
+			<div ng-if="metaItem.type != 'link' && metaItem.type != 'zoom'">
+				{{entry[metaItem.name]}}
+			</div>
+		</td>
+		<td>
+			<a ng-href = "#/{{entry[idField]}}{{type}}/"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a ng-href = "#/{{entry[idField]}}{{type}}"><span class="glyphicon glyphicon-trash"></span></a>
+		</td>
+	</tr>
+</table>
+</p>

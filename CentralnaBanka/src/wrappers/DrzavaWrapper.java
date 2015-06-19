@@ -21,6 +21,10 @@ public class DrzavaWrapper {
 	
 	@XmlElement(name = "meta")
 	private List<MetaData> meta = new ArrayList<MetaData>();
+	
+	public DrzavaWrapper(){
+		meta = EntityInfoUtil.getFields(Drzava.class);
+	}
 
 	public List<MetaData> getMeta() {
 		return meta;
@@ -31,8 +35,6 @@ public class DrzavaWrapper {
 
 	public void setWrappedElement(List<Drzava> wrappedElement) {
 		this.wrappedElement = wrappedElement;
-		meta = EntityInfoUtil.getFields(Drzava.class);
-		
 	}
 
 	public void setMeta(List<MetaData> meta) {

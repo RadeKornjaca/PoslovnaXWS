@@ -22,7 +22,7 @@
 		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
 		
 		
-	<bean id="restClent" class="poslovnaxws.services.centralnabanka.CBClientService" />
+	<bean id="restClient" class="poslovnaxws.services.centralnabanka.CBClientService" />
 
 	<jaxrs:server id="restService" address="/restService">
 		<jaxrs:serviceBeans>

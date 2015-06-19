@@ -32,7 +32,6 @@ public class RacunBankeWrapper {
 	}
 
 	public void setWrappedElement(List<RacunBanke> wrappedElement) {
-		// TODO Auto-generated method stub
 		this.wrappedElement = wrappedElement;
 		meta = EntityInfoUtil.getFields(RacunBanke.class);
 	}

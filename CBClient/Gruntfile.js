@@ -18,8 +18,8 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'E:/Za faks/apache-tomee-plus-1.5.1/webapps/gen',
-    dist1: 'C:/Program Files/apache-tomee-plus-1.5.1/webapps/gen'
+    dist: 'C:/Program Files/apache-tomee-plus-1.5.1/webapps/CBClient',
+    dist1: 'C:/Program Files/apache-tomee-plus-1.5.1/webapps/CBClient'
   };
 
   // Define the configuration for all the tasks

@@ -22,6 +22,29 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name="poruka_tip")
 @Table(name="poruka")
 public abstract class Poruka{
+	
+	public enum Vrsta {
+	    MT102 ("mt102"),
+	    MT103 ("mt103"),
+	    MT900 ("mt900"),
+	    MT910 ("mt910");
+
+	    private final String name;       
+
+	    private Vrsta(String s) {
+	        name = s;
+	    }
+
+	    public boolean equalsName(String otherName){
+	        return (otherName == null)? false:name.equals(otherName);
+	    }
+
+	    public String toString(){
+	       return name;
+	    }
+
+	}
+	
 	/** @pdOid 0e5481d8-2ce7-48b7-bd2d-8fba2a6a39d0 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

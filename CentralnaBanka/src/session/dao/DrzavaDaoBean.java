@@ -18,4 +18,11 @@ public class DrzavaDaoBean extends GenericDaoBean<Drzava, Integer> implements Dr
 		return drzava;
 	}
 
+	@Override
+	public Drzava loadFully(int id) {
+		Drzava drzava = findById(id);
+		drzava.getNaseljenoMesto().size();
+		return drzava;
+	}
+
 }

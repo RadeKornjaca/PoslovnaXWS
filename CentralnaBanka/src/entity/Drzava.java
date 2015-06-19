@@ -11,6 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TDrzava;
 import poslovnaxws.common.TNaseljenoMesto;
+import util.Restriction;
 
 /** @pdOid d66bf4c9-7b74-47ab-ae68-713217add753 */
 
@@ -51,7 +53,7 @@ public class Drzava {
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "drzava")
-	private java.util.Collection<NaseljenoMesto> naseljenoMesto;
+	private java.util.Collection<NaseljenoMesto> naseljenoMesto = new HashSet<NaseljenoMesto>();
 
 	public Drzava() {
 
@@ -123,10 +125,13 @@ public class Drzava {
 	public void addNaseljenoMesto(NaseljenoMesto newNaseljenoMesto) {
 		if (newNaseljenoMesto == null)
 			return;
-		if (this.naseljenoMesto == null)
+		if (this.naseljenoMesto == null) {
 			this.naseljenoMesto = new java.util.HashSet<NaseljenoMesto>();
-		if (!this.naseljenoMesto.contains(newNaseljenoMesto))
+		}
+		if (!this.naseljenoMesto.contains(newNaseljenoMesto)) {
 			this.naseljenoMesto.add(newNaseljenoMesto);
+			newNaseljenoMesto.setDrzava(this);
+		}
 	}
 
 	/**
@@ -147,6 +152,10 @@ public class Drzava {
 			naseljenoMesto.clear();
 	}
 
-
+	@Override
+	public boolean equals(Object obj) {
+		Drzava that = (Drzava) obj;
+		return this.idDrzave == that.idDrzave;
+	}
 
 }

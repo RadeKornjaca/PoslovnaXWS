@@ -57,6 +57,9 @@ public class JndiUtils {
 	
 	public static final String STAVKA_PORUKE_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "StavkaPorukeDaoBean!session.dao.StavkaPorukeDaoLocal";
+	
+	public static final String MT9xy_EJB = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "Mt9xyDaoBean!session.dao.Mt9xyDaoLocal";
 	/**
 	 * Gets local EJB from JNDI.
 	 *

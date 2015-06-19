@@ -60,5 +60,13 @@ public class ObjectFactory {
     public Presek.StavkePreseka createPresekStavkePreseka() {
         return new Presek.StavkePreseka();
     }
+    
+    public BankaDB createBankaDB(){
+    	return new BankaDB();
+    }
+    
+    public BankaDB.Nalozi createBankaDBNalozi(){
+    	return new BankaDB.Nalozi();
+    }
 
 }
