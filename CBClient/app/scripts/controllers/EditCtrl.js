@@ -5,28 +5,42 @@
 
 		var onResourceComplete = function(data) {
 
-			var temp = data.wrapper.data;
-			$scope.entry = [temp];
+			$scope.entry = data.data;
 			/*
 			 * $scope.meta sadrži podatke o poljima dobavljenih podataka.
 			 * Podaci obuhvataju ime i tip polja. Služi da bi generička forma
 			 * mogla da napravi header tabele.
 			 */
-			 $scope.meta = data.wrapper.meta;
-		};
+			 $scope.meta = data.meta;
+			};
 
-		var onError = function(reason) {
-			$scope.error = "Could not fetch the data, reason: " + reason.statusText;
-		};
+			var onError = function(reason) {
+				$scope.response = "Neuspešno učitavanje podataka: " + reason.status +" "+ reason.statusText;
+				$scope.error = true;
+				$scope.success = false;
+			};
 
+			var onErrorSend = function(reason){
+				$scope.response = "Neuspešna izmena podataka: " + reason.status + reason.statusText;
+				$scope.error = true;
+				$scope.success = false;
+			};
 
-		$scope.submit = function(data){
-			cbService.editResource(type, id, data);
-		};
+			var onSuccessSend = function(){
+				$scope.response = "Uspešna izmena podataka."
+				$scope.error = false;
+				$scope.success = true;
+			};
 
-		$scope.bleja = function(){
-			console.log("bleja");
-		}
+			var resetFeedback = function(){
+				$scope.error = false;
+				$scope.success = false;
+			};
+
+			$scope.submit = function(data){
+				cbService.editResource(type, id, data).then(onSuccessSend, onErrorSend).then(resetFeedback(), 2000);
+			};
+
 		/* Uzima putanju do kontrolera.
 		 * npr: za CBClient/#/1/drzave će vratiti /1/drzave
 		 * Ovo služi da se konkatenira na URL ka resursu
@@ -42,9 +56,9 @@
 		 $scope.num = {'num':1};
 
 		 cbService.getResourceById(type, id).then(onResourceComplete, onError);
-	};
+		};
 
-	var app = angular.module("cbApp");
-	app.controller("EditCtrl", EditCtrl);
+		var app = angular.module("cbApp");
+		app.controller("EditCtrl", EditCtrl);
 
-}());
+	}());

@@ -35,8 +35,19 @@
 	<!-- Za svaki dobavljeni entitet, pristupi 
 	svim njegovim poljima -->
 	<tr ng-repeat="entry in entries">
+		<!--ID se ne prikazuje-->
 		<td ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
-			{{entry[metaItem.name]}}
+			<!-- Ako je link, stavi <a> -->
+			<div ng-if="metaItem.type == 'link' || metaItem.type == 'zoom'">
+				<a ng-href="{{entry[metaItem.name]}}">Detalji</a>
+			</div>
+			<div ng-if="metaItem.type != 'link' && metaItem.type != 'zoom'">
+				{{entry[metaItem.name]}}
+			</div>
+		</td>
+		<td>
+			<a ng-href = "#/{{entry[idField]}}{{type}}/"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a ng-href = "#/{{entry[idField]}}{{type}}"><span class="glyphicon glyphicon-trash"></span></a>
 		</td>
 	</tr>
 </table>
