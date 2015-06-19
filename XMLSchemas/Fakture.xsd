@@ -86,8 +86,7 @@
                 <xs:element name="stavkeFakture">
                     <xs:complexType>
                         <xs:sequence maxOccurs="1" minOccurs="1">
-                            <xs:element name="stavkaFakture" maxOccurs="unbounded"
-                                type="TStavkaFakture"> </xs:element>
+                            <xs:element ref="stavkaFakture"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -95,85 +94,87 @@
             <xs:attribute name="id" type="xs:long" use="required"/>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="TStavkaFakture">
-        <xs:sequence>
-            <xs:element name="RedniBroj">
-                <xs:simpleType>
-                    <xs:restriction base="xs:positiveInteger">
-                        <xs:totalDigits value="3"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="NazivUsluge">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:maxLength value="120"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="Kolicina">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="10"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="JedinicaMere">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="[a-z]{1,6}"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="JedinicnaCena">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="10"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="Vrednost">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="12"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="ProcenatRabata">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="5"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="IznosRabata">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:fractionDigits value="2"/>
-                        <xs:totalDigits value="12"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="UmanjenoZarabat">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="12"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="UkupanPorez">
-                <xs:simpleType>
-                    <xs:restriction base="xs:decimal">
-                        <xs:totalDigits value="12"/>
-                        <xs:fractionDigits value="2"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="stavkaFakture">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="RedniBroj">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:positiveInteger">
+                            <xs:totalDigits value="3"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="NazivUsluge">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="120"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Kolicina">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="10"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="JedinicaMere">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[a-z]{1,6}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="JedinicnaCena">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="10"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Vrednost">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="12"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="ProcenatRabata">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="5"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="IznosRabata">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:fractionDigits value="2"/>
+                            <xs:totalDigits value="12"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="UmanjenoZarabat">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="12"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="UkupanPorez">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:totalDigits value="12"/>
+                            <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>
