@@ -62,7 +62,7 @@ public class Dobavljac
      */
     @Override
     public void setId(Long value) {
-        this.id = value;
+        this.id = Long.parseLong(this.getPib());
     }
 
 }

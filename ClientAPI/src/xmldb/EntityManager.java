@@ -71,8 +71,9 @@ public class EntityManager<T, ID extends Serializable> {
 
 		System.out.println("\n* HTTP response: " + responseCode + " (" + message + ')');
 		
-		if (responseCode == HttpURLConnection.HTTP_OK) 
-			return (T) unmarshaller.unmarshal(conn.getInputStream());
+		if (responseCode == HttpURLConnection.HTTP_OK) {
+			entity = (T) unmarshaller.unmarshal(conn.getInputStream());
+		}
 		
 		conn.disconnect();
 		return entity;

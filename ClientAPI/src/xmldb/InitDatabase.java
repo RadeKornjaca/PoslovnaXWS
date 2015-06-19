@@ -41,7 +41,7 @@ public final class InitDatabase {
 
         File input = new File("data/dobavljac_test.xml");
         
-        PutMethod put = new PutMethod(REST_URL + "/partneri/1");
+        PutMethod put = new PutMethod(REST_URL + "/partneri/14234512432");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         RequestEntity entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
