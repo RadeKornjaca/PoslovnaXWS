@@ -85,7 +85,7 @@
                 </xs:element>
                 <xs:element name="stavkeFakture">
                     <xs:complexType>
-                        <xs:sequence maxOccurs="1" minOccurs="1">
+                        <xs:sequence maxOccurs="unbounded" minOccurs="1">
                             <xs:element ref="stavkaFakture"/>
                         </xs:sequence>
                     </xs:complexType>
