@@ -17,12 +17,8 @@
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-	<jaxws:endpoint id="clearing" address="/CBClearing"
-		implementor="poslovnaxws.services.centralnabanka.CBClearingImpl"
-		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
-		
-	<jaxws:endpoint id="rtgs" address="/CBRTGS"
-		implementor="poslovnaxws.services.centralnabanka.CBRTGSImpl"
+	<jaxws:endpoint id="cbservice" address="/CBService"
+		implementor="poslovnaxws.services.centralnabanka.CentralnaBankaImpl"
 		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
 		
 		

@@ -10,6 +10,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import poslovnaxws.poruke.MT900;
 import poslovnaxws.poruke.MT910;
@@ -17,6 +18,7 @@ import poslovnaxws.poruke.MT910;
 /** @pdOid 928b7313-3d67-4770-99f2-90dc6a721a77 */
 @Entity
 @DiscriminatorValue("mt9xy")
+@Table(name = "mt9xy")
 public class Mt9xy extends Poruka {
 
 	@ManyToOne
@@ -24,11 +26,11 @@ public class Mt9xy extends Poruka {
 	private Mt10x mt10x;
 
 	@ManyToOne
-	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_banke", nullable = true)
+	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_racuna", nullable = true)
 	private RacunBanke racunBankeDuznika;
 
 	@ManyToOne
-	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_banke", nullable = true)
+	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_racuna", nullable = true)
 	private RacunBanke racunBankePoverioca;
 
 	public Mt9xy(){

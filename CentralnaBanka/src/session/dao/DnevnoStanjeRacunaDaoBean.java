@@ -1,6 +1,6 @@
 package session.dao;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -12,13 +12,23 @@ import entity.DnevnoStanjeRacuna;
 @Local(DnevnoStanjeRacunaDaoLocal.class)
 public class DnevnoStanjeRacunaDaoBean extends GenericDaoBean<DnevnoStanjeRacuna, Integer> implements DnevnoStanjeRacunaDaoLocal{
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DnevnoStanjeRacuna findDnevnoStanjeRacuna(Date datum) {
+	public List<DnevnoStanjeRacuna> findDnevnoStanjeRacuna(String datum, long id) {
 		Query q = em.createNamedQuery("findDnevnoStanjeRacuna");
 		q.setParameter("datum", datum);
-		DnevnoStanjeRacuna dnevnoStanjeRacuna = (DnevnoStanjeRacuna) q.getSingleResult();
+		q.setParameter("idRacunaBanke", id);
+		List<DnevnoStanjeRacuna> dnevnoStanjeRacuna = (List<DnevnoStanjeRacuna>) q.getResultList();
 		
 		return dnevnoStanjeRacuna;
+	}
+
+	@Override
+	public DnevnoStanjeRacuna getAllCollections(long id) {
+		DnevnoStanjeRacuna dnevnoStanjeRacuna = em.find(DnevnoStanjeRacuna.class, id);
+		dnevnoStanjeRacuna.getStavkaDnevnogRacuna().size();
+		return dnevnoStanjeRacuna;
+		
 	}
 
 }

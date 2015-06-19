@@ -9,6 +9,8 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +32,7 @@ public class Nalog{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_naloga", unique = true, nullable = false)
-	private long idNaloga;
+	private Integer idNaloga;
 	/** @pdOid 47e4ae67-7a54-4548-927f-827e4d918138 */
 	@Column(name = "svrha_placanja", unique = false, nullable = false)
 	private java.lang.String svrhaPlacanja;
@@ -89,14 +91,14 @@ public class Nalog{
 	 *             side=A
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
-	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
+	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna = new HashSet<StavkaDnevnogRacuna>();
 	/**
 	 * @pdRoleInfo migr=no name=StavkaPoruke assc=naloziStavke
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
-	private java.util.Collection<StavkaPoruke> stavkaPoruke;
+	private java.util.Collection<StavkaPoruke> stavkaPoruke = new HashSet<StavkaPoruke>();
 	
 	public Nalog(){
 		
@@ -130,7 +132,7 @@ public class Nalog{
 		return idNaloga;
 	}
 
-	public void setIdNaloga(long idNaloga) {
+	public void setIdNaloga(Integer idNaloga) {
 		this.idNaloga = idNaloga;
 	}
 
