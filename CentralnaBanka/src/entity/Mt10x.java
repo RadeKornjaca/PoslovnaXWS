@@ -18,10 +18,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.Restifyable;
 
 /** @pdOid f45025a4-1a2c-4311-a8d2-60cc9bf412bf */
 @Entity
@@ -43,6 +50,7 @@ public class Mt10x extends Poruka {
 	@Column(name = "sifra_valute_poruke", unique = false, nullable = false)
 	private java.lang.String sifraValutePoruke;
 
+	@JsonIgnore
 	/**
 	 * @pdRoleInfo migr=no name=StavkaPoruke assc=naloziPoruke
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -54,26 +62,29 @@ public class Mt10x extends Poruka {
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "mt10x")
 	private java.util.Collection<Mt9xy> mt9xy;
 
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_banke", nullable = false)
+	@JoinColumn(name = "id_banke_poverioca", referencedColumnName = "id_racuna", nullable = false)
 	private RacunBanke racunBankePoverioca;
 
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_banke", nullable = false)
+	@JoinColumn(name = "id_banke_duznika", referencedColumnName = "id_racuna", nullable = false)
 	private RacunBanke racunBankeDuznika;
 
-	public Mt10x(){
-		
+	public Mt10x() {
+
 	}
-	
+
 	public Mt10x(MT102 mt102) {
 		TBanka duznik = mt102.getBankaDuznik();
 		TBanka poverioc = mt102.getBankaPoverioc();
 		List<TNalog> uplate = mt102.getUplate().getUplata();
-		this.setVrsta(102);
+		this.setVrsta(Poruka.Vrsta.MT102.toString());
 		this.datumValutePoruke = mt102.getDatumValute().toGregorianCalendar()
 				.getTime();
 		this.racunBankeDuznika = new RacunBanke(duznik);
@@ -83,28 +94,30 @@ public class Mt10x extends Poruka {
 		this.statusPoruke = 1; // Na cekanju
 		this.svrhaPlacanja = mt102.getUplate().getUplata().get(0)
 				.getSvrhaPlacanja();
-		
+
 		for (TNalog tNalog : uplate) {
 			Nalog nalog = new Nalog(tNalog);
-			this.stavkaPoruke.add(new StavkaPoruke(1,1,this,nalog));
+			this.stavkaPoruke.add(new StavkaPoruke(1, 1, this, nalog));
 		}
 		this.ukupanIznos = mt102.getUkupanIznos().doubleValue();
 		duznik.getRacun();
 
 	}
-	
-	public Mt10x(MT103 mt103){
+
+	public Mt10x(MT103 mt103) {
 		TBanka duznik = mt103.getBankaDuznik();
 		TBanka poverioc = mt103.getBankaPoverioc();
 		TNalog uplata = mt103.getUplata();
-		this.setVrsta(103);
-		this.datumValutePoruke = mt103.getUplata().getDatumValute().toGregorianCalendar().getTime();
+		this.setVrsta(Poruka.Vrsta.MT103.toString());
+		this.datumValutePoruke = mt103.getUplata().getDatumValute()
+				.toGregorianCalendar().getTime();
 		this.racunBankeDuznika = new RacunBanke(duznik);
 		this.racunBankePoverioca = new RacunBanke(poverioc);
 		this.sifraValutePoruke = uplata.getOznakaValute();
 		this.svrhaPlacanja = uplata.getSvrhaPlacanja();
 		this.ukupanIznos = uplata.getIznos().doubleValue();
-		this.stavkaPoruke.add(new StavkaPoruke(1,1,this,new Nalog(mt103.getUplata())));
+		this.stavkaPoruke.add(new StavkaPoruke(1, 1, this, new Nalog(mt103
+				.getUplata())));
 	}
 
 	public java.lang.String getSvrhaPlacanja() {
@@ -170,6 +183,7 @@ public class Mt10x extends Poruka {
 		return stavkaPoruke;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorStavkaPoruke() {
 		if (stavkaPoruke == null)
@@ -227,6 +241,7 @@ public class Mt10x extends Poruka {
 		return mt9xy;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorMt9xy() {
 		if (mt9xy == null)
@@ -274,5 +289,33 @@ public class Mt10x extends Poruka {
 		if (mt9xy != null)
 			mt9xy.clear();
 	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		json.put("racunBankeDuznika", racunBankeDuznika.resourceURL());
+		json.put("racunBankePoverioca", racunBankePoverioca.resourceURL());
+
+		// Daje link cak i ako nije ucitan zbog lazy fetch-a
+		json.put("stavkaPoruke",
+				resourceURL() + EntityInfoUtil.getTableName(StavkaPoruke.class));
+
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
+	}
+
+	@Override
+	public String tableURL() {
+		return CBClientService.REST_URL + "/" + vrsta;
+	}
+
 
 }

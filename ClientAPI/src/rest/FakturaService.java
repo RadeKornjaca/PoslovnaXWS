@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 
-import sessionbeans.concrete.DobavljacDaoLocal;
 import sessionbeans.concrete.FakturaDaoLocal;
 import entity.dobavljac.Dobavljac;
 import entity.fakture.Faktura;
@@ -30,14 +29,14 @@ public class FakturaService {
 	@EJB
 	private FakturaDaoLocal fakturaDao;
 
-	@EJB
-	private DobavljacDaoLocal dobavljacDao;
+	//@EJB
+	//private DobavljacDaoLocal dobavljacDao;
 
 	public FakturaService() {
 
 	}
 	
-	@POST
+	/*@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
 	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) {
@@ -82,7 +81,7 @@ public class FakturaService {
 
 		
 		return response;
-	}
+	}*/
 
 	@GET
 	@Path("/{id}/fakture")

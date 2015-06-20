@@ -26,8 +26,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import poslovnaxws.common.TDrzava;
 import poslovnaxws.common.TNaseljenoMesto;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.MetaData;
+import util.Restifyable;
 import util.Restriction;
 
 /** @pdOid d66bf4c9-7b74-47ab-ae68-713217add753 */
@@ -35,7 +45,7 @@ import util.Restriction;
 @Entity
 @Table(name = "drzava")
 @NamedQuery(name = "findDrzava", query = "Select d from Drzava d where d.nazivDrzave like :naziv")
-public class Drzava {
+public class Drzava implements Restifyable {
 	/** @pdOid a55cf1cc-a239-4b44-8263-5ccf47261c30 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +62,7 @@ public class Drzava {
 	 * @pdRoleInfo migr=no name=NaseljenoMesto assc=deoDrzave
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "drzava")
 	private java.util.Collection<NaseljenoMesto> naseljenoMesto = new HashSet<NaseljenoMesto>();
 
@@ -99,6 +110,7 @@ public class Drzava {
 		return naseljenoMesto;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorNaseljenoMesto() {
 		if (naseljenoMesto == null)
@@ -157,5 +169,30 @@ public class Drzava {
 		Drzava that = (Drzava) obj;
 		return this.idDrzave == that.idDrzave;
 	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+		// Daje link cak i ako nije ucitan zbog lazy fetch-a
+		json.put(
+				"naseljenoMesto",
+				resourceURL()
+						+ EntityInfoUtil.getTableName(NaseljenoMesto.class));
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBClientService.REST_URL + "/" + idDrzave + "/drzava";
+	}
+
+	@Override
+	public String tableURL() {
+		return CBClientService.REST_URL + "/drzava";
+	}
+
 
 }

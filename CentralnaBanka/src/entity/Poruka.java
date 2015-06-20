@@ -15,11 +15,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import util.Restifyable;
+
 /** @pdOid e4573f75-49fa-46a0-8c33-c940152ac38d */
 @Entity
 @Table(name = "poruka")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Poruka{
+public abstract class Poruka implements Restifyable{
 	
 	public enum Vrsta {
 	    MT102 ("mt102"),
@@ -47,13 +49,13 @@ public abstract class Poruka{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_poruke", unique = true, nullable = false)
-	private long idPoruke;
+	protected long idPoruke;
 	/** @pdOid 211d11bd-82b3-4f46-82b9-2aa254689474 */
 	@Column(name = "vrsta", unique = false, nullable = false)
-	private double vrsta;
+	protected String vrsta;
 	/** @pdOid 0b9d5b13-4d3f-44bf-adfe-993e3b45b10a */
 	@Column(name = "datum_poruke", unique = false, nullable = false)
-	private java.util.Date datumPoruke;
+	protected java.util.Date datumPoruke;
 	
 	public Poruka(){
 		
@@ -65,10 +67,10 @@ public abstract class Poruka{
 	public void setIdPoruke(long idPoruke) {
 		this.idPoruke = idPoruke;
 	}
-	public double getVrsta() {
+	public String getVrsta() {
 		return vrsta;
 	}
-	public void setVrsta(double vrsta) {
+	public void setVrsta(String vrsta) {
 		this.vrsta = vrsta;
 	}
 	public java.util.Date getDatumPoruke() {

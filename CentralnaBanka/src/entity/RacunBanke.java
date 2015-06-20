@@ -22,17 +22,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import poslovnaxws.common.TBanka;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.Restifyable;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
 @Table(name="racunBanke")
-public class RacunBanke{
+public class RacunBanke implements Restifyable{
 	/** @pdOid c725a61b-9fa6-4298-8db6-3e5bd6931f67 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id_banke", unique = true, nullable = false)
-	private long idBanke;
+	@Column(name = "id_racuna", unique = true, nullable = false)
+	private long idRacuna;
 	/** @pdOid 4c7e74ea-9624-4762-a948-70298323f533 */
 	@Column(name = "broj_racuna", unique = true, nullable = false)
 	private java.lang.String brojRacuna;
@@ -101,11 +108,11 @@ public class RacunBanke{
 	}
 
 	public long getIdBanke() {
-		return idBanke;
+		return idRacuna;
 	}
 
 	public void setIdBanke(long idBanke) {
-		this.idBanke = idBanke;
+		this.idRacuna = idBanke;
 	}
 
 	public java.lang.String getBrojRacuna() {
@@ -148,13 +155,15 @@ public class RacunBanke{
 		this.banka = banka;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorDnevnoStanjeRacuna() {
 		if (dnevnoStanjeRacuna == null)
 			dnevnoStanjeRacuna = new java.util.HashSet<DnevnoStanjeRacuna>();
 		return dnevnoStanjeRacuna.iterator();
 	}
-
+	
+	@JsonIgnore
 	/**
 	 * @pdGenerated default setter
 	 * @param newDnevnoStanjeRacuna
@@ -199,115 +208,39 @@ public class RacunBanke{
 			dnevnoStanjeRacuna.clear();
 	}
 
-	/** @pdGenerated default getter */
-	/*public java.util.Collection<Mt9xy> getMt9xy() {
-		if (mt9xy == null)
-			mt9xy = new java.util.HashSet<Mt9xy>();
-		return mt9xy;
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		json.put("banka",
+				banka.resourceURL());
+		
+		//Daje link cak i ako nije ucitan zbog lazy fetch-a
+		json.put(
+				"dnevnoStanjeRacuna",
+				resourceURL()
+						+ EntityInfoUtil.getTableName(DnevnoStanjeRacuna.class));
+		
+		return json;
 	}
 
-	/** @pdGenerated default iterator getter */
-	/*public java.util.Iterator getIteratorMt9xy() {
-		if (mt9xy == null)
-			mt9xy = new java.util.HashSet<Mt9xy>();
-		return mt9xy.iterator();
+	@Override
+	public String resourceURL() {
+		return CBClientService.REST_URL + "/" + idRacuna + "/racunBanke";
 	}
 
-	/**
-	 * @pdGenerated default setter
-	 * @param newMt9xy
-	 */
-	/*public void setMt9xy(java.util.Collection<Mt9xy> newMt9xy) {
-		removeAllMt9xy();
-		for (java.util.Iterator iter = newMt9xy.iterator(); iter.hasNext();)
-			addMt9xy((Mt9xy) iter.next());
+	@Override
+	public String tableURL() {
+		return CBClientService.REST_URL + "/racunBanke";
 	}
-
-	/**
-	 * @pdGenerated default add
-	 * @param newMt9xy
-	 */
-	/*public void addMt9xy(Mt9xy newMt9xy) {
-		if (newMt9xy == null)
-			return;
-		if (this.mt9xy == null)
-			this.mt9xy = new java.util.HashSet<Mt9xy>();
-		if (!this.mt9xy.contains(newMt9xy))
-			this.mt9xy.add(newMt9xy);
+	
+	@Override
+	public boolean equals(Object obj) {
+		RacunBanke that = (RacunBanke) obj;
+		return this.idRacuna == that.idRacuna;
 	}
-
-	/**
-	 * @pdGenerated default remove
-	 * @param oldMt9xy
-	 */
-	/*public void removeMt9xy(Mt9xy oldMt9xy) {
-		if (oldMt9xy == null)
-			return;
-		if (this.mt9xy != null)
-			if (this.mt9xy.contains(oldMt9xy))
-				this.mt9xy.remove(oldMt9xy);
-	}
-
-	/** @pdGenerated default removeAll */
-	/*public void removeAllMt9xy() {
-		if (mt9xy != null)
-			mt9xy.clear();
-	}
-
-	/** @pdGenerated default getter */
-	/*public java.util.Collection<Mt10x> getMt10x() {
-		if (mt10x == null)
-			mt10x = new java.util.HashSet<Mt10x>();
-		return mt10x;
-	}
-
-	/** @pdGenerated default iterator getter */
-	/*public java.util.Iterator getIteratorMt10x() {
-		if (mt10x == null)
-			mt10x = new java.util.HashSet<Mt10x>();
-		return mt10x.iterator();
-	}
-
-	/**
-	 * @pdGenerated default setter
-	 * @param newMt10x
-	 */
-	/*public void setMt10x(java.util.Collection<Mt10x> newMt10x) {
-		removeAllMt10x();
-		for (java.util.Iterator iter = newMt10x.iterator(); iter.hasNext();)
-			addMt10x((Mt10x) iter.next());
-	}
-
-	/**
-	 * @pdGenerated default add
-	 * @param newMt10x
-	 */
-	/*public void addMt10x(Mt10x newMt10x) {
-		if (newMt10x == null)
-			return;
-		if (this.mt10x == null)
-			this.mt10x = new java.util.HashSet<Mt10x>();
-		if (!this.mt10x.contains(newMt10x))
-			this.mt10x.add(newMt10x);
-	}
-
-	/**
-	 * @pdGenerated default remove
-	 * @param oldMt10x
-	 */
-	/*public void removeMt10x(Mt10x oldMt10x) {
-		if (oldMt10x == null)
-			return;
-		if (this.mt10x != null)
-			if (this.mt10x.contains(oldMt10x))
-				this.mt10x.remove(oldMt10x);
-	}
-
-	/** @pdGenerated default removeAll */
-	/*public void removeAllMt10x() {
-		if (mt10x != null)
-			mt10x.clear();
-	}
-	/** @pdGenerated default getter */
 
 }

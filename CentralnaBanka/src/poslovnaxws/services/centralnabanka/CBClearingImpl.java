@@ -20,6 +20,7 @@ import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import poslovnaxws.common.Status;
 import poslovnaxws.common.StatusWrapper;
 import poslovnaxws.poruke.MT102;
 
@@ -31,6 +32,10 @@ import poslovnaxws.poruke.MT102;
 
 @javax.jws.WebService(serviceName = "CBService", portName = "CBClearingPort", targetNamespace = "PoslovnaXWS/services/centralnaBanka", wsdlLocation = "file:/C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/CentralnaBanka/web/WEB-INF/wsdl/CentralnaBanka.wsdl", endpointInterface = "poslovnaxws.services.centralnabanka.CBClearing")
 public class CBClearingImpl implements CBClearing {
+
+	private static String PORUKE_XSD = "../webapps/banka/WEB-INF/xsd/Poruke.xsd";
+	private static String BANKE_XSD = "../webapps/banka/WEB-INF/xsd/Banke.xsd";
+	private static String COMMON_XSD = "../webapps/banka/WEB-INF/xsd/Common.xsd";
 
 	private static final Logger LOG = Logger.getLogger(CBClearingImpl.class
 			.getName());
@@ -53,8 +58,9 @@ public class CBClearingImpl implements CBClearing {
 
 			SchemaFactory sf = SchemaFactory
 					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = sf.newSchema(new File(
-					"../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd"));
+			Schema schema = sf
+					.newSchema(new File(
+							"../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd"));
 			System.out.println(schema);
 
 			Validator validator = schema.newValidator();
@@ -85,11 +91,11 @@ public class CBClearingImpl implements CBClearing {
 			_return.setOpis("???");
 			e.printStackTrace();
 		}
-		
+
 		StatusWrapper response = new StatusWrapper();
-		
+
 		response.setWrappedParameter(_return);
-		
+
 		return response;
 	}
 
@@ -104,16 +110,61 @@ public class CBClearingImpl implements CBClearing {
 		LOG.info("Executing operation receiveMT103Clearing");
 		System.out.println(mt103);
 		try {
-			poslovnaxws.common.Status _return = new poslovnaxws.common.Status();
 			StatusWrapper response = new StatusWrapper();
 			
+			Status _return = validate(mt103.getWrappedParameter(), PORUKE_XSD);
+
 			response.setWrappedParameter(_return);
-			
+
 			return response;
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private Status validate(Object message, String xsdLocation) {
+		Status _return = new Status();
+		try {
+			JAXBContext jc = JAXBContext.newInstance(message.getClass());
+			JAXBSource source = new JAXBSource(jc, message);
+
+			SchemaFactory sf = SchemaFactory
+					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sf.newSchema(new File(xsdLocation));
+			System.out.println(schema);
+
+			javax.xml.validation.Validator validator = schema.newValidator();
+			validator.validate(source);
+
+			_return.setKod(0);
+			_return.setOpis("OK");
+
+		} catch (JAXBException e) {
+			_return.setKod(1);
+			_return.setOpis("JAXB exception");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (SAXParseException e) {
+			_return.setKod(2);
+			_return.setOpis("Invalid XML");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (SAXException e) {
+			_return.setKod(3);
+			_return.setOpis("SAX exception");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			_return.setKod(4);
+			_return.setOpis("IO exception");
+			LOG.warning(e.getMessage());
+		} catch (Exception e) {
+			_return.setKod(5);
+			_return.setOpis("???");
+			e.printStackTrace();
+		}
+		return _return;
 	}
 
 }
