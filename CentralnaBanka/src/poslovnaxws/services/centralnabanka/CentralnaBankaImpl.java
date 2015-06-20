@@ -158,13 +158,13 @@ public class CentralnaBankaImpl implements CentralnaBanka {
         	System.out.println("inicijalizovan context");
         	Marshaller marshaller = context.createMarshaller();
         	System.out.println("kreiran marshaller");
-        	File tempXMLFile = new File("E:/Za faks/apache-tomee-plus-1.5.1/temp/xmlForValidatin.xml");
+        	File XMLFile = new File("E:/Za faks/apache-tomee-plus-1.5.1/temp/xmlForValidatin.xml");
         	System.out.println("kreiran temp xml");
-        	System.out.println(tempXMLFile.toString());
-        	marshaller.marshal(mt103, tempXMLFile);
+        	System.out.println(XMLFile.toString());
+        	marshaller.marshal(mt103, XMLFile);
         	System.out.println("odradjen marshal");
-        	System.out.println(tempXMLFile.toString());
-        	URL schemaFile = new URL(tempXMLFile.toString());
+        	System.out.println(XMLFile.toString());
+        	URL schemaFile = new URL("file:///E:/Za faks/apache-tomee-plus-1.5.1/webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd");
         	SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	        Schema schema = schemaFactory.newSchema(schemaFile);
 	        Validator validator = schema.newValidator();
@@ -175,6 +175,10 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 	        System.out.println("Reason: " + e.getLocalizedMessage());
 	        e.printStackTrace();
 	        System.out.println("usao u SAXException");
+	        Status status = new Status();
+	        status.setKod(2);
+	        status.setOpis("Invalid XML");
+	        return status;
         } catch (JAXBException e) {
 			// TODO Auto-generated catch block
         	System.out.println("usao u JAXBException");
@@ -365,7 +369,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		                    nalogDao.persist(nalog);*/
 	        				DnevnoStanjeRacuna dnevnoStanjeRacunaPoverioca = dnevnoStanjeRacunaDao.getAllCollections(dnevnoStanjeRacunaPoveriocaLista.get(0).getIdDnevnogStanja());
 	        				dnevnoStanjeRacunaPoverioca.setPrethodnoStanje(dnevnoStanjeRacunaPoverioca.getTrenutnoStanje());
-	        				dnevnoStanjeRacunaPoverioca.setDnevniPrometUKorist(dnevnoStanjeRacunaPoverioca.getDnevniPrometNaTeret() + nalog.getIznos());
+	        				dnevnoStanjeRacunaPoverioca.setDnevniPrometUKorist(dnevnoStanjeRacunaPoverioca.getDnevniPrometUKorist() + nalog.getIznos());
 	        				dnevnoStanjeRacunaPoverioca.setTrenutnoStanje(dnevnoStanjeRacunaPoverioca.getTrenutnoStanje() + nalog.getIznos());
 	        				StavkaDnevnogRacuna stavkaDnevnogRacunaPoverioca = new StavkaDnevnogRacuna();
 	        				stavkaDnevnogRacunaPoverioca.setDnevnoStanjeRacuna(dnevnoStanjeRacunaPoverioca);
@@ -413,7 +417,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
         	poslovnaxws.common.Status status = new Status();
             status.setKod(9);
             status.setOpis("Jedna od  banaka ili njihovi racuni ne postoje u bazi");
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("-------------------EJBException---------------------");
             return status;
         } catch (java.lang.Exception ex) {
