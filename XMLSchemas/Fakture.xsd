@@ -2,6 +2,13 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="PoslovnaXWS/Fakture" xmlns="PoslovnaXWS/Fakture" xmlns:xws="PoslovnaXWS/Common">
     <xs:import namespace="PoslovnaXWS/Common" schemaLocation="Common.xsd"/>
+    <xs:element name="fakture">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="faktura"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="faktura">
         <xs:complexType>
             <xs:sequence>
