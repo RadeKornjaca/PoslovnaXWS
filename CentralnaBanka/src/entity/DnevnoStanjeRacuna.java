@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /** @pdOid 4e03db37-cf8e-49d4-a795-92a43c20cb39 */
 @Entity
 @Table(name = "dnevnoStanjeRacuna")
-@NamedQuery(name = "findDnevnoStanjeRacuna", query = "Select d from DnevnoStanjeRacuna d where d.datum like :datum")
+@NamedQuery(name = "findDnevnoStanjeRacuna", query="Select d from DnevnoStanjeRacuna d where d.datum like :datum and d.racunBanke.idRacuna like :idRacunaBanke")
 public class DnevnoStanjeRacuna implements Restifyable {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

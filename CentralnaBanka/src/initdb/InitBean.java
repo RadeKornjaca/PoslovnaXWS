@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import entity.Banka;
-import entity.Drzava;
 
 @Stateless
 @Remote(Init.class)
@@ -25,12 +24,12 @@ public class InitBean implements Init{
 		em.persist(banka);
 		
 
-		Drzava drzava = new Drzava();
+		/*Drzava drzava = new Drzava();
 		
 		drzava.setIdDrzave(1);
 		drzava.setNazivDrzave("Srbija");
 		drzava.setSifraDrzave("SRB");
-		em.persist(drzava);
+		em.persist(drzava);*/
 
 		/*Banka banka1 = new Banka();
 		banka.setNaziv("BankaPoverilac");
