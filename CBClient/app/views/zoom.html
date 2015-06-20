@@ -25,3 +25,18 @@
 <p>
 	<div ng-include="'views/table.html'"></div>
 </p>
+
+<div ng-controller="ZoomCtrl">
+	<button class = "btn btn-success" ng-click="pick()">Odaberi</button>
+	<button class = "btn btn-danger" ng-click="cancel()">Odustanak</button>
+
+	<div class="alert alert-success" role="alert" ng-show="success" >
+		<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		<b>Uspeh!</b> {{response}}
+	</div>
+	<div class="alert alert-danger" role="alert" ng-show="error">
+		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		<b>Greška!</b> {{response}}
+	</div>
+
+</div>

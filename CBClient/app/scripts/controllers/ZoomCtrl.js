@@ -1,18 +1,29 @@
 'use strict';
 
 (function() {
-	var EditCtrl = function($scope, $routeParams, $route, cbService) {
+	var ZoomCtrl = function($scope, $routeParams, $route, cbService) {
 
 		var onResourceComplete = function(data) {
 
-			$scope.entry = data.data;
-			/*
-			 * $scope.meta sadrži podatke o poljima dobavljenih podataka.
-			 * Podaci obuhvataju ime i tip polja. Služi da bi generička forma
-			 * mogla da napravi header tabele.
-			 */
-			 $scope.meta = data.meta;
+			var idField = $scope.$parent.idField;
+
+			//Izvlaci se samo id, posto su dodati linkovi umesto objekata
+			var picked = $scope.$parent.selectedEntry[idField];
+
+			var entry = data.data[0];
+
+
+			//npr: za drzave ce type biti /drzave
+			entry[pickType.replace("/","")]={};
+			entry[pickType.replace("/","")][idField] = picked;
+
+			//Sacuvaj promenjeni entitet
+			cbService.editResource(type, id, entry).then(onSuccessSend, onErrorSend);
+			
 			};
+
+			$scope.error = false;
+			$scope.success = false;
 
 			var onError = function(reason) {
 				$scope.response = "Neuspešno učitavanje podataka: " + reason.status +" "+ reason.statusText;
@@ -33,15 +44,10 @@
 				$scope.success = true;
 			};
 
-			var resetFeedback = function(){
-				$scope.error = false;
-				$scope.success = false;
-			};
 
-			$scope.submit = function(data){
-				cbService.editResource(type, id, data).then(onSuccessSend, onErrorSend).then(resetFeedback(), 2000);
-			};
-
+			$scope.pick = function(){
+				cbService.getResourceById(type, id).then(onResourceComplete, onError);
+			}
 
 		/* Uzima putanju do kontrolera.
 		 * npr: za CBClient/#/1/drzave će vratiti /1/drzave
@@ -52,15 +58,16 @@
 
 		 var route = $route.current.$$route.originalPath.split('/');
 
+		 var pickType = "/"+route[3];
 		 var type = "/"+route[2];
 		 var id = $routeParams.id;
 
 		 $scope.num = {'num':1};
 
-		 cbService.getResourceById(type, id).then(onResourceComplete, onError);
+		 //cbService.getResourceById(type, id).then(onResourceComplete, onError);
 		};
 
 		var app = angular.module("cbApp");
-		app.controller("EditCtrl", EditCtrl);
+		app.controller("ZoomCtrl", ZoomCtrl);
 
 	}());

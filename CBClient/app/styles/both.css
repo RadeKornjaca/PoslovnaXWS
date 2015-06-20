@@ -207,3 +207,7 @@ body {
         margin-right: 0;
     }
 }
+
+.selected {
+    background-color: gray;
+}

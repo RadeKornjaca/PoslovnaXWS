@@ -29,26 +29,24 @@ app.directive('contentItems', function ($compile) {
           +'id=\"'+fieldName+'\" name=\"'+fieldName+'\"/></div>');
         break;
         case 'link':
-        case 'zoom':
-          var link = scope.ngModel[fieldName].replace("http://localhost:8080/CentralnaBanka/services/restService","");
-          var path = window.location.origin+window.location.pathname;
+        var link = scope.ngModel[fieldName].replace("http://localhost:8080/CentralnaBanka/services/restService","");
+        var path = window.location.origin+window.location.pathname;
 
-          template = template.concat('<a ng-href = \"'+path+"#"+link+'\">'+fieldName+'</a>');
-          break;
+        template = template.concat('<a ng-href = \"'+path+"#"+link+'\">'+fieldName+'</a>');
+        break;
         case 'zoom':
-          var link = scope.ngModel[fieldName].replace("http://localhost:8080/CentralnaBanka/services/restService","");
-          var path = window.location.origin+window.location.pathname;
-
-          template = template.concat('ID:'++'<a ng-href = \"'+path+"#"+link+'\">Promeni </a>');   
+        var link = scope.ngModel[fieldName].replace("http://localhost:8080/CentralnaBanka/services/restService","");
+        var path = window.location.origin+window.location.pathname;
+        template = template.concat('<a ng-href = \"'+path+"#"+link+'\">'+fieldName+'</a>');
+        template = template.concat('<br><a ng-href = \"'+path+window.location.hash+"/"+fieldName+'\">Promeni</a>');   
         break;
       }
 
       template = template.concat('</div>');
     }
-    template = template.concat('<div class="form-group">'
-      +'<button class=\"btn btn-success\" type=\"submit\" ng-click=\"submit(ngModel)\">Submit</button>'
+    template = template.concat('<button class=\"btn btn-success\" type=\"submit\" ng-click=\"submit(ngModel)\">Submit</button>'
       +'<button class=\"btn btn-danger\" ng-click="cancel()">Cancel</button>'
-      +'</div>')
+      )
     return template;
   }
 
@@ -63,7 +61,7 @@ app.directive('contentItems', function ($compile) {
   }
 
   var redirect = function(){
-      scope.location.path(scope.ngModel);
+    scope.location.path(scope.ngModel);
   }
 
   return {

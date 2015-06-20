@@ -95,9 +95,13 @@
     templateUrl: 'views/edit.html',
     controller: 'EditCtrl'
   })
-    .when('/:id/banka', {
+  .when('/:id/banka', {
     templateUrl: 'views/edit.html',
     controller: 'EditCtrl'
+  })
+  .when('/:id/naseljenoMesto/drzava', {
+    templateUrl: 'views/zoom.html',
+    controller: 'ReadOnlyCtrl'
   })
   .otherwise({
     redirectTo: '/'

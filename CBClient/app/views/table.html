@@ -1,0 +1,28 @@
+	<table class="table table-bordered">
+		<!-- Za svako polje entiteta, napravi header. -->
+		<th ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
+			<button class="btn btn-default" type="submit" ng-click="sort(metaItem.name)">
+				<b>{{metaItem.name}}</b> 
+				<i ng-show="sortList[metaItem.name]=='asc'" class="glyphicon glyphicon-menu-down"></i>
+				<i ng-show="sortList[metaItem.name]=='desc'" class="glyphicon glyphicon-menu-up"></i>
+			</button>
+		</th>
+	<!-- Za svaki dobavljeni entitet, pristupi 
+	svim njegovim poljima -->
+	<tr ng-repeat="entry in entries" ng-click="select(entry)"  ng-class="{selected: entry === selectedEntry}">
+		<!--ID se ne prikazuje-->
+		<td ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
+			<!-- Ako je link, stavi <a> -->
+			<div ng-if="metaItem.type == 'link' || metaItem.type == 'zoom'">
+				<a ng-href="{{entry[metaItem.name]}}">Detalji</a>
+			</div>
+			<div ng-if="metaItem.type != 'link' && metaItem.type != 'zoom'">
+				{{entry[metaItem.name]}}
+			</div>
+		</td>
+		<td>
+			<a ng-href = "#/{{entry[idField]}}{{type}}/"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a ng-href = "#/{{entry[idField]}}{{type}}"><span class="glyphicon glyphicon-trash"></span></a>
+		</td>
+	</tr>
+</table>
