@@ -143,14 +143,13 @@ public class MT102Test {
 	
 	private static void testValidUplata() throws JAXBException {
 
-		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		File file = new File("C:/Users/Lazar/Desktop/Faks/testMT103Valid.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
 		Uplata uplata = new Uplata();
 		uplata.setNalog(message.getUplate().getUplata().get(0));
-		
 		Status response = banka.receiveUplata(uplata);
 		System.out.println("response: " + +response.getKod() + ":"
 				+ response.getOpis());

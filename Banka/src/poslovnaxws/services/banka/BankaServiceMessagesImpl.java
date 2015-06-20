@@ -7,6 +7,8 @@ package poslovnaxws.services.banka;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -26,15 +28,16 @@ import org.xml.sax.SAXParseException;
 
 import poslovnaxws.banke.Preseci;
 import poslovnaxws.banke.Presek;
+import poslovnaxws.banke.Presek.StavkePreseka;
+import poslovnaxws.banke.Presek.Zaglavlje;
 import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.Status;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
+import poslovnaxws.common.TStavkaPreseka;
 import poslovnaxws.poruke.MT103;
-import poslovnaxws.poruke.MT103Wrapper;
-import poslovnaxws.services.centralnabanka.CBClearing;
-import poslovnaxws.test.Temp;
+import poslovnaxws.services.centralnabanka.CentralnaBanka;
 import sessionbeans.concrete.PreseciDaoLocal;
 import util.JndiUtils;
 
@@ -46,7 +49,7 @@ import util.JndiUtils;
 
 @javax.jws.WebService(serviceName = "BankaService", portName = "BankaServicePort", targetNamespace = "PoslovnaXWS/services/banka", wsdlLocation = "file:/C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/Banka/WEB-INF/wsdl/Banka.wsdl", endpointInterface = "poslovnaxws.services.banka.BankaServiceMessages")
 public class BankaServiceMessagesImpl implements BankaServiceMessages {
-	
+
 	private static String PORUKE_XSD = "../webapps/banka/WEB-INF/xsd/Poruke.xsd";
 	private static String BANKE_XSD = "../webapps/banka/WEB-INF/xsd/Banke.xsd";
 	private static String COMMON_XSD = "../webapps/banka/WEB-INF/xsd/Common.xsd";
@@ -58,13 +61,8 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	private static final Logger LOG = Logger
 			.getLogger(BankaServiceMessagesImpl.class.getName());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * poslovnaxws.services.banka.BankaServiceMessages#receiveMT103(poslovnaxws
-	 * .poruke.MT103 mt103 )*
-	 */
+	public static final String BANKA_WSDL = "http://localhost:8080/CentralnaBanka/services/CBClearing?wsdl";
+
 	public poslovnaxws.common.Status receiveMT103(poslovnaxws.poruke.MT103 mt103) {
 		LOG.info("Executing operation receiveMT103");
 		System.out.println(mt103);
@@ -77,13 +75,6 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * poslovnaxws.services.banka.BankaServiceMessages#receiveMT102(poslovnaxws
-	 * .poruke.MT102 mt102 )*
-	 */
 	public poslovnaxws.common.Status receiveMT102(poslovnaxws.poruke.MT102 mt102) {
 		LOG.info("Executing operation receiveMT102");
 		System.out.println(mt102);
@@ -96,36 +87,21 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * poslovnaxws.services.banka.BankaServiceMessages#receiveMT900(poslovnaxws
-	 * .poruke.MT900 mt900 )*
-	 */
 	public poslovnaxws.common.Status receiveMT900(poslovnaxws.poruke.MT900 mt900) {
 		LOG.info("Executing operation receiveMT900");
 		System.out.println(mt900);
-		Temp.sendMT103(new MT103());
-		try {
-			poslovnaxws.common.Status _return = validate(mt900, PORUKE_XSD);
-			return _return;
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		}
+
+		Status status = validate(mt900, PORUKE_XSD);
+
+		if (status.getKod() != 0)
+			return status;
+
+		return status;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * poslovnaxws.services.banka.BankaServiceMessages#receiveMT910(poslovnaxws
-	 * .poruke.MT910 mt910 )*
-	 */
 	public poslovnaxws.common.Status receiveMT910(poslovnaxws.poruke.MT910 mt910) {
 		LOG.info("Executing operation receiveMT910");
-		
+
 		try {
 			poslovnaxws.common.Status _return = validate(mt910, PORUKE_XSD);
 			return _return;
@@ -140,10 +116,10 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			throws NotificationMessage {
 		System.out.println("Executing operation zahtevZaIzvod");
 		Preseci preseci = null;
-		
+
 		poslovnaxws.common.Status status = validate(zahtevZaIzvod, BANKE_XSD);
-		
-		//0 = OK
+
+		// 0 = OK
 		if (status.getKod() != 0)
 			throw new NotificationMessage();
 
@@ -158,29 +134,90 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			throw new NotificationMessage();
 		}
 	}
-	
+
 	@Override
 	public Status receiveUplata(Uplata uplata) {
 		System.out.println("Executing operation receiveUplata");
-		
+
 		poslovnaxws.common.Status status = validate(uplata, BANKE_XSD);
-		
-		if(status.getKod() != 0){
+
+		Preseci preseci = null;
+		Presek presek = new Presek();
+		TNalog nalog = uplata.getNalog();
+
+		if (status.getKod() != 0) {
 			return status;
 		}
-		
+		System.out.println(nalog.getDatumNaloga());
+		try {
+
+			// Pripremi presek
+
+			// TODO: Banke iz baze
+
+			StavkePreseka stavke = new StavkePreseka();
+
+			TStavkaPreseka stavkaUKorist = new TStavkaPreseka(nalog);
+			stavkaUKorist.setSmer("K");
+			TStavkaPreseka stavkaNaTeret = new TStavkaPreseka(nalog);
+			stavkaNaTeret.setSmer("T");
+
+			stavke.getStavka().add(stavkaUKorist);
+			stavke.getStavka().add(stavkaNaTeret);
+
+			presek.setZaglavlje(new Zaglavlje());
+
+			presek.setStavkePreseka(stavke);
+
+			preseci = presekDao.findById(uplata.getNalog().getDatumNaloga()
+					.toString());
+
+			preseci.getPresek().add(presek);
+			presekDao.merge(preseci, preseci.getId());
+
+		} catch (JAXBException e) {
+			// Ako ne nadje nista, vratice nesto sto
+			// parser ne ume da prepozna.
+			preseci = new Preseci();
+			preseci.setDatum(uplata.getNalog().getDatumNaloga());
+			preseci.getPresek().add(presek);
+
+			try {
+				presekDao.persist(preseci);
+			} catch (JAXBException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+				return status;
+			} catch (IOException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+				return status;
+			}
+
+		} catch (IOException e) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IOException: Couldn't fetch data from database.");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+			return status;
+		}
+
 		MT103 mt103 = new MT103();
-		TNalog nalog = uplata.getNalog();
-		
+
 		mt103.setUplata(nalog);
 		
+		mt103.setId("123");
+
 		mt103.setBankaDuznik((TBanka) nalog.getDuznik());
 		mt103.setBankaPoverioc((TBanka) nalog.getPrimalac());
-	
-		mt103.setId("123");
-		
-		status = sendMT103(mt103);
-		
+
+		CentralnaBanka centralnaBanka = createBankaService();
+		status = centralnaBanka.receiveMT103(mt103);
+
 		return status;
 	}
 
@@ -197,113 +234,58 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 			javax.xml.validation.Validator validator = schema.newValidator();
 			validator.validate(source);
-			
+
 			_return.setKod(0);
 			_return.setOpis("OK");
 
 		} catch (JAXBException e) {
 			_return.setKod(1);
-			_return.setOpis("JAXB exception");
+			_return.setOpis("BANKE exception :JAXB exception");
 			LOG.warning(e.getMessage());
 			e.printStackTrace();
 		} catch (SAXParseException e) {
 			_return.setKod(2);
-			_return.setOpis("Invalid XML");
+			_return.setOpis("BANKE exception :Invalid XML");
 			LOG.warning(e.getMessage());
 			e.printStackTrace();
 		} catch (SAXException e) {
 			_return.setKod(3);
-			_return.setOpis("SAX exception");
+			_return.setOpis("BANKE exception :SAX exception");
 			LOG.warning(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
 			_return.setKod(4);
-			_return.setOpis("IO exception");
+			_return.setOpis("BANKE exception :IO exception");
 			LOG.warning(e.getMessage());
 		} catch (Exception e) {
 			_return.setKod(5);
-			_return.setOpis("???");
+			_return.setOpis("BANKE exception :Internal server error");
 			e.printStackTrace();
 		}
 		return _return;
 	}
-	
 
-	public static String BANKA_WSDL = "http://localhost:8080/CentralnaBanka/services/CBClearing?wsdl";
-
-	private CBClearing createBankaService() {
+	private CentralnaBanka createBankaService() {
 		URL wsdl;
 		try {
 			wsdl = new URL(
-					"http://localhost:8080/CentralnaBanka/services/CBClearing?wsdl");
+					"http://localhost:8080/CentralnaBanka/services/CBService?wsdl");
 
-			QName serviceName = new QName("PoslovnaXWS/services/centralnaBanka",
-					"CBService");
+			QName serviceName = new QName(
+					"PoslovnaXWS/services/centralnaBanka", "CBService");
 			QName portName = new QName("PoslovnaXWS/services/centralnaBanka",
-					"CBClearingPort");
-			
+					"CentralnaBankaPort");
+
 			Service service = Service.create(wsdl, serviceName);
-			
-			return service.getPort(portName, CBClearing.class);
+
+			return service.getPort(portName, CentralnaBanka.class);
 
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		return null;
 
 	}
-
-	private Status sendMT103(MT103 message) {
-		
-		CBClearing banka = createBankaService();
-		MT103Wrapper wrapper = new MT103Wrapper();
-		wrapper.setWrappedParameter(message);
-		return banka.receiveMT103Clearing(wrapper).getWrappedParameter();
-	}
-	
-	/*public static void sendMT910(MT910 message, String url) {
-		
-		BankaServiceMessages banka = createBankaService(url);
-		
-		banka.receiveMT910(message);
-	}
-	
-	public static void sendMT102(MT102 message, String url) {
-		
-		BankaServiceMessages banka = createBankaService(url);
-		
-		banka.receiveMT102(message);
-	}
-	
-	public static void sendMT103(MT103 message, String url) {
-		
-		BankaServiceMessages banka = createBankaService(url);
-		
-		banka.receiveMT103(message);
-	}
-	
-	public static Presek getPresek(ZahtevZaIzvod zahtevZaIzvod, String url) {
-		
-		BankaServiceMessages banka = createBankaService(url);
-		
-		try {
-			return banka.zahtevZaIzvod(zahtevZaIzvod);
-		} catch (NotificationMessage e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	public static void main(String[] args) {
-		sendMT900(new MT900(), BANKA_WSDL);
-		sendMT910(new MT910(), BANKA_WSDL);
-		
-		Presek presek = getPresek(new ZahtevZaIzvod(), BANKA_WSDL);
-		System.out.println(presek);
-	}*/
-
 
 }

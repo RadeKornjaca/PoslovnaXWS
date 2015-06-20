@@ -70,9 +70,9 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
     private static final Logger LOG = Logger.getLogger(CentralnaBankaImpl.class.getName());
     
-	private static String PORUKE_XSD = "../webapps/banka/WEB-INF/xsd/Poruke.xsd";
-	private static String BANKE_XSD = "../webapps/banka/WEB-INF/xsd/Banke.xsd";
-	private static String COMMON_XSD = "../webapps/banka/WEB-INF/xsd/Common.xsd";
+	private static String PORUKE_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd";
+	private static String BANKE_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Banke.xsd";
+	private static String COMMON_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Common.xsd";
     
     @EJB
 	private NalogDaoLocal nalogDao = JndiUtils.getLocalEJB(JndiUtils.NALOG_EJB);
@@ -250,6 +250,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 	        bankaDuznika = bankaDao.getAllCollections(bankaDuznika.getBankaId());
 	        bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca.getBankaId());
 	        RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika());
+	        
 	        if(racunBankeDuznika.getBanka().getBankaId() == bankaDuznika.getBankaId() && racunBankeDuznika.isLikvidan()){
 	        	if(racunBankeDuznika.getStanjeRacuna()>= nalog.getIznos()){
 	            	RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca());

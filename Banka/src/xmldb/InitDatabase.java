@@ -130,14 +130,14 @@ public final class InitDatabase {
 		
 		conn.disconnect();
 		
-		File file = new File("C:/Users/Lazar/Desktop/Faks/presek.xml");
+		/*File file = new File("C:/Users/Lazar/Desktop/Faks/presek.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(Preseci.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		Preseci preseci = (Preseci) jaxbUnmarshaller.unmarshal(file);
         
 		PreseciDao dao = new PreseciDao();
 		
-		dao.persist(preseci);
+		dao.persist(preseci);*/
 		
 		
 	}

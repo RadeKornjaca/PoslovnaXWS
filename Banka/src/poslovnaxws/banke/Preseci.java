@@ -47,7 +47,7 @@ public class Preseci implements Identifiable {
 	@XmlSchemaType(name = "date")
 	protected XMLGregorianCalendar datum;
 	@XmlElement(required = true)
-	protected List<Presek> presek;
+	protected List<Presek> presek = new ArrayList<Presek>();
 
 	/**
 	 * Gets the value of the datum property.
