@@ -1,9 +1,9 @@
 package rest;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,11 +18,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 
+import sessionbeans.common.GenericDaoLocal;
 import sessionbeans.concrete.DobavljacDaoLocal;
 import sessionbeans.concrete.FakturaDaoLocal;
-import entity.dobavljac.Dobavljac;
+import sessionbeans.concrete.StavkaFaktureDaoLocal;
+import sessionbeans.concrete.StavkeDaoLocal;
 import entity.fakture.Faktura;
-import entity.fakture.TStavkaFakture;
+import entity.fakture.StavkaFakture;
+import entity.fakture.StavkeFakture;
 
 @Path("/partneri")
 public class FakturaService {
@@ -32,6 +35,12 @@ public class FakturaService {
 
 	@EJB
 	private DobavljacDaoLocal dobavljacDao;
+	
+	@EJB
+	private StavkaFaktureDaoLocal stavkaDao;
+	
+	@EJB
+	private StavkeDaoLocal stavkeDao;
 
 	public FakturaService() {
 
@@ -40,49 +49,23 @@ public class FakturaService {
 	@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
-	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) {
+	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) throws URISyntaxException {
 		System.out.println("Invoking addFaktura!");
-
-		System.out.println("Id poslovnog partnera: " + id);
-		System.out.println(faktura);
-
-		Response response = Response.status(Status.BAD_REQUEST).build();
-
-		Dobavljac dobavljac = null;
-		try {
-			dobavljac = dobavljacDao.findById(id);
-		} catch (NumberFormatException | JAXBException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		System.out.println(dobavljacDao);
-		System.out.println(dobavljac);
 		
-		if(dobavljac != null){
-			try {
-				fakturaDao.persist(faktura);
-				try {
-					response = Response.status(Status.CREATED).contentLocation(new URI("/partneri/" + id + "/fakture/" + faktura.getId())).build();
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
+		Response response;
+		
+		URI uri = new URI("/partneri/" + id + "/fakture/" + faktura.getId());
+		
+		if(checkDobavljac(id)){
+			response = postResponsePack(fakturaDao, faktura, uri);
+		} else {
 			response = Response.status(Status.FORBIDDEN).build();
 		}
-
 		
 		return response;
 	}
+
+
 
 	@GET
 	@Path("/{id}/fakture")
@@ -92,7 +75,6 @@ public class FakturaService {
 
 		System.out.println("Id poslovnog partnera: " + id);
 
-		Response response;
 		List<Faktura> fakture = null;
 
 		try {
@@ -105,15 +87,11 @@ public class FakturaService {
 			e.printStackTrace();
 		}
 		
-		if(fakture != null) {
-			response = Response.ok(fakture).build();
-		}
-		else {
-			response = Response.status(Status.NOT_FOUND).build();
-		}
+		Response response = getResponsePack(fakture);
 
 		return response;
 	}
+
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}")
@@ -123,16 +101,11 @@ public class FakturaService {
 			@PathParam("id_fakture") Long idFakture) {
 		System.out.println("Invoking getFakturaFromDobavljac");
 		
-		Response response;
+		
 		Faktura faktura = fakturaDao.findFakturaById(idDobavljaca, idFakture);
 		
-		
-		if(faktura != null) {
-			response = Response.ok(faktura).build();
-		}
-		else {
-			response = Response.status(Status.NOT_FOUND).build();
-		}
+		Response response;
+		response = getResponsePack(faktura);
 		
 		return response;
 	}
@@ -140,11 +113,19 @@ public class FakturaService {
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke")
 	@Produces("application/xml")
-	public List<TStavkaFakture> getStavke(
+	public Response getStavke(
 			@PathParam("id_dobavljaca") String idDobavljaca,
-			@PathParam("id_fakture") String idFakture) {
-
-		return new ArrayList<TStavkaFakture>();
+			@PathParam("id_fakture") Long idFakture) {
+		
+		StavkeFakture stavkeFakture = null;
+		
+		stavkeFakture = stavkeDao.findStavkeFakture(idDobavljaca, idFakture);
+		
+		Response response;
+		response = getResponsePack(stavkeFakture);
+		
+		
+		return response;
 
 	}
 
@@ -159,11 +140,17 @@ public class FakturaService {
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
 	@Produces("application/xml")
-	public TStavkaFakture getStavka(
+	public Response getStavka(
 			@PathParam("id_dobavljaca") String idDobavljaca,
-			@PathParam("id_fakture") String idFakture,
-			@PathParam("red_br") String redBr) {
-		return new TStavkaFakture();
+			@PathParam("id_fakture") Long idFakture,
+			@PathParam("red_br") BigInteger redBr) {
+		
+		StavkaFakture stavka = stavkaDao.findByIdInFaktura(idDobavljaca, idFakture, redBr);
+		Response response;
+		
+		response = getResponsePack(stavka);
+		
+		return response;
 
 	}
 
@@ -182,36 +169,71 @@ public class FakturaService {
 	public Response deleteStavka(@PathParam("id_dobavljaca") String idDob,
 			@PathParam("id_fakture") String idFak,
 			@PathParam("red_br") String br) {
-		long idDobavljaca = Long.parseLong(idDob);
-		long idFakture = Long.parseLong(idFak);
-		int redBr = Integer.parseInt(br);
+				
+		
+		return null;
 
-		System.out.println("Invoking deleteStavka!");
 
+	}
+
+	
+	/**
+	 * Metoda sluzi za generisanje HTTP odgovora prilikom GET zahteva, koji se 
+	 * salje klijentu. Ukoliko postoje informacije, odgovor je tipa 200, 
+	 * dok ukoliko je data == null, onda se salje odgovor tipa 404.
+	 * 
+	 * @param data - informacioni deo odgovora
+	 * @return objekat klase Response koji predstavlja enkapsulaciju HTTP odgovora
+	 */
+	private Response getResponsePack(Object data) {
 		Response response;
-
-		// fali HTTP 403 ukoliko dobavljac nije poslovni partner kupca
-
-		Faktura faktura = null;
-		try {
-			faktura = fakturaDao.findById(idFakture);
-		} catch (JAXBException e) {
+		if(data != null) {
+			response = Response.ok(data).build();
+		}
+		else {
 			response = Response.status(Status.NOT_FOUND).build();
-		} catch (IOException e) {
+		}
+		return response;
+	}
+	
+	/**
+	 * Proverava da li postoji dobavljac u listi poslovnih partnera
+	 * 
+	 * @param id - vrednost PIB-a dobavljaca
+	 * @return	boolean vrednost u zavisnosti od toga da li postoji partner ili ne
+	 */
+	private boolean checkDobavljac(Long id) {
+		try {
+			dobavljacDao.findById(id);
+		} catch (NumberFormatException | JAXBException | IOException e1) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Vrsi validaciju i upisuje novi entitet u bazu
+	 * 
+	 * @param dao	- daoBean entiteta koji se upisuje
+	 * @param data	- konkretan novi podatak
+	 * @param uri	- kontekstna putanja na kojoj ce biti upisan novi podatak
+	 * @return	uspesnost operacije
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Response postResponsePack(GenericDaoLocal dao, Object data, URI uri) {
+		Response response;
+		
+		try {
+			dao.persist(data);
+			response = Response.status(Status.CREATED).contentLocation(uri).build();
+
+		} catch (JAXBException | IOException e) {
+			response = Response.status(Status.BAD_REQUEST).build();
 			e.printStackTrace();
 		}
 
-		TStavkaFakture resource = faktura.getStavkeFakture().getStavkaFakture()
-				.get(redBr); // TODO: Povuci iz baze
-
-		if (resource != null) {
-			// TODO: Remove stavka
-			response = Response.ok().build();
-		} else {
-			response = Response.noContent().build();
-		}
-
+		
 		return response;
 	}
-
+	
 }
