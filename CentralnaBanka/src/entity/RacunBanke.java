@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,12 +28,13 @@ import poslovnaxws.common.TBanka;
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
 @Table(name="racunBanke")
+@NamedQuery(name = "findByBrojRacuna", query= "select rb from RacunBanke rb where rb.brojRacuna like :brojRacuna")
 public class RacunBanke{
 	/** @pdOid c725a61b-9fa6-4298-8db6-3e5bd6931f67 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id_banke", unique = true, nullable = false)
-	private long idBanke;
+	@Column(name = "id_racuna", unique = true, nullable = false)
+	private long idRacuna;
 	/** @pdOid 4c7e74ea-9624-4762-a948-70298323f533 */
 	@Column(name = "broj_racuna", unique = true, nullable = false)
 	private java.lang.String brojRacuna;
@@ -45,6 +47,9 @@ public class RacunBanke{
 	/** @pdOid a17685ec-3851-4a11-9771-58002089e1cb */
 	@Column(name = "likvidan", unique = false, nullable = false)
 	private boolean likvidan;
+	/** @pdOid 523574da-f013-49d5-86c9-854200b941af */
+	@Column(name = "stanje_racuna", unique = false, nullable = false)
+	public double stanjeRacuna;
 	
 	@ManyToOne
 	@JoinColumn(name = "banka_id", referencedColumnName = "banka_id", nullable = false)
@@ -55,11 +60,10 @@ public class RacunBanke{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBanke")
-	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna
-	 = new HashSet<DnevnoStanjeRacuna>();
+	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna = new HashSet<DnevnoStanjeRacuna>();
 	
-	@OneToMany
-	private java.util.Collection<Mt9xy> mt9xy = new HashSet<Mt9xy>();
+	/*@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankeMt9xy")
+	private java.util.Collection<Mt9xy> mt9xy;
 	/**
 	 * @pdRoleInfo migr=no name=Mt9xy assc=obracunskiRacun
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -71,8 +75,11 @@ public class RacunBanke{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
-	/*@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBanke")
-	private java.util.Collection<Mt10x> mt10x;
+	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankeDuznika")
+	private java.util.Collection<Mt10x> mt10xDuznika;
+	
+	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankePoverioca")
+	private java.util.Collection<Mt10x> mt10xPoverioca;
 
 	/**
 	 * @pdRoleInfo migr=no name=Mt10x assc=obracunskiRacunBankePoverioca
@@ -100,12 +107,30 @@ public class RacunBanke{
 		this.banka.addRacunBanke(this);
 	}
 
-	public long getIdBanke() {
-		return idBanke;
+	public double getStanjeRacuna() {
+		return stanjeRacuna;
 	}
 
-	public void setIdBanke(long idBanke) {
-		this.idBanke = idBanke;
+	public void setStanjeRacuna(double stanjeRacuna) {
+		this.stanjeRacuna = stanjeRacuna;
+	}
+
+	/*public java.util.Collection<Mt9xy> getMt9xy() {
+		return mt9xy;
+	}
+
+	public void setMt9xy(java.util.Collection<Mt9xy> mt9xy) {
+		this.mt9xy = mt9xy;
+	}*/
+
+
+
+	public long getIdRacuna() {
+		return idRacuna;
+	}
+
+	public void setIdRacuna(long idRacuna) {
+		this.idRacuna = idRacuna;
 	}
 
 	public java.lang.String getBrojRacuna() {

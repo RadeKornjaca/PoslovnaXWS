@@ -8,6 +8,8 @@ package entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.HashSet;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +25,7 @@ import javax.persistence.Table;
 /** @pdOid 4e03db37-cf8e-49d4-a795-92a43c20cb39 */
 @Entity
 @Table(name = "dnevnoStanjeRacuna")
-@NamedQuery(name = "findDnevnoStanjeRacuna", query="Select d from DnevnoStanjeRacuna d where d.datum like :datum")
+@NamedQuery(name = "findDnevnoStanjeRacuna", query="Select d from DnevnoStanjeRacuna d where d.datum like :datum and d.racunBanke.idRacuna like :idRacunaBanke")
 public class DnevnoStanjeRacuna{
 	/** @pdOid 61879e33-25d4-4972-85e1-0acd180d8b91 */
 	@Id
@@ -47,14 +49,14 @@ public class DnevnoStanjeRacuna{
 	private double trenutnoStanje;
 
 	@ManyToOne
-	@JoinColumn(name = "id_banke", referencedColumnName = "id_banke", nullable = false)
+	@JoinColumn(name = "id_racuna", referencedColumnName = "id_racuna", nullable = false)
 	private RacunBanke racunBanke;
 	/**
 	 * @pdRoleInfo migr=no name=StavkaDnevnogRacuna assc=stavke
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "dnevnoStanjeRacuna")
-	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
+	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna = new HashSet<StavkaDnevnogRacuna>();
 	
 	public DnevnoStanjeRacuna(){
 		

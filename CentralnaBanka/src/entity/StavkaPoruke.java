@@ -26,7 +26,7 @@ public class StavkaPoruke{
 	private long idStavkePoruke;
 	/** @pdOid fa0457c0-a16f-4efe-ba23-c1c65c64976a */
 
-	@Column(name = "redni_broj_stavke", unique = true, nullable = false)
+	@Column(name = "redni_broj_stavke", unique = false, nullable = false)
 	private double redniBrojStavke;
 
 	@ManyToOne

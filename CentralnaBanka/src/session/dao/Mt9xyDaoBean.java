@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import entity.Mt10x;
 import javax.persistence.Query;
-
 import entity.Mt9xy;
 import entity.Poruka;
 
@@ -26,6 +26,11 @@ public class Mt9xyDaoBean extends GenericDaoBean<Mt9xy, Integer> implements Mt9x
 		List<Mt9xy> result = q.getResultList();
 		return result;
 	}
-	
 
+	@Override
+	public Mt10x getAllCollections(long id){
+		return null;
+		
+	}
+	
 }

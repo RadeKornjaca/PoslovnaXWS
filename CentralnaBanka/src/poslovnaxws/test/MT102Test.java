@@ -17,39 +17,39 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import poslovnaxws.common.Status;
 import poslovnaxws.common.StatusWrapper;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT102.Uplate;
 import poslovnaxws.poruke.MT102Wrapper;
-import poslovnaxws.services.centralnabanka.CBClearing;
+import poslovnaxws.services.centralnabanka.CentralnaBanka;
 
 public class MT102Test {
 
 	public static QName serviceName;
 	public static QName portName;
 	public static Service service;
-	public static CBClearing banka;
+	public static CentralnaBanka banka;
 
 	public static void main(String[] args) {
 		URL wsdl;
 		try {
 			wsdl = new URL(
-					"http://localhost:8080/CentralnaBanka/services/CBClearing?wsdl");
-
+					"http://localhost:8080/CentralnaBanka/services/CBService?wsdl");
 			serviceName = new QName("PoslovnaXWS/services/centralnaBanka",
 					"CBService");
 			portName = new QName("PoslovnaXWS/services/centralnaBanka",
-					"CBClearingPort");
+					"CentralnaBankaPort");
 
 			service = Service.create(wsdl, serviceName);
 
-			banka = service.getPort(portName, CBClearing.class);
+			banka = service.getPort(portName, CentralnaBanka.class);
 
-			//testValidClearing();
+			testValidClearing();
 
-			 testInvalid();
+			 //testInvalid();
 
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
@@ -120,12 +120,10 @@ public class MT102Test {
 			e.printStackTrace();
 		}
 
-		MT102Wrapper wrapper = new MT102Wrapper();
 
-		wrapper.setWrappedParameter(mt102);
 
-		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter().getKod());
+		Status response = banka.receiveMT102(mt102);
+		System.out.println("response: " + response.getKod());
 
 	}
 
@@ -187,12 +185,8 @@ public class MT102Test {
 
 		message.setUplate(uplate);
 
-		MT102Wrapper wrapper = new MT102Wrapper();
-
-		wrapper.setWrappedParameter(message);
-
-		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter());
+		Status response = banka.receiveMT102(message);
+		System.out.println("response: " + response.getKod());
 
 	}
 

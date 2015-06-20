@@ -1,6 +1,5 @@
 package poslovnaxws.test;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -9,9 +8,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -19,14 +15,11 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
 import poslovnaxws.banke.ZahtevZaIzvod;
-import poslovnaxws.common.NalogWrapper;
 import poslovnaxws.common.Status;
-import poslovnaxws.common.StatusWrapper;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT102.Uplate;
-import poslovnaxws.poruke.MT102Wrapper;
 import poslovnaxws.services.banka.BankaServiceMessages;
 import poslovnaxws.services.banka.NotificationMessage;
 
@@ -122,11 +115,9 @@ public class MT102Test {
 		uplate.getUplata().add(nalog);
 
 		message.setUplate(uplate);
-		MT102Wrapper wrapper = new MT102Wrapper();
-		wrapper.setWrappedParameter(message);
-		StatusWrapper response = banka.receiveMT102(wrapper);
+		Status response = banka.receiveMT102(message);
 
-		System.out.println("response: " + response.getWrappedParameter());
+		System.out.println("response: " + response);
 
 	}
 
@@ -187,11 +178,9 @@ public class MT102Test {
 		uplate.getUplata().add(nalog);
 
 		message.setUplate(uplate);
-		MT102Wrapper wrapper = new MT102Wrapper();
-		wrapper.setWrappedParameter(message);
-		StatusWrapper response = banka.receiveMT102(wrapper);
+		Status response = banka.receiveMT102(message);
 		
-		System.out.println("response: " + response.getWrappedParameter());
+		System.out.println("response: " + response);
 
 	}
 
@@ -215,7 +204,7 @@ public class MT102Test {
 		}
 
 		try {
-			banka.zahtevZaIzvod(new NalogWrapper());
+			banka.zahtevZaIzvod(new ZahtevZaIzvod());
 		} catch (NotificationMessage e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

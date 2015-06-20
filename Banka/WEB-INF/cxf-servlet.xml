@@ -26,7 +26,7 @@
 		
 	<jaxws:endpoint 
 		id="banka" 
-		address="/BankaService"
+		address="/banka"
 		implementor="poslovnaxws.services.banka.BankaServiceMessagesImpl"
 		wsdlLocation="WEB-INF/wsdl/Banka.wsdl"/>
 

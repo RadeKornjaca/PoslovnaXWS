@@ -3,8 +3,16 @@
 		<legend>Edit</legend>
 		<!--Ne radi ako nije ng-repeat iz nekog razloga-->
 		<div ng-repeat="e in entry">
-		<content-items ng-model="e" meta="meta" submit="submit(e)"></content-items>
+			<content-items ng-model="e" meta="meta" submit="submit(e)"></content-items>
 		</div>
-		<button ng-click="bleja()">Bleja</button>
 	</fieldset>
 </form>
+
+<div class="alert alert-success" role="alert" ng-show="success" >
+	<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+	<b>Uspeh!</b> {{response}}
+</div>
+<div class="alert alert-danger" role="alert" ng-show="error">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	<b>Greška!</b> {{response}}
+</div>

@@ -21,6 +21,13 @@ public class BankaDaoBean extends GenericDaoBean<Banka, Integer> implements Bank
 		
 		return banka;
 	}
+
+	@Override
+	public Banka getAllCollections(long id) {
+		Banka banka = em.find(Banka.class, id);
+		banka.getRacunBanke().size();
+		return banka;
+	}
 	
 	
 

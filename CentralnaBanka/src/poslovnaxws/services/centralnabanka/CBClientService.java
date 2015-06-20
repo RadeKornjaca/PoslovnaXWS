@@ -3,8 +3,6 @@ package poslovnaxws.services.centralnabanka;
 import java.util.HashMap;
 
 import javax.ejb.EJB;
-import javax.persistence.EntityExistsException;
-import javax.persistence.PersistenceException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,15 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mysql.jdbc.log.Log;
-
-import entity.Banka;
-import entity.Drzava;
-import entity.NaseljenoMesto;
-import poslovnaxws.poruke.MT9xyWrapper;
 import session.dao.BankaDaoLocal;
 import session.dao.DnevnoStanjeRacunaDaoLocal;
 import session.dao.DrzavaDaoLocal;
@@ -44,12 +33,20 @@ import wrappers.BankaWrapper;
 import wrappers.DnevnoStanjeRacunaWrapper;
 import wrappers.DrzavaWrapper;
 import wrappers.MT10xWrapper;
+import wrappers.MT9xyWrapper;
 import wrappers.NalogWrapper;
 import wrappers.NaseljenoMestoWrapper;
 import wrappers.PorukaWrapper;
 import wrappers.RacunBankeWrapper;
 import wrappers.StavkaDnevnogRacunaWrapper;
 import wrappers.StavkaPorukeWrapper;
+
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import entity.Banka;
+import entity.Drzava;
+import entity.NaseljenoMesto;
 
 public class CBClientService {
 
@@ -521,8 +518,8 @@ public class CBClientService {
 		try {
 			bankaDao.persist(banka);
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 
@@ -545,8 +542,8 @@ public class CBClientService {
 		try {
 			drzavaDao.persist(drzava);
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 
@@ -564,7 +561,7 @@ public class CBClientService {
 		//Drzava je mandatory
 		if (mesto.getDrzava() == null) {
 			ObjectNode mapper = new ObjectNode(JsonNodeFactory.instance);
-			mapper.put("message", "Država can't be null.");
+			mapper.put("message", "Drï¿½ava can't be null.");
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity(mapper.toString()).build();
 		}
@@ -583,8 +580,8 @@ public class CBClientService {
 			naseljenoMestoDao.persist(mesto);
 			drzavaDao.merge(drzava);
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 
@@ -610,8 +607,8 @@ public class CBClientService {
 			drzavaDao.merge(drzavaOld);
 			System.out.println(drzavaOld.getNazivDrzave());
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 
@@ -635,8 +632,8 @@ public class CBClientService {
 
 			naseljenoMestoDao.merge(mestoOld);
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 
@@ -662,8 +659,8 @@ public class CBClientService {
 
 			bankaDao.merge(bankaOld);
 		} catch (RuntimeException e) {
-			// EntityExistsException se nalazi ugnježden u gomili drugih
-			// Ne može se uhvatiti na elegantan naèin
+			// EntityExistsException se nalazi ugnjeï¿½den u gomili drugih
+			// Ne moï¿½e se uhvatiti na elegantan naï¿½in
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 

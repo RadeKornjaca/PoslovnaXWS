@@ -10,6 +10,8 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +52,7 @@ public class Banka{
 	 *             side=A
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "banka")
-	private java.util.Collection<RacunBanke> racunBanke;
+	private java.util.Collection<RacunBanke> racunBanke = new HashSet<RacunBanke>();
 
 	public Banka(){
 		

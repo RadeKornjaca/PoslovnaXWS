@@ -48,9 +48,9 @@ public class CopyOfMT102Test {
 
 			banka = service.getPort(portName, CBClearing.class);
 
-			testValidClearing();
+			//testValidClearing();
 
-			// testInvalid();
+			 testInvalid();
 
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
@@ -179,7 +179,7 @@ public class CopyOfMT102Test {
 		wrapper.setWrappedParameter(message);
 
 		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter());
+		System.out.println("response: " + response.getWrappedParameter().getOpis());
 
 	}
 

@@ -18,8 +18,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 
+<<<<<<< HEAD
 import sessionbeans.common.GenericDaoLocal;
 import sessionbeans.concrete.DobavljacDaoLocal;
+=======
+>>>>>>> 76020f2430c70993f17910d5fc4872241b948a5b
 import sessionbeans.concrete.FakturaDaoLocal;
 import sessionbeans.concrete.StavkaFaktureDaoLocal;
 import sessionbeans.concrete.StavkeDaoLocal;
