@@ -87,8 +87,8 @@ public final class BankaServiceMessages_BankaServicePort_Client {
         java.lang.String _zahtevZaIzvod_brojRacuna = "";
         javax.xml.datatype.XMLGregorianCalendar _zahtevZaIzvod_datum = null;
         java.math.BigInteger _zahtevZaIzvod_redniBrojPreseka = new java.math.BigInteger("0");
-        javax.xml.ws.Holder<poslovnaxws.banke.Presek.Zaglavlje> _zahtevZaIzvod_zaglavlje = new javax.xml.ws.Holder<poslovnaxws.banke.Presek.Zaglavlje>();
-        javax.xml.ws.Holder<poslovnaxws.banke.Presek.StavkePreseka> _zahtevZaIzvod_stavkePreseka = new javax.xml.ws.Holder<poslovnaxws.banke.Presek.StavkePreseka>();
+        javax.xml.ws.Holder<poslovnaxws.banke.Zaglavlje> _zahtevZaIzvod_zaglavlje = new javax.xml.ws.Holder<poslovnaxws.banke.Zaglavlje>();
+        javax.xml.ws.Holder<poslovnaxws.banke.StavkePreseka> _zahtevZaIzvod_stavkePreseka = new javax.xml.ws.Holder<poslovnaxws.banke.StavkePreseka>();
         System.out.println("zahtevZaIzvod._zahtevZaIzvod_zaglavlje=" + _zahtevZaIzvod_zaglavlje.value);
 		System.out.println("zahtevZaIzvod._zahtevZaIzvod_stavkePreseka=" + _zahtevZaIzvod_stavkePreseka.value);
             }

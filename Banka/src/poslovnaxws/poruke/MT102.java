@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -15,15 +16,23 @@ import poslovnaxws.common.TNalog;
 
 
 /**
- * <p>Java class for MT102 complex type.
+ * <p>Java class for anonymous complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="MT102">
+ * &lt;complexType>
  *   &lt;complexContent>
- *     &lt;extension base="{PoslovnaXWS/Poruke}TPoruka">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="id">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;maxLength value="50"/>
+ *               &lt;minLength value="1"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
  *         &lt;element name="bankaDuznik" type="{PoslovnaXWS/Common}TBanka"/>
  *         &lt;element name="bankaPoverioc" type="{PoslovnaXWS/Common}TBanka"/>
  *         &lt;element name="ukupanIznos">
@@ -54,7 +63,7 @@ import poslovnaxws.common.TNalog;
  *           &lt;/complexType>
  *         &lt;/element>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -62,7 +71,8 @@ import poslovnaxws.common.TNalog;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "MT102", propOrder = {
+@XmlType(name = "", propOrder = {
+    "id",
     "bankaDuznik",
     "bankaPoverioc",
     "ukupanIznos",
@@ -71,10 +81,11 @@ import poslovnaxws.common.TNalog;
     "datum",
     "uplate"
 })
-public class MT102
-    extends TPoruka
-{
+@XmlRootElement(name = "MT102")
+public class MT102 {
 
+    @XmlElement(required = true)
+    protected String id;
     @XmlElement(required = true)
     protected TBanka bankaDuznik;
     @XmlElement(required = true)
@@ -91,6 +102,30 @@ public class MT102
     protected XMLGregorianCalendar datum;
     @XmlElement(required = true)
     protected MT102 .Uplate uplate;
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
+    }
 
     /**
      * Gets the value of the bankaDuznik property.

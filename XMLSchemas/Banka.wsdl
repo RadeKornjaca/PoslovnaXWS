@@ -37,10 +37,11 @@
 	</wsdl:message>
 
 	<wsdl:message name="zahtevZaIzvodResponse">
-		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod" />
+		<wsdl:part name="presek" element="xws_banke:presek" />
 	</wsdl:message>
 
 	<wsdl:message name="zahtevZaIzvodRequest">
+		<wsdl:part name="zahtevZaIzvod" element="xws_banke:zahtevZaIzvod" />
 	</wsdl:message>
 
 	<wsdl:message name="receiveMT900">
@@ -49,6 +50,10 @@
 
 	<wsdl:message name="receiveMT910">
 		<wsdl:part name="mt910" element="xws_poruke:MT910" />
+	</wsdl:message>
+
+	<wsdl:message name="receiveUplata">
+		<wsdl:part name="uplata" element="xws_banke:uplata" />
 	</wsdl:message>
 
 	<wsdl:message name="notificationMessage">
@@ -61,8 +66,8 @@
 	<wsdl:portType name="BankaServiceMessages">
 
 		<wsdl:operation name="zahtevZaIzvod" parameterOrder="nmtokens">
-			<wsdl:output message="ws:zahtevZaIzvodResponse" />
 			<wsdl:input message="ws:zahtevZaIzvodRequest" />
+			<wsdl:output message="ws:zahtevZaIzvodResponse" />
 			<wsdl:fault name="zahtevZaIzvodError" message="ws:notificationMessage" />
 		</wsdl:operation>
 
@@ -83,6 +88,11 @@
 
 		<wsdl:operation name="receiveMT103" parameterOrder="nmtokens">
 			<wsdl:input message="ws:recieveMT103Request" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveUplata" parameterOrder="nmtokens">
+			<wsdl:input message="ws:receiveUplata" />
 			<wsdl:output message="ws:notificationMessage" />
 		</wsdl:operation>
 
@@ -123,27 +133,37 @@
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
-			</wsdl:operation>
+		</wsdl:operation>
 
-			<wsdl:operation name="receiveMT102">
-				<soap:operation soapAction="" style="document" />
-				<wsdl:input>
-					<soap:body use="literal" />
-				</wsdl:input>
-				<wsdl:output>
-					<soap:body use="literal" />
-				</wsdl:output>
-			</wsdl:operation>
+		<wsdl:operation name="receiveMT102">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 
-			<wsdl:operation name="receiveMT103">
-				<soap:operation soapAction="" style="document" />
-				<wsdl:input>
-					<soap:body use="literal" />
-				</wsdl:input>
-				<wsdl:output>
-					<soap:body use="literal" />
-				</wsdl:output>
-			</wsdl:operation>
+		<wsdl:operation name="receiveMT103">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="receiveUplata">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 
 	</wsdl:binding>
 
