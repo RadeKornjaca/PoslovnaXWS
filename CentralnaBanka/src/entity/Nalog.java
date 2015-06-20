@@ -21,15 +21,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.common.TKlijent;
+import poslovnaxws.common.TNalog;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.Restifyable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import poslovnaxws.common.TKlijent;
-import poslovnaxws.common.TNalog;
-import poslovnaxws.services.centralnabanka.CBRestService;
-import util.EntityInfoUtil;
-import util.Restifyable;
 
 /** @pdOid 8b4e0f96-2ad2-4d40-88eb-e2c4a5cd282d */
 @Entity
@@ -414,12 +413,12 @@ public class Nalog implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idNaloga + "/nalog";
+		return CBClientService.REST_URL + "/" + idNaloga + "/nalog";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/racunBanke";
+		return CBClientService.REST_URL + "/racunBanke";
 	}
 
 }

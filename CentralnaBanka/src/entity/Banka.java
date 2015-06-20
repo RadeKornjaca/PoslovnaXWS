@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
-import poslovnaxws.services.centralnabanka.CBRestService;
+import poslovnaxws.services.centralnabanka.CBClientService;
 import util.EntityInfoUtil;
 import util.Restifyable;
 
@@ -174,12 +174,12 @@ public class Banka implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + bankaId + "/banka";
+		return CBClientService.REST_URL + "/" + bankaId + "/banka";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/banka";
+		return CBClientService.REST_URL + "/banka";
 	}
 
 	@Override

@@ -8,8 +8,6 @@ package entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.HashSet;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,14 +20,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import poslovnaxws.services.centralnabanka.CBRestService;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.Restifyable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import util.EntityInfoUtil;
-import util.Restifyable;
 
 /** @pdOid 4e03db37-cf8e-49d4-a795-92a43c20cb39 */
 @Entity
@@ -204,12 +201,12 @@ public class DnevnoStanjeRacuna implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idDnevnogStanja + "/dnevnoStanjeRacuna";
+		return CBClientService.REST_URL + "/" + idDnevnogStanja + "/dnevnoStanjeRacuna";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/dnevnoStanjeRacuna";
+		return CBClientService.REST_URL + "/dnevnoStanjeRacuna";
 	}
 
 }

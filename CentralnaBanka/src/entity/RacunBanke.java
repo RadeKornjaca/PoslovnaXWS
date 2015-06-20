@@ -23,14 +23,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.common.TBanka;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.Restifyable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import poslovnaxws.common.TBanka;
-import poslovnaxws.services.centralnabanka.CBRestService;
-import util.EntityInfoUtil;
-import util.Restifyable;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
@@ -255,12 +255,12 @@ public class RacunBanke implements Restifyable{
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idRacuna + "/racunBanke";
+		return CBClientService.REST_URL + "/" + idRacuna + "/racunBanke";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/racunBanke";
+		return CBClientService.REST_URL + "/racunBanke";
 	}
 	
 	@Override
