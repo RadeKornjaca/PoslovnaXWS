@@ -21,14 +21,20 @@
 		implementor="poslovnaxws.services.centralnabanka.CentralnaBankaImpl"
 		wsdlLocation="/WEB-INF/wsdl/CentralnaBanka.wsdl" />
 
-
 	<bean id="restClient" class="poslovnaxws.services.centralnabanka.CBClientService" />
+	<bean id="jsonProvider" class="util.MyProvider" />
 
 	<jaxrs:server id="restService" address="/restService">
 		<jaxrs:serviceBeans>
 			<ref bean="restClient" />
 		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jsonProvider" />
+		</jaxrs:providers>
+
 	</jaxrs:server>
+
+
 </beans>
   
 

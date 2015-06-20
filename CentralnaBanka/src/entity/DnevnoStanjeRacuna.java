@@ -22,12 +22,20 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import poslovnaxws.services.centralnabanka.CBRestService;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import util.EntityInfoUtil;
+import util.Restifyable;
+
 /** @pdOid 4e03db37-cf8e-49d4-a795-92a43c20cb39 */
 @Entity
 @Table(name = "dnevnoStanjeRacuna")
-@NamedQuery(name = "findDnevnoStanjeRacuna", query="Select d from DnevnoStanjeRacuna d where d.datum like :datum and d.racunBanke.idRacuna like :idRacunaBanke")
-public class DnevnoStanjeRacuna{
-	/** @pdOid 61879e33-25d4-4972-85e1-0acd180d8b91 */
+@NamedQuery(name = "findDnevnoStanjeRacuna", query = "Select d from DnevnoStanjeRacuna d where d.datum like :datum")
+public class DnevnoStanjeRacuna implements Restifyable {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_dnevnog_stanja", unique = true, nullable = false)
@@ -55,12 +63,13 @@ public class DnevnoStanjeRacuna{
 	 * @pdRoleInfo migr=no name=StavkaDnevnogRacuna assc=stavke
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "dnevnoStanjeRacuna")
-	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna = new HashSet<StavkaDnevnogRacuna>();
-	
-	public DnevnoStanjeRacuna(){
-		
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "dnevnoStanjeRacuna")
+	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
+
+	public DnevnoStanjeRacuna() {
 	}
+
 	public long getIdDnevnogStanja() {
 		return idDnevnogStanja;
 	}
@@ -117,20 +126,21 @@ public class DnevnoStanjeRacuna{
 		this.racunBanke = racunBanke;
 	}
 
+
 	/** @pdGenerated default getter */
 	public java.util.Collection<StavkaDnevnogRacuna> getStavkaDnevnogRacuna() {
 		if (stavkaDnevnogRacuna == null)
 			stavkaDnevnogRacuna = new java.util.HashSet<StavkaDnevnogRacuna>();
 		return stavkaDnevnogRacuna;
 	}
-
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorStavkaDnevnogRacuna() {
 		if (stavkaDnevnogRacuna == null)
 			stavkaDnevnogRacuna = new java.util.HashSet<StavkaDnevnogRacuna>();
 		return stavkaDnevnogRacuna.iterator();
 	}
-
+	
 	/**
 	 * @pdGenerated default setter
 	 * @param newStavkaDnevnogRacuna
@@ -174,6 +184,32 @@ public class DnevnoStanjeRacuna{
 	public void removeAllStavkaDnevnogRacuna() {
 		if (stavkaDnevnogRacuna != null)
 			stavkaDnevnogRacuna.clear();
+	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		// Daje link cak i ako nije ucitan zbog lazy fetch-a
+		json.put(
+				"stavkaDnevnogRacuna",
+				resourceURL()
+						+ EntityInfoUtil.getTableName(StavkaDnevnogRacuna.class));
+
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBRestService.REST_URL + "/" + idDnevnogStanja + "/dnevnoStanjeRacuna";
+	}
+
+	@Override
+	public String tableURL() {
+		return CBRestService.REST_URL + "/dnevnoStanjeRacuna";
 	}
 
 }

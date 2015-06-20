@@ -33,7 +33,7 @@ public class CopyOfMT102Test {
 	public static Service service;
 	public static CBClearing banka;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JAXBException {
 		URL wsdl;
 		try {
 			wsdl = new URL(
@@ -48,9 +48,9 @@ public class CopyOfMT102Test {
 
 			banka = service.getPort(portName, CBClearing.class);
 
-			//testValidClearing();
+			testValidClearing();
 
-			 testInvalid();
+			testInvalid();
 
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
@@ -59,127 +59,43 @@ public class CopyOfMT102Test {
 
 	}
 
-	private static void testValidClearing() {
+	private static void testValidClearing() throws JAXBException {
 
-		MT102 message = new MT102();
+		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
 
-		
-		  TBanka duznik = new TBanka(); duznik.setModel(new BigInteger("97"));
-		  duznik.setNaziv("Duznik"); duznik.setPozivNaBroj("asdasgh");
-		  duznik.setRacun("111-1111111111111-11");
-		  duznik.setSwiftKod("BANKAS12");
-		  
-		  TBanka poverioc = new TBanka(); poverioc.setModel(new
-		  BigInteger("97")); poverioc.setNaziv("Poverioc");
-		  poverioc.setPozivNaBroj("asdasgh");
-		  poverioc.setRacun("111-1111111111111-11");
-		  poverioc.setSwiftKod("BANKAS34");
-		  
-		  message.setBankaDuznik(duznik); message.setBankaPoverioc(poverioc);
-		  
-		  TNalog nalog = new TNalog();
-		  
-		  GregorianCalendar datumTemp = new GregorianCalendar();
-		  datumTemp.setTime(new Date()); XMLGregorianCalendar datum; try {
-		  datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-		  datumTemp);
-		  
-		  message.setDatum(datum); message.setDatumValute(datum);
-		  
-		  nalog.setDatumNaloga(datum); nalog.setDatumValute(datum);
-		  
-		  } catch (DatatypeConfigurationException e) { e.printStackTrace(); }
-		  
-		  message.setId("123"); message.setSifraValute("RSD"); BigDecimal
-		  ukupanIznos = new BigDecimal(1235.24); ukupanIznos =
-		  ukupanIznos.setScale(2, RoundingMode.CEILING);
-		  message.setUkupanIznos(ukupanIznos);
-		  
-		  Uplate uplate = new Uplate();
-		  
-		  nalog.setDuznik(duznik); nalog.setPrimalac(poverioc);
-		  nalog.setHitno(false); nalog.setId("111");
-		  nalog.setIznos(ukupanIznos); nalog.setOznakaValute("RSD");
-		  nalog.setSvrhaPlacanja("Uplata silnih novaca.");
-		  
-		  uplate.getUplata().add(nalog);
-		  
-		  message.setUplate(uplate);
-
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
 
 		MT102Wrapper wrapper = new MT102Wrapper();
 
 		wrapper.setWrappedParameter(message);
 
 		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter());
+		System.out.println("response: "
+				+ +response.getWrappedParameter().getKod() + ":"
+				+ response.getWrappedParameter().getOpis());
 
 	}
 
-	private static void testInvalid() {
+	private static void testInvalid() throws JAXBException {
 
-		MT102 message = new MT102();
+		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
 
-		TBanka duznik = new TBanka();
-		duznik.setModel(new BigInteger("97"));
-		duznik.setNaziv("Duznik");
-		duznik.setPozivNaBroj("asdasgh");
-		duznik.setRacun("111-11111111111111111111111111111111-11");
-		duznik.setSwiftKod("123");
-
-		TBanka poverioc = new TBanka();
-		duznik.setModel(new BigInteger("97"));
-		duznik.setNaziv("Poverioc");
-		duznik.setPozivNaBroj("asdasgh");
-		duznik.setRacun("111-11111111111111111111111111111111-11");
-		duznik.setSwiftKod("345");
-
-		message.setBankaDuznik(duznik);
-		message.setBankaPoverioc(poverioc);
-
-		TNalog nalog = new TNalog();
-
-		GregorianCalendar datumTemp = new GregorianCalendar();
-		datumTemp.setTime(new Date());
-		XMLGregorianCalendar datum;
-		try {
-			datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					datumTemp);
-
-			message.setDatum(datum);
-			message.setDatumValute(datum);
-
-			nalog.setDatumNaloga(datum);
-			nalog.setDatumValute(datum);
-
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-
-		message.setId("123");
-		message.setSifraValute("RSD");
-		message.setUkupanIznos(new BigDecimal(1235.24));
-
-		Uplate uplate = new Uplate();
-
-		nalog.setDuznik(duznik);
-		nalog.setPrimalac(poverioc);
-		nalog.setHitno(false);
-		nalog.setId("111");
-		nalog.setIznos(new BigDecimal(1235.24));
-		nalog.setOznakaValute("RSD");
-		nalog.setSvrhaPlacanja("Uplata silnih novaca.");
-
-		uplate.getUplata().add(nalog);
-
-		message.setUplate(uplate);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
+		
+		message.getBankaDuznik().setRacun("123-123-12312-3123-123-123");
 
 		MT102Wrapper wrapper = new MT102Wrapper();
 
 		wrapper.setWrappedParameter(message);
 
 		StatusWrapper response = banka.receiveMT102Clearing(wrapper);
-		System.out.println("response: " + response.getWrappedParameter().getOpis());
+		System.out.println("response: "
+				+ +response.getWrappedParameter().getKod() + ":"
+				+ response.getWrappedParameter().getOpis());
 
 	}
 

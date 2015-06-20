@@ -16,12 +16,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import util.Restifyable;
+
 /** @pdOid e4573f75-49fa-46a0-8c33-c940152ac38d */
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="poruka_tip")
 @Table(name="poruka")
-public abstract class Poruka{
+public abstract class Poruka implements Restifyable{
 	
 	public enum Vrsta {
 	    MT102 ("mt102"),
@@ -49,6 +51,7 @@ public abstract class Poruka{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_poruke", unique = true, nullable = false)
+
 	protected Integer idPoruke;
 	/** @pdOid 211d11bd-82b3-4f46-82b9-2aa254689474 */
 	@Column(name = "vrsta", unique = false, nullable = false)

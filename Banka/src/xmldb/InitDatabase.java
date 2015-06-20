@@ -5,10 +5,16 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
+
+import poslovnaxws.banke.Preseci;
+import sessionbeans.concrete.PreseciDao;
 
 
 /**
@@ -106,9 +112,9 @@ public final class InitDatabase {
         }
 	}
 	
-	public static void main(String[] args) throws HttpException, IOException {
+	public static void main(String[] args) throws HttpException, IOException, JAXBException {
         
-		URL url = new URL(REST_URL + "stavke");
+		URL url = new URL(REST_URL + "preseci");
 		
 		System.out.println(url);
 		
@@ -123,6 +129,16 @@ public final class InitDatabase {
 		System.out.println("\n* HTTP response: " + responseCode + " (" + message + ')');
 		
 		conn.disconnect();
+		
+		File file = new File("C:/Users/Lazar/Desktop/Faks/presek.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(Preseci.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		Preseci preseci = (Preseci) jaxbUnmarshaller.unmarshal(file);
         
+		PreseciDao dao = new PreseciDao();
+		
+		dao.persist(preseci);
+		
+		
 	}
 }

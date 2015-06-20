@@ -21,13 +21,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import poslovnaxws.common.TKlijent;
 import poslovnaxws.common.TNalog;
+import poslovnaxws.services.centralnabanka.CBRestService;
+import util.EntityInfoUtil;
+import util.Restifyable;
 
 /** @pdOid 8b4e0f96-2ad2-4d40-88eb-e2c4a5cd282d */
 @Entity
 @Table(name = "nalog")
-public class Nalog{
+public class Nalog implements Restifyable {
 	/** @pdOid f319aa07-d806-46da-ba81-1b7afa9db2a7 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,6 +89,7 @@ public class Nalog{
 	@Column(name = "sifra_poverioca", unique = false, nullable = false)
 	private java.lang.String sifraValute;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_mesta", referencedColumnName = "id_mesta", nullable = false)
 	private NaseljenoMesto naseljenoMesto;
@@ -90,6 +98,7 @@ public class Nalog{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
 	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna = new HashSet<StavkaDnevnogRacuna>();
 	/**
@@ -97,23 +106,24 @@ public class Nalog{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
 	private java.util.Collection<StavkaPoruke> stavkaPoruke = new HashSet<StavkaPoruke>();
-	
-	public Nalog(){
-		
+
+	public Nalog() {
 	}
-	
+
 	public Nalog(TNalog nalog) {
 		TKlijent duznik = nalog.getDuznik();
 		TKlijent poverilac = nalog.getPrimalac();
-		
+
 		this.brojRacunaDuznika = duznik.getRacun();
 		this.brojRacunaPoverioca = poverilac.getRacun();
-		
-		this.datumNaloga = nalog.getDatumNaloga().toGregorianCalendar().getTime();
+
+		this.datumNaloga = nalog.getDatumNaloga().toGregorianCalendar()
+				.getTime();
 		this.hitno = nalog.isHitno();
-		
+
 		this.iznos = nalog.getIznos().doubleValue();
 		this.modelOdobrenja = poverilac.getModel().toString();
 		this.modelZaduzenja = duznik.getModel().toString();
@@ -123,9 +133,9 @@ public class Nalog{
 		this.pozivNaBrojOdobrenja = poverilac.getPozivNaBroj();
 		this.pozivNaBrojZaduzenja = duznik.getPozivNaBroj();
 		this.sifraValute = nalog.getOznakaValute();
-		this.status = 1; //Na cekanju
+		this.status = 1; // Na cekanju
 		this.svrhaPlacanja = nalog.getSvrhaPlacanja();
-		
+
 	}
 
 	public long getIdNaloga() {
@@ -279,6 +289,7 @@ public class Nalog{
 		return stavkaDnevnogRacuna;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorStavkaDnevnogRacuna() {
 		if (stavkaDnevnogRacuna == null)
@@ -338,6 +349,7 @@ public class Nalog{
 		return stavkaPoruke;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorStavkaPoruke() {
 		if (stavkaPoruke == null)
@@ -386,6 +398,28 @@ public class Nalog{
 	public void removeAllStavkaPoruke() {
 		if (stavkaPoruke != null)
 			stavkaPoruke.clear();
+	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		json.put("naseljenoMesto", naseljenoMesto.resourceURL());
+
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBRestService.REST_URL + "/" + idNaloga + "/nalog";
+	}
+
+	@Override
+	public String tableURL() {
+		return CBRestService.REST_URL + "/racunBanke";
 	}
 
 }

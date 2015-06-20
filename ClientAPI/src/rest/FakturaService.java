@@ -29,14 +29,14 @@ public class FakturaService {
 	@EJB
 	private FakturaDaoLocal fakturaDao;
 
-	@EJB
-	private DobavljacDaoLocal dobavljacDao;
+	//@EJB
+	//private DobavljacDaoLocal dobavljacDao;
 
 	public FakturaService() {
 
 	}
 	
-	@POST
+	/*@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
 	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) {
@@ -81,7 +81,7 @@ public class FakturaService {
 
 		
 		return response;
-	}
+	}*/
 
 	@GET
 	@Path("/{id}/fakture")

@@ -9,6 +9,8 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.io.IOException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,12 +24,20 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TNaseljenoMesto;
+import poslovnaxws.services.centralnabanka.CBRestService;
+import util.Restifyable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
 @Entity
 @Table(name = "naseljenoMesto")
-@NamedQuery(name = "findNaseljenoMesto", query="Select n from NaseljenoMesto n where n.nazivMesta like :nazivMesta")
-public class NaseljenoMesto{
+@NamedQuery(name = "findNaseljenoMesto", query = "Select n from NaseljenoMesto n where n.nazivMesta like :nazivMesta")
+public class NaseljenoMesto implements Restifyable {
 	/** @pdOid 6af7346e-67b5-4494-91d7-95941222c0cd */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,31 +50,33 @@ public class NaseljenoMesto{
 	@Column(name = "naziv_mesta", unique = true, nullable = false)
 	private java.lang.String nazivMesta;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_drzave", referencedColumnName = "id_drzave", nullable = false)
 	private Drzava drzava;
-	
+
 	/**
-	 * @pdRoleInfo migr=no name=Nalog assc=mestoPrijema coll=java.util.Collection
-	 *             impl=java.util.HashSet mult=0..*
+	 * @pdRoleInfo migr=no name=Nalog assc=mestoPrijema
+	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "naseljenoMesto")
 	private java.util.Collection<Nalog> nalog;
-	
-	public NaseljenoMesto(){
-		
+
+	public NaseljenoMesto() {
+
 	}
-	
-	public NaseljenoMesto(TNaseljenoMesto naseljenoMesto){
+
+	public NaseljenoMesto(TNaseljenoMesto naseljenoMesto) {
 		this.drzava = new Drzava(naseljenoMesto.getDrzava());
 		this.nazivMesta = naseljenoMesto.getNazivMesta();
 		this.sifraMesta = naseljenoMesto.getSifraMesta();
 		for (TNalog nalog2 : naseljenoMesto.getNalozi().getNalog()) {
 			nalog.add(new Nalog(nalog2));
 		}
-		
+
 	}
-	
+
 	public long getIdMesta() {
 		return idMesta;
 	}
@@ -104,6 +116,7 @@ public class NaseljenoMesto{
 		return nalog;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorNalog() {
 		if (nalog == null)
@@ -151,5 +164,33 @@ public class NaseljenoMesto{
 		if (nalog != null)
 			nalog.clear();
 	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		json.put("drzava", drzava.resourceURL());
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBRestService.REST_URL + "/" + idMesta + "/naseljenaMesta";
+	}
+
+	@Override
+	public String tableURL() {
+		return CBRestService.REST_URL + "/naseljenaMesta";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		NaseljenoMesto that = (NaseljenoMesto) obj;
+		return this.idMesta == that.idMesta;
+	}
+
 
 }
