@@ -20,6 +20,7 @@ import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.Status;
 import poslovnaxws.poruke.MT102;
+import poslovnaxws.poruke.MT103;
 import poslovnaxws.services.banka.BankaServiceMessages;
 import poslovnaxws.services.banka.NotificationMessage;
 
@@ -144,12 +145,12 @@ public class MT102Test {
 	private static void testValidUplata() throws JAXBException {
 
 		File file = new File("C:/Users/Lazar/Desktop/Faks/testMT103Valid.xml");
-		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT103.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
+		MT103 message = (MT103) jaxbUnmarshaller.unmarshal(file);
 		Uplata uplata = new Uplata();
-		uplata.setNalog(message.getUplate().getUplata().get(0));
+		uplata.setNalog(message.getUplata());
 		Status response = banka.receiveUplata(uplata);
 		System.out.println("response: " + +response.getKod() + ":"
 				+ response.getOpis());
