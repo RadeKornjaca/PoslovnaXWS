@@ -8,6 +8,8 @@ package entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.HashSet;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +36,6 @@ import util.Restifyable;
 @Table(name = "dnevnoStanjeRacuna")
 @NamedQuery(name = "findDnevnoStanjeRacuna", query = "Select d from DnevnoStanjeRacuna d where d.datum like :datum")
 public class DnevnoStanjeRacuna implements Restifyable {
-	/** @pdOid 61879e33-25d4-4972-85e1-0acd180d8b91 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_dnevnog_stanja", unique = true, nullable = false)
@@ -67,7 +68,6 @@ public class DnevnoStanjeRacuna implements Restifyable {
 	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
 
 	public DnevnoStanjeRacuna() {
-
 	}
 
 	public long getIdDnevnogStanja() {
@@ -204,12 +204,12 @@ public class DnevnoStanjeRacuna implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idDnevnogStanja + "/dnevnoStanjeRacuna";
+		return CBRestService.REST_URL + "/" + idDnevnogStanja + "/dnevnoStanjeRacuna";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/dnevnoStanjeRacuna";
+		return CBRestService.REST_URL + "/dnevnoStanjeRacuna";
 	}
 
 }

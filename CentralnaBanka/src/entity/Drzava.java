@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import poslovnaxws.common.TDrzava;
 import poslovnaxws.common.TNaseljenoMesto;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.EntityInfoUtil;
 import util.MetaData;
 import util.Restifyable;
@@ -186,12 +186,12 @@ public class Drzava implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idDrzave + "/drzava";
+		return CBRestService.REST_URL + "/" + idDrzave + "/drzava";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/drzava";
+		return CBRestService.REST_URL + "/drzava";
 	}
 
 

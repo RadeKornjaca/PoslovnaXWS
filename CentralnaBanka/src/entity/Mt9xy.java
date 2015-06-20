@@ -10,10 +10,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import poslovnaxws.poruke.MT900;
 import poslovnaxws.poruke.MT910;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.Restifyable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /** @pdOid 928b7313-3d67-4770-99f2-90dc6a721a77 */
 @Entity
 @DiscriminatorValue("mt9xy")
+@Table(name = "mt9xy")
 public class Mt9xy extends Poruka {
 	@JsonIgnore
 	@ManyToOne
@@ -71,7 +73,7 @@ public class Mt9xy extends Poruka {
 	public Mt9xy(MT900 mt900) {
 		this.setDatumPoruke(mt900.getDatumValute().toGregorianCalendar()
 				.getTime());
-		this.setVrsta(Poruka.Vrsta.MT900.toString());
+		this.setVrsta(900);
 		racunBankeDuznika = new RacunBanke(mt900.getBanka());
 
 	}
@@ -79,7 +81,7 @@ public class Mt9xy extends Poruka {
 	public Mt9xy(MT910 mt910) {
 		this.setDatumPoruke(mt910.getDatumValute().toGregorianCalendar()
 				.getTime());
-		this.setVrsta(Poruka.Vrsta.MT900.toString());
+		this.setVrsta(910);
 		racunBankeDuznika = new RacunBanke(mt910.getBanka());
 	}
 
@@ -100,11 +102,11 @@ public class Mt9xy extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBRestService.REST_URL + "/" + idPoruke + "/" + vrsta;
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/" + vrsta;
+		return CBRestService.REST_URL + "/" + vrsta;
 	}
 }

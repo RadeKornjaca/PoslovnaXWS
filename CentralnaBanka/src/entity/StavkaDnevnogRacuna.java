@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -110,12 +110,12 @@ public class StavkaDnevnogRacuna implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idStavkeRacuna + "/stavkaDnevnogRacuna";
+		return CBRestService.REST_URL + "/" + idStavkeRacuna + "/stavkaDnevnogRacuna";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/stavkaDnevnogRacuna";
+		return CBRestService.REST_URL + "/stavkaDnevnogRacuna";
 	}
 
 

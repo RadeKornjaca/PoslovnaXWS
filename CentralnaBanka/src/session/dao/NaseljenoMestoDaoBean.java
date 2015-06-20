@@ -13,7 +13,7 @@ public class NaseljenoMestoDaoBean extends GenericDaoBean<NaseljenoMesto, Intege
 	@Override
 	public NaseljenoMesto findNaseljenoMesto(String nazivMesta) {
 		Query q = em.createNamedQuery("findNaseljenoMesto");
-		q.setParameter("naziv", nazivMesta);
+		q.setParameter("nazivMesta", nazivMesta);
 		NaseljenoMesto naseljenoMesto = (NaseljenoMesto) q.getSingleResult();
 		
 		return naseljenoMesto;

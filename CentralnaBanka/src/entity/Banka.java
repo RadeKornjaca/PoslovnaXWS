@@ -10,6 +10,8 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.EntityInfoUtil;
 import util.Restifyable;
 
@@ -56,7 +58,7 @@ public class Banka implements Restifyable {
 	 *             side=A
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "banka")
-	private java.util.Collection<RacunBanke> racunBanke;
+	private java.util.Collection<RacunBanke> racunBanke = new HashSet<RacunBanke>();
 
 	public Banka() {
 
@@ -172,12 +174,12 @@ public class Banka implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + bankaId + "/banka";
+		return CBRestService.REST_URL + "/" + bankaId + "/banka";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/banka";
+		return CBRestService.REST_URL + "/banka";
 	}
 
 	@Override

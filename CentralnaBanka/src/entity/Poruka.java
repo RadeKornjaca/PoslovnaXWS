@@ -7,6 +7,7 @@
 package entity;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,8 +20,9 @@ import util.Restifyable;
 
 /** @pdOid e4573f75-49fa-46a0-8c33-c940152ac38d */
 @Entity
-@Table(name = "poruka")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="poruka_tip")
+@Table(name="poruka")
 public abstract class Poruka implements Restifyable{
 	
 	public enum Vrsta {
@@ -49,10 +51,11 @@ public abstract class Poruka implements Restifyable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_poruke", unique = true, nullable = false)
-	protected long idPoruke;
+
+	protected Integer idPoruke;
 	/** @pdOid 211d11bd-82b3-4f46-82b9-2aa254689474 */
 	@Column(name = "vrsta", unique = false, nullable = false)
-	protected String vrsta;
+	protected double vrsta;
 	/** @pdOid 0b9d5b13-4d3f-44bf-adfe-993e3b45b10a */
 	@Column(name = "datum_poruke", unique = false, nullable = false)
 	protected java.util.Date datumPoruke;
@@ -61,16 +64,16 @@ public abstract class Poruka implements Restifyable{
 		
 	}
 	
-	public long getIdPoruke() {
+	public Integer getIdPoruke() {
 		return idPoruke;
 	}
-	public void setIdPoruke(long idPoruke) {
+	public void setIdPoruke(Integer idPoruke) {
 		this.idPoruke = idPoruke;
 	}
-	public String getVrsta() {
+	public double getVrsta() {
 		return vrsta;
 	}
-	public void setVrsta(String vrsta) {
+	public void setVrsta(double vrsta) {
 		this.vrsta = vrsta;
 	}
 	public java.util.Date getDatumPoruke() {

@@ -9,6 +9,7 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,13 +28,14 @@ import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.EntityInfoUtil;
 import util.Restifyable;
 
 /** @pdOid f45025a4-1a2c-4311-a8d2-60cc9bf412bf */
 @Entity
 @DiscriminatorValue("mt10x")
+@Table(name = "mt10x")
 public class Mt10x extends Poruka {
 	/** @pdOid bd899746-12b5-41d7-956d-fdb8787e9355 */
 	@Column(name = "svrha_placanja", unique = false, nullable = false)
@@ -56,7 +59,7 @@ public class Mt10x extends Poruka {
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "mt10x")
-	private java.util.Collection<StavkaPoruke> stavkaPoruke;
+	private java.util.Collection<StavkaPoruke> stavkaPoruke = new HashSet<StavkaPoruke>();
 	/**
 	 * @pdRoleInfo migr=no name=Mt9xy assc=porukaNaloga
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -64,7 +67,7 @@ public class Mt10x extends Poruka {
 	 */
 	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "mt10x")
-	private java.util.Collection<Mt9xy> mt9xy;
+	private java.util.Collection<Mt9xy> mt9xy = new HashSet<Mt9xy>();
 
 	@JsonIgnore
 	@ManyToOne
@@ -79,12 +82,23 @@ public class Mt10x extends Poruka {
 	public Mt10x() {
 
 	}
-
+	
+	public Mt10x(Mt10x mt10x){
+		this.datumValutePoruke = mt10x.getDatumValutePoruke();
+		this.racunBankeDuznika = mt10x.getRacunBankeDuznika();
+		this.racunBankePoverioca = mt10x.getRacunBankePoverioca();
+		this.sifraValutePoruke = mt10x.getSifraValutePoruke();
+		this.statusPoruke = mt10x.getStatusPoruke();
+		this.svrhaPlacanja = mt10x.getSvrhaPlacanja();
+		this.ukupanIznos = mt10x.getUkupanIznos();
+		this.stavkaPoruke = mt10x.getStavkaPoruke();
+	}
+	
 	public Mt10x(MT102 mt102) {
 		TBanka duznik = mt102.getBankaDuznik();
 		TBanka poverioc = mt102.getBankaPoverioc();
 		List<TNalog> uplate = mt102.getUplate().getUplata();
-		this.setVrsta(Poruka.Vrsta.MT102.toString());
+		this.setVrsta(102);
 		this.datumValutePoruke = mt102.getDatumValute().toGregorianCalendar()
 				.getTime();
 		this.racunBankeDuznika = new RacunBanke(duznik);
@@ -108,7 +122,7 @@ public class Mt10x extends Poruka {
 		TBanka duznik = mt103.getBankaDuznik();
 		TBanka poverioc = mt103.getBankaPoverioc();
 		TNalog uplata = mt103.getUplata();
-		this.setVrsta(Poruka.Vrsta.MT103.toString());
+		this.setVrsta(103);
 		this.datumValutePoruke = mt103.getUplata().getDatumValute()
 				.toGregorianCalendar().getTime();
 		this.racunBankeDuznika = new RacunBanke(duznik);
@@ -235,60 +249,76 @@ public class Mt10x extends Poruka {
 	}
 
 	/** @pdGenerated default getter */
-	public java.util.Collection<Mt9xy> getMt9xy() {
+/*	public java.util.Collection<Mt9xy> getMt9xy() {
 		if (mt9xy == null)
 			mt9xy = new java.util.HashSet<Mt9xy>();
 		return mt9xy;
-	}
+	}*/
 
 	@JsonIgnore
 	/** @pdGenerated default iterator getter */
-	public java.util.Iterator getIteratorMt9xy() {
+	/*public java.util.Iterator getIteratorMt9xy() {
 		if (mt9xy == null)
 			mt9xy = new java.util.HashSet<Mt9xy>();
 		return mt9xy.iterator();
-	}
+	}*/
 
 	/**
 	 * @pdGenerated default setter
 	 * @param newMt9xy
 	 */
-	public void setMt9xy(java.util.Collection<Mt9xy> newMt9xy) {
+	/*public void setMt9xy(java.util.Collection<Mt9xy> newMt9xy) {
 		removeAllMt9xy();
 		for (java.util.Iterator iter = newMt9xy.iterator(); iter.hasNext();)
 			addMt9xy((Mt9xy) iter.next());
 	}
-
+*/
 	/**
 	 * @pdGenerated default add
 	 * @param newMt9xy
 	 */
-	public void addMt9xy(Mt9xy newMt9xy) {
+	/*public void addMt9xy(Mt9xy newMt9xy) {
 		if (newMt9xy == null)
 			return;
 		if (this.mt9xy == null)
 			this.mt9xy = new java.util.HashSet<Mt9xy>();
 		if (!this.mt9xy.contains(newMt9xy))
 			this.mt9xy.add(newMt9xy);
-	}
+	}*/
 
 	/**
 	 * @pdGenerated default remove
 	 * @param oldMt9xy
 	 */
-	public void removeMt9xy(Mt9xy oldMt9xy) {
+	/*public void removeMt9xy(Mt9xy oldMt9xy) {
 		if (oldMt9xy == null)
 			return;
 		if (this.mt9xy != null)
 			if (this.mt9xy.contains(oldMt9xy))
 				this.mt9xy.remove(oldMt9xy);
-	}
+	}*/
 
 	/** @pdGenerated default removeAll */
-	public void removeAllMt9xy() {
+	/*public void removeAllMt9xy() {
 		if (mt9xy != null)
 			mt9xy.clear();
+	}*/
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null){
+			return false;
+		}
+		if(idPoruke == ((Mt10x)obj).getIdPoruke()){
+			return true;
+		}
+		return false;
 	}
+	
+	/*@Override
+	public int hashCode() {
+		return idPoruke;
+	}*/
 
 	@Override
 	public ObjectNode restify() {
@@ -309,12 +339,12 @@ public class Mt10x extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBRestService.REST_URL + "/" + idPoruke + "/" + vrsta;
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/" + vrsta;
+		return CBRestService.REST_URL + "/" + vrsta;
 	}
 
 

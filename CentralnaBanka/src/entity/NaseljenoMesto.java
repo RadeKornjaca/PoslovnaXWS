@@ -24,7 +24,7 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TNaseljenoMesto;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.Restifyable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -178,12 +178,12 @@ public class NaseljenoMesto implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idMesta + "/naseljenaMesta";
+		return CBRestService.REST_URL + "/" + idMesta + "/naseljenaMesta";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/naseljenaMesta";
+		return CBRestService.REST_URL + "/naseljenaMesta";
 	}
 
 	@Override

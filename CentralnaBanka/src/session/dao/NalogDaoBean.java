@@ -18,7 +18,7 @@ public class NalogDaoBean extends GenericDaoBean<Nalog, Integer> implements Nalo
 		System.out.println("Usao u executeProcedure()");
 		try {
 			Query q = em.createNativeQuery("CALL getForClearing();", Nalog.class);
-			q.setParameter(1, 123);
+			//q.setParameter(1, 123);
 			List<Nalog> nalozi= (List<Nalog>) q.getResultList();
 			int redni = 0;
 			for (Nalog nalog : nalozi) {
@@ -32,6 +32,15 @@ public class NalogDaoBean extends GenericDaoBean<Nalog, Integer> implements Nalo
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public Nalog getAllCollections(long id) {
+		Nalog nalog = em.find(Nalog.class, id);
+		nalog.getStavkaDnevnogRacuna().size();
+		nalog.getStavkaPoruke().size();
+		
+		return nalog;
 	}
 	
 }

@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,13 +28,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import poslovnaxws.common.TBanka;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.EntityInfoUtil;
 import util.Restifyable;
 
 /** @pdOid 7de48eda-71c8-407f-bdb7-62fd83310efd */
 @Entity
 @Table(name="racunBanke")
+@NamedQuery(name = "findByBrojRacuna", query= "select rb from RacunBanke rb where rb.brojRacuna like :brojRacuna")
 public class RacunBanke implements Restifyable{
 	/** @pdOid c725a61b-9fa6-4298-8db6-3e5bd6931f67 */
 	@Id
@@ -52,6 +54,9 @@ public class RacunBanke implements Restifyable{
 	/** @pdOid a17685ec-3851-4a11-9771-58002089e1cb */
 	@Column(name = "likvidan", unique = false, nullable = false)
 	private boolean likvidan;
+	/** @pdOid 523574da-f013-49d5-86c9-854200b941af */
+	@Column(name = "stanje_racuna", unique = false, nullable = false)
+	private double stanjeRacuna;
 	
 	@ManyToOne
 	@JoinColumn(name = "banka_id", referencedColumnName = "banka_id", nullable = false)
@@ -62,11 +67,10 @@ public class RacunBanke implements Restifyable{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 */
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBanke")
-	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna
-	 = new HashSet<DnevnoStanjeRacuna>();
+	private java.util.Collection<DnevnoStanjeRacuna> dnevnoStanjeRacuna = new HashSet<DnevnoStanjeRacuna>();
 	
-	@OneToMany
-	private java.util.Collection<Mt9xy> mt9xy = new HashSet<Mt9xy>();
+	/*@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankeMt9xy")
+	private java.util.Collection<Mt9xy> mt9xy;
 	/**
 	 * @pdRoleInfo migr=no name=Mt9xy assc=obracunskiRacun
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -78,8 +82,11 @@ public class RacunBanke implements Restifyable{
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
-	/*@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBanke")
-	private java.util.Collection<Mt10x> mt10x;
+	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankeDuznika")
+	private java.util.Collection<Mt10x> mt10xDuznika;
+	
+	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "racunBankePoverioca")
+	private java.util.Collection<Mt10x> mt10xPoverioca;
 
 	/**
 	 * @pdRoleInfo migr=no name=Mt10x assc=obracunskiRacunBankePoverioca
@@ -107,12 +114,31 @@ public class RacunBanke implements Restifyable{
 		this.banka.addRacunBanke(this);
 	}
 
-	public long getIdBanke() {
+
+	public double getStanjeRacuna() {
+		return stanjeRacuna;
+	}
+
+	public void setStanjeRacuna(double stanjeRacuna) {
+		this.stanjeRacuna = stanjeRacuna;
+	}
+
+	/*public java.util.Collection<Mt9xy> getMt9xy() {
+		return mt9xy;
+	}
+
+	public void setMt9xy(java.util.Collection<Mt9xy> mt9xy) {
+		this.mt9xy = mt9xy;
+	}*/
+
+
+
+	public long getIdRacuna() {
 		return idRacuna;
 	}
 
-	public void setIdBanke(long idBanke) {
-		this.idRacuna = idBanke;
+	public void setIdRacuna(long idRacuna) {
+		this.idRacuna = idRacuna;
 	}
 
 	public java.lang.String getBrojRacuna() {
@@ -229,12 +255,12 @@ public class RacunBanke implements Restifyable{
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idRacuna + "/racunBanke";
+		return CBRestService.REST_URL + "/" + idRacuna + "/racunBanke";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/racunBanke";
+		return CBRestService.REST_URL + "/racunBanke";
 	}
 	
 	@Override

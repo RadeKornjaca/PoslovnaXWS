@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +34,7 @@ public class StavkaPoruke implements Restifyable {
 	private long idStavkePoruke;
 	/** @pdOid fa0457c0-a16f-4efe-ba23-c1c65c64976a */
 
-	@Column(name = "redni_broj_stavke", unique = true, nullable = false)
+	@Column(name = "redni_broj_stavke", unique = false, nullable = false)
 	private double redniBrojStavke;
 	@JsonIgnore
 	@ManyToOne
@@ -106,11 +106,11 @@ public class StavkaPoruke implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idStavkePoruke + "/stavkaPoruke";
+		return CBRestService.REST_URL + "/" + idStavkePoruke + "/stavkaPoruke";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/stavkaPoruke";
+		return CBRestService.REST_URL + "/stavkaPoruke";
 	}
 }

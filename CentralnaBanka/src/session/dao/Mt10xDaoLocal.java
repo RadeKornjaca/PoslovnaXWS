@@ -10,4 +10,6 @@ public interface Mt10xDaoLocal extends GenericDaoLocal<Mt10x, Integer> {
 
 	public List<Mt10x> findAllMT103();
 
+	public Mt10x getAllCollections(long id);
+	
 }

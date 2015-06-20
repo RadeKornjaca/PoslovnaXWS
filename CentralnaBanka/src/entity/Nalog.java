@@ -9,6 +9,8 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import poslovnaxws.common.TKlijent;
 import poslovnaxws.common.TNalog;
-import poslovnaxws.services.centralnabanka.CBClientService;
+import poslovnaxws.services.centralnabanka.CBRestService;
 import util.EntityInfoUtil;
 import util.Restifyable;
 
@@ -37,7 +39,7 @@ public class Nalog implements Restifyable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_naloga", unique = true, nullable = false)
-	private long idNaloga;
+	private Integer idNaloga;
 	/** @pdOid 47e4ae67-7a54-4548-927f-827e4d918138 */
 	@Column(name = "svrha_placanja", unique = false, nullable = false)
 	private java.lang.String svrhaPlacanja;
@@ -98,7 +100,7 @@ public class Nalog implements Restifyable {
 	 */
 	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
-	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna;
+	private java.util.Collection<StavkaDnevnogRacuna> stavkaDnevnogRacuna = new HashSet<StavkaDnevnogRacuna>();
 	/**
 	 * @pdRoleInfo migr=no name=StavkaPoruke assc=naloziStavke
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
@@ -106,10 +108,9 @@ public class Nalog implements Restifyable {
 	 */
 	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "nalog")
-	private java.util.Collection<StavkaPoruke> stavkaPoruke;
+	private java.util.Collection<StavkaPoruke> stavkaPoruke = new HashSet<StavkaPoruke>();
 
 	public Nalog() {
-
 	}
 
 	public Nalog(TNalog nalog) {
@@ -141,7 +142,7 @@ public class Nalog implements Restifyable {
 		return idNaloga;
 	}
 
-	public void setIdNaloga(long idNaloga) {
+	public void setIdNaloga(Integer idNaloga) {
 		this.idNaloga = idNaloga;
 	}
 
@@ -413,12 +414,12 @@ public class Nalog implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idNaloga + "/nalog";
+		return CBRestService.REST_URL + "/" + idNaloga + "/nalog";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/racunBanke";
+		return CBRestService.REST_URL + "/racunBanke";
 	}
 
 }
