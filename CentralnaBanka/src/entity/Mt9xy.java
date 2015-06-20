@@ -14,8 +14,7 @@ import javax.persistence.Table;
 
 import poslovnaxws.poruke.MT900;
 import poslovnaxws.poruke.MT910;
-import poslovnaxws.services.centralnabanka.CBRestService;
-import util.Restifyable;
+import poslovnaxws.services.centralnabanka.CBClientService;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,11 +101,11 @@ public class Mt9xy extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + vrsta;
 	}
 }

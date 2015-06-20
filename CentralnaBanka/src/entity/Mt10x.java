@@ -20,17 +20,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
-import poslovnaxws.services.centralnabanka.CBRestService;
+import poslovnaxws.services.centralnabanka.CBClientService;
 import util.EntityInfoUtil;
-import util.Restifyable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** @pdOid f45025a4-1a2c-4311-a8d2-60cc9bf412bf */
 @Entity
@@ -339,12 +338,12 @@ public class Mt10x extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + vrsta;
 	}
 
 

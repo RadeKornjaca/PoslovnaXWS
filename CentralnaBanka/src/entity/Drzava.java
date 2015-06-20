@@ -9,36 +9,26 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import poslovnaxws.common.TDrzava;
 import poslovnaxws.common.TNaseljenoMesto;
-import poslovnaxws.services.centralnabanka.CBRestService;
+import poslovnaxws.services.centralnabanka.CBClientService;
 import util.EntityInfoUtil;
-import util.MetaData;
 import util.Restifyable;
-import util.Restriction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** @pdOid d66bf4c9-7b74-47ab-ae68-713217add753 */
 
@@ -186,12 +176,12 @@ public class Drzava implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idDrzave + "/drzava";
+		return CBClientService.REST_URL + "/" + idDrzave + "/drzava";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/drzava";
+		return CBClientService.REST_URL + "/drzava";
 	}
 
 

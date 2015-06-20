@@ -9,8 +9,6 @@ package entity;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
-import java.io.IOException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,13 +22,11 @@ import javax.persistence.Table;
 
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TNaseljenoMesto;
-import poslovnaxws.services.centralnabanka.CBRestService;
+import poslovnaxws.services.centralnabanka.CBClientService;
 import util.Restifyable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** @pdOid da2bd5ef-bcd6-474f-ba3a-4241202f87d3 */
@@ -178,12 +174,12 @@ public class NaseljenoMesto implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBRestService.REST_URL + "/" + idMesta + "/naseljenaMesta";
+		return CBClientService.REST_URL + "/" + idMesta + "/naseljenaMesta";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBRestService.REST_URL + "/naseljenaMesta";
+		return CBClientService.REST_URL + "/naseljenaMesta";
 	}
 
 	@Override
