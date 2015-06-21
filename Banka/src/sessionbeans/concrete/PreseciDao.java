@@ -39,5 +39,13 @@ public class PreseciDao extends GenericDao<Preseci, String> implements
 		
 		return result;
 	}
+	
+	
+	//Po datumu, ne po id-u
+	@Override
+	public Preseci persist(Preseci entity) throws JAXBException, IOException {
+		em.persist(entity, entity.getId());
+		return entity;
+	}
 
 }

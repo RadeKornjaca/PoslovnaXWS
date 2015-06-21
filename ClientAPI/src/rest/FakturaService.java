@@ -51,7 +51,7 @@ public class FakturaService {
 
 	}
 	
-	/*@POST
+	@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
 	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) throws URISyntaxException {
@@ -75,7 +75,7 @@ public class FakturaService {
 		}
 		
 		return response;
-	}*/
+	}
 
 
 

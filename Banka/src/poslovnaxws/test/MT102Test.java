@@ -32,58 +32,49 @@ public class MT102Test {
 	public static Service service;
 	public static BankaServiceMessages banka;
 
-	public static void main(String[] args) throws NotificationMessage,
-			DatatypeConfigurationException {
+	public static void main(String[] args) throws Exception {
 		URL wsdl;
-		try {
-			wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
+		wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
 
-			serviceName = new QName("PoslovnaXWS/services/banka",
-					"BankaService");
-			portName = new QName("PoslovnaXWS/services/banka",
-					"BankaServicePort");
+		serviceName = new QName("PoslovnaXWS/services/banka", "BankaService");
+		portName = new QName("PoslovnaXWS/services/banka", "BankaServicePort");
 
-			service = Service.create(wsdl, serviceName);
+		service = Service.create(wsdl, serviceName);
 
-			banka = service.getPort(portName, BankaServiceMessages.class);
+		banka = service.getPort(portName, BankaServiceMessages.class);
 
-			// testValid();
+		// testValid();
 
-			/*
-			 * File file = new File("C:/Users/Lazar/Desktop/Faks/mt900.xml");
-			 * JAXBContext jaxbContext = JAXBContext.newInstance(MT900.class);
-			 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			 * MT900 mt900 = (MT900) jaxbUnmarshaller.unmarshal(file);
-			 * 
-			 * // Status response = banka.receiveMT900(mt900);
-			 * 
-			 * ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
-			 * 
-			 * XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
-			 * .newXMLGregorianCalendarDate(2015, 6, 19,
-			 * DatatypeConstants.FIELD_UNDEFINED);
-			 * 
-			 * zahtev.setDatum(xmlDate);
-			 * 
-			 * zahtev.setRedniBrojPreseka(new BigInteger("0"));
-			 * 
-			 * Presek presek = banka.zahtevZaIzvod(zahtev);
-			 * 
-			 * testValidMT102();
-			 * 
-			 * testInvalidMT102();
-			 */
-			testZahtev();
+		/*
+		 * File file = new File("C:/Users/Lazar/Desktop/Faks/mt900.xml");
+		 * JAXBContext jaxbContext = JAXBContext.newInstance(MT900.class);
+		 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		 * MT900 mt900 = (MT900) jaxbUnmarshaller.unmarshal(file);
+		 * 
+		 * // Status response = banka.receiveMT900(mt900);
+		 * 
+		 * ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
+		 * 
+		 * XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
+		 * .newXMLGregorianCalendarDate(2015, 6, 19,
+		 * DatatypeConstants.FIELD_UNDEFINED);
+		 * 
+		 * zahtev.setDatum(xmlDate);
+		 * 
+		 * zahtev.setRedniBrojPreseka(new BigInteger("0"));
+		 * 
+		 * Presek presek = banka.zahtevZaIzvod(zahtev);
+		 * 
+		 * testValidMT102();
+		 * 
+		 * testInvalidMT102();
+		 */
 
-			testValidUplata();
+		 //testValidMT102();
 
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (JAXBException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		testZahtev();
+
+		// testValidUplata();
 
 	}
 
@@ -97,8 +88,7 @@ public class MT102Test {
 		XMLGregorianCalendar datum;
 		try {
 			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
-					2015, 4, 22,
-					DatatypeConstants.FIELD_UNDEFINED);
+					2015, 6, 21, DatatypeConstants.FIELD_UNDEFINED);
 
 			zahtev.setDatum(datum);
 		} catch (DatatypeConfigurationException e) {
@@ -106,11 +96,11 @@ public class MT102Test {
 		}
 
 		try {
-		for(int i = 1; ;i++){
-			zahtev.setRedniBrojPreseka(new BigInteger(String.valueOf(i)));
-			Presek presek = banka.zahtevZaIzvod(zahtev);
-			System.out.println(presek.getZaglavlje().getNovoStanje());
-		}
+			for (int i = 1;; i++) {
+				zahtev.setRedniBrojPreseka(new BigInteger(String.valueOf(i)));
+				Presek presek = banka.zahtevZaIzvod(zahtev);
+				System.out.println(presek.getZaglavlje().getNovoStanje());
+			}
 		} catch (NotificationMessage e) {
 			System.out.println(e.getMessage());
 		}
@@ -123,7 +113,7 @@ public class MT102Test {
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
-
+		
 		Status response = banka.receiveMT102(message);
 		System.out.println("response: " + +response.getKod() + ":"
 				+ response.getOpis());

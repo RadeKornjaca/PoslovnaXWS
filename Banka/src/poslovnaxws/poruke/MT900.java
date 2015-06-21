@@ -2,6 +2,7 @@
 package poslovnaxws.poruke;
 
 import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import entity.iface.Identifiable;
 import poslovnaxws.common.TBanka;
 
 
@@ -66,7 +69,7 @@ import poslovnaxws.common.TBanka;
     "sifraValute"
 })
 @XmlRootElement(name = "MT900")
-public class MT900 {
+public class MT900 implements Identifiable{
 
     @XmlElement(required = true, nillable = true)
     protected String id;

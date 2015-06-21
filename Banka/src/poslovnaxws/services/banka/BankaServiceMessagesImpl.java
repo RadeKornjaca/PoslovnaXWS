@@ -16,7 +16,6 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
-import javax.xml.datatype.DatatypeConstants;
 import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -37,6 +36,10 @@ import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TStavkaPreseka;
 import poslovnaxws.poruke.MT103;
 import poslovnaxws.services.centralnabanka.CentralnaBanka;
+import sessionbeans.concrete.MT102DaoLocal;
+import sessionbeans.concrete.MT103DaoLocal;
+import sessionbeans.concrete.MT900DaoLocal;
+import sessionbeans.concrete.MT910DaoLocal;
 import sessionbeans.concrete.PreseciDaoLocal;
 import util.JndiUtils;
 
@@ -57,6 +60,18 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	private PreseciDaoLocal presekDao = JndiUtils
 			.getLocalEJB(JndiUtils.PRESECI_DAO);
 
+	@EJB
+	private MT900DaoLocal mt900Dao = JndiUtils.getLocalEJB(JndiUtils.MT900_DAO);
+
+	@EJB
+	private MT910DaoLocal mt910Dao = JndiUtils.getLocalEJB(JndiUtils.MT910_DAO);
+
+	@EJB
+	private MT102DaoLocal mt102Dao = JndiUtils.getLocalEJB(JndiUtils.MT102_DAO);
+
+	@EJB
+	private MT103DaoLocal mt103Dao = JndiUtils.getLocalEJB(JndiUtils.MT103_DAO);
+
 	private static final Logger LOG = Logger
 			.getLogger(BankaServiceMessagesImpl.class.getName());
 
@@ -65,25 +80,76 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	public poslovnaxws.common.Status receiveMT103(poslovnaxws.poruke.MT103 mt103) {
 		LOG.info("Executing operation receiveMT103");
 		System.out.println(mt103);
+
+		poslovnaxws.common.Status status = validate(mt103, PORUKE_XSD);
+
+		if (status.getKod() != 0)
+			return status;
+
 		try {
-			poslovnaxws.common.Status _return = validate(mt103, PORUKE_XSD);
-			return _return;
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
+			mt103Dao.persist(mt103);
+
+			Uplata uplata = new Uplata();
+			uplata.setNalog(mt103.getUplata());
+			status = createPresek(uplata);
+
+			if (status.getKod() != 0)
+				return status;
+
+		} catch (JAXBException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
+		} catch (IOException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
 		}
+
+		return status;
 	}
 
 	public poslovnaxws.common.Status receiveMT102(poslovnaxws.poruke.MT102 mt102) {
 		LOG.info("Executing operation receiveMT102");
-		System.out.println(mt102);
+
+		poslovnaxws.common.Status status = validate(mt102, PORUKE_XSD);
+
+		if (status.getKod() != 0)
+			return status;
+
 		try {
-			poslovnaxws.common.Status _return = validate(mt102, PORUKE_XSD);
-			return _return;
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
+			mt102Dao.persist(mt102);
+
+			for (int i = 0; i < mt102.getUplate().getUplata().size(); i++) {
+				Uplata uplata = new Uplata();
+				uplata.setNalog(mt102.getUplate().getUplata().get(i));
+				status = createPresek(uplata);
+
+				if (status.getKod() != 0)
+					return status;
+
+			}
+
+		} catch (JAXBException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
+		} catch (IOException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
 		}
+
+		return status;
+
 	}
 
 	public poslovnaxws.common.Status receiveMT900(poslovnaxws.poruke.MT900 mt900) {
@@ -94,6 +160,22 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 		if (status.getKod() != 0)
 			return status;
+		
+		try {
+			mt900Dao.persist(mt900);
+		} catch (JAXBException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
+		} catch (IOException e1) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+			LOG.warning(e1.getMessage());
+			e1.printStackTrace();
+			return status;
+		}
 
 		return status;
 	}
@@ -101,13 +183,28 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	public poslovnaxws.common.Status receiveMT910(poslovnaxws.poruke.MT910 mt910) {
 		LOG.info("Executing operation receiveMT910");
 
-		try {
-			poslovnaxws.common.Status _return = validate(mt910, PORUKE_XSD);
-			return _return;
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		}
+			poslovnaxws.common.Status status = validate(mt910, PORUKE_XSD);
+			
+			if (status.getKod() != 0)
+				return status;
+			
+			try {
+				mt910Dao.persist(mt910);
+			} catch (JAXBException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+				return status;
+			} catch (IOException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+				return status;
+			}
+			
+			return status;
 	}
 
 	@Override
@@ -167,70 +264,17 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 		poslovnaxws.common.Status status = validate(uplata, BANKE_XSD);
 
-		Preseci preseci = null;
-		Presek presek = new Presek();
-		TNalog nalog = uplata.getNalog();
+		if (status.getKod() != 0) {
+			return status;
+		}
+
+		status = createPresek(uplata);
 
 		if (status.getKod() != 0) {
 			return status;
 		}
-		System.out.println(nalog.getDatumNaloga());
-		try {
 
-			// Pripremi presek
-
-			// TODO: Banke iz baze
-
-			StavkePreseka stavke = new StavkePreseka();
-
-			TStavkaPreseka stavkaUKorist = new TStavkaPreseka(nalog);
-			stavkaUKorist.setSmer("K");
-			TStavkaPreseka stavkaNaTeret = new TStavkaPreseka(nalog);
-			stavkaNaTeret.setSmer("T");
-
-			stavke.getStavka().add(stavkaUKorist);
-			stavke.getStavka().add(stavkaNaTeret);
-
-			presek.setZaglavlje(new Zaglavlje());
-
-			presek.setStavkePreseka(stavke);
-
-			preseci = presekDao.findById(uplata.getNalog().getDatumNaloga()
-					.toString());
-
-			preseci.getPresek().add(presek);
-			presekDao.merge(preseci, preseci.getId());
-
-		} catch (JAXBException e) {
-			// Ako ne nadje nista, vratice nesto sto
-			// parser ne ume da prepozna.
-			preseci = new Preseci();
-			preseci.setDatum(uplata.getNalog().getDatumNaloga());
-			preseci.getPresek().add(presek);
-
-			try {
-				presekDao.persist(preseci);
-			} catch (JAXBException e1) {
-				status.setKod(4);
-				status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
-				LOG.warning(e1.getMessage());
-				e1.printStackTrace();
-				return status;
-			} catch (IOException e1) {
-				status.setKod(4);
-				status.setOpis("BANKE exception :IOException: Couldn't save to database.");
-				LOG.warning(e1.getMessage());
-				e1.printStackTrace();
-				return status;
-			}
-
-		} catch (IOException e) {
-			status.setKod(4);
-			status.setOpis("BANKE exception :IOException: Couldn't fetch data from database.");
-			LOG.warning(e.getMessage());
-			e.printStackTrace();
-			return status;
-		}
+		TNalog nalog = uplata.getNalog();
 
 		MT103 mt103 = new MT103();
 
@@ -310,6 +354,81 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 		return null;
 
+	}
+
+	private Status createPresek(Uplata uplata) {
+		Preseci preseci = null;
+		Presek presek = new Presek();
+
+		Status status = new Status();
+
+		TNalog nalog = uplata.getNalog();
+
+		System.out.println(nalog.getDatumNaloga());
+		try {
+
+			// Pripremi presek
+
+			// TODO: Banke iz baze
+
+			StavkePreseka stavke = new StavkePreseka();
+
+			TStavkaPreseka stavkaUKorist = new TStavkaPreseka(nalog);
+			stavkaUKorist.setSmer("K");
+			TStavkaPreseka stavkaNaTeret = new TStavkaPreseka(nalog);
+			stavkaNaTeret.setSmer("T");
+
+			stavke.getStavka().add(stavkaUKorist);
+			stavke.getStavka().add(stavkaNaTeret);
+
+			presek.setZaglavlje(new Zaglavlje());
+
+			presek.setStavkePreseka(stavke);
+
+			preseci = presekDao.findById(uplata.getNalog().getDatumNaloga()
+					.toString());
+
+			preseci.getPresek().add(presek);
+			presekDao.merge(preseci, preseci.getId());
+
+		} catch (JAXBException e) {
+			// Ako ne nadje nista, vratice nesto sto
+			// parser ne ume da prepozna.
+			preseci = new Preseci();
+			preseci.setDatum(uplata.getNalog().getDatumNaloga());
+			preseci.getPresek().add(presek);
+
+			try {
+				presekDao.persist(preseci);
+			} catch (JAXBException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+
+				return status;
+			} catch (IOException e1) {
+				status.setKod(4);
+				status.setOpis("BANKE exception :IOException: Couldn't save to database.");
+				LOG.warning(e1.getMessage());
+				e1.printStackTrace();
+
+				return status;
+			}
+
+		} catch (IOException e) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IOException: Couldn't fetch data from database.");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+
+			return status;
+		}
+		
+		status.setKod(0);
+		status.setOpis("OK");
+
+		return status;
 	}
 
 }

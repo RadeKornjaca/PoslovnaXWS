@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import entity.iface.Identifiable;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 
@@ -47,7 +49,7 @@ import poslovnaxws.common.TNalog;
     "bankaPoverioc"
 })
 @XmlRootElement(name = "MT103")
-public class MT103 {
+public class MT103 implements Identifiable {
 
     @XmlElement(required = true, nillable = true)
     protected String id;
