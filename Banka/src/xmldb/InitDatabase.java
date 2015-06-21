@@ -114,7 +114,7 @@ public final class InitDatabase {
 	
 	public static void main(String[] args) throws HttpException, IOException, JAXBException {
         
-		URL url = new URL(REST_URL + "preseci");
+		URL url = new URL(REST_URL + "mt102");
 		
 		System.out.println(url);
 		

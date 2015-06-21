@@ -198,7 +198,7 @@ public class EntityManager<T, ID extends Serializable> {
 	 * @return the next id value.
 	 * @throws IOException
 	 */
-	/*public Long getIdentity() throws IOException {
+	public Long getIdentity() throws IOException {
 
 		String xQuery = "max(//@id)";
 		InputStream input = executeQuery(xQuery, false);
@@ -208,7 +208,7 @@ public class EntityManager<T, ID extends Serializable> {
 		if (line != null)
 			return Long.valueOf(line) + 1L;
 		return 1L;
-	}*/
+	}
 	
 	/*
 	 * Get/set methods

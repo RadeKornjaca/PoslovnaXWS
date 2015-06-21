@@ -11,32 +11,38 @@ import javax.xml.bind.JAXBException;
 import entity.iface.Identifiable;
 import xmldb.EntityManager;
 
-public abstract class GenericDao<T extends Identifiable, ID extends Serializable> implements GenericDaoLocal<T, ID> {
-	
+public abstract class GenericDao<T extends Identifiable, ID extends Serializable>
+		implements GenericDaoLocal<T, ID> {
+
 	protected String contextPath;
-	
+
 	protected JAXBContext context;
-	
+
 	protected EntityManager<T, ID> em;
-	
+
 	public GenericDao(String contextPath, String schemaName) {
-		
+
 		try {
 			context = JAXBContext.newInstance(contextPath);
 			em = new EntityManager<T, ID>(schemaName, contextPath);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public T persist(T entity) throws JAXBException, IOException {
-		//Long id = em.getIdentity();
-		//entity.setId(id);
+
+		if (entity.getId() == null) {
+			Long id = em.getIdentity();
+			entity.setId(id.toString());
+			System.out.println("ID: " + id);
+		}
+
 		em.persist(entity, entity.getId());
 		return entity;
 	}
-	
+
 	public T findById(ID id) throws IOException, JAXBException {
 		T entity;
 		entity = em.find(id);
@@ -48,13 +54,13 @@ public abstract class GenericDao<T extends Identifiable, ID extends Serializable
 		result = em.executeQuery(xQuery, wrap);
 		return result;
 	}
-	
+
 	public List<T> findAll() throws IOException, JAXBException {
 		List<T> result;
 		result = em.findAll();
 		return result;
 	}
-	
+
 	public void remove(ID id) throws IOException {
 		em.delete(id);
 	}
@@ -63,5 +69,5 @@ public abstract class GenericDao<T extends Identifiable, ID extends Serializable
 		em.update(entity, id);
 		return entity;
 	}
-	
-} 
+
+}

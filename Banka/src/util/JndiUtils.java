@@ -31,6 +31,18 @@ public class JndiUtils {
 	 */
 	public static final String PRESECI_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "PreseciDao!sessionbeans.concrete.PreseciDaoLocal";
+	
+	public static final String MT900_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "MT900Dao!sessionbeans.concrete.MT900DaoLocal";
+	
+	public static final String MT910_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "MT910Dao!sessionbeans.concrete.MT910DaoLocal";
+	
+	public static final String MT102_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "MT102Dao!sessionbeans.concrete.MT102DaoLocal";
+	
+	public static final String MT103_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "MT103Dao!sessionbeans.concrete.MT103DaoLocal";
 	/**
 	 * Gets local EJB from JNDI.
 	 *
