@@ -46,7 +46,7 @@ import util.JndiUtils;
  * 
  */
 
-@javax.jws.WebService(serviceName = "BankaService", portName = "BankaServicePort", targetNamespace = "PoslovnaXWS/services/banka", wsdlLocation = "file:/C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/Banka/WEB-INF/wsdl/Banka.wsdl", endpointInterface = "poslovnaxws.services.banka.BankaServiceMessages")
+@javax.jws.WebService(serviceName = "BankaService", portName = "BankaServicePort", targetNamespace = "PoslovnaXWS/services/banka", wsdlLocation = "file:/E:/Za faks/Projekti/PoslovnaXWS/Banka/WEB-INF/wsdl/Banka.wsdl", endpointInterface = "poslovnaxws.services.banka.BankaServiceMessages")
 public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 	private static String PORUKE_XSD = "../webapps/banka/WEB-INF/xsd/Poruke.xsd";

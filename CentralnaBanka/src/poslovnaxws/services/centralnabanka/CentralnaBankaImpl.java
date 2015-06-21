@@ -8,6 +8,8 @@ package poslovnaxws.services.centralnabanka;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,13 +23,16 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
+import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.ws.Service;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import poslovnaxws.common.Status;
+import poslovnaxws.services.banka.BankaServiceMessages;
 import session.dao.BankaDaoLocal;
 import session.dao.DnevnoStanjeRacunaDaoLocal;
 import session.dao.Mt10xDaoLocal;
@@ -62,6 +67,12 @@ import entity.StavkaPoruke;
                       
 public class CentralnaBankaImpl implements CentralnaBanka {
 
+	
+	public static QName serviceName;
+	public static QName portName;
+	public static Service service;
+	public static BankaServiceMessages banka;
+	
     private static final Logger LOG = Logger.getLogger(CentralnaBankaImpl.class.getName());
     
 	private static String PORUKE_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd";
@@ -107,7 +118,35 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		Mt10x mt103Base = new Mt10x(mt103);
 		Object[] ob = mt103Base.getStavkaPoruke().toArray();
 	    Nalog nalog = ((StavkaPoruke) ob[0]).getNalog();
-	    return doHardJob(nalog, mt103Base, true, "RTGS");
+	    status = doHardJob(nalog, mt103Base, true, "RTGS");
+	    
+	    if(status.getKod() != 0){
+	    	return status;
+	    }
+	    
+	    URL wsdl;
+		try {
+			wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
+
+			serviceName = new QName("PoslovnaXWS/services/banka",
+					"BankaService");
+			portName = new QName("PoslovnaXWS/services/banka",
+					"BankaServicePort");
+
+			service = Service.create(wsdl, serviceName);
+
+			banka = service.getPort(portName, BankaServiceMessages.class);
+			
+			status = banka.receiveMT103(mt103);
+			System.out.println("response code: " + status.getKod());
+			System.out.println("response: " + status.getOpis());
+			
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return status;
         
     }
 
