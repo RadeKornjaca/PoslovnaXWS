@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
@@ -18,21 +17,22 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 
-<<<<<<< HEAD
-import sessionbeans.common.GenericDaoLocal;
 import sessionbeans.concrete.DobavljacDaoLocal;
-=======
->>>>>>> 76020f2430c70993f17910d5fc4872241b948a5b
 import sessionbeans.concrete.FakturaDaoLocal;
+import sessionbeans.concrete.FaktureDaoLocal;
 import sessionbeans.concrete.StavkaFaktureDaoLocal;
 import sessionbeans.concrete.StavkeDaoLocal;
 import entity.fakture.Faktura;
+import entity.fakture.Fakture;
 import entity.fakture.StavkaFakture;
 import entity.fakture.StavkeFakture;
 
 @Path("/partneri")
 public class FakturaService {
 
+	@EJB
+	private FaktureDaoLocal faktureDao;
+	
 	@EJB
 	private FakturaDaoLocal fakturaDao;
 
@@ -60,7 +60,14 @@ public class FakturaService {
 		URI uri = new URI("/partneri/" + id + "/fakture/" + faktura.getId());
 		
 		if(checkDobavljac(id)){
-			response = postResponsePack(fakturaDao, faktura, uri);
+			try {
+				fakturaDao.persist(faktura);
+				response = Response.status(Status.CREATED).contentLocation(uri).build();
+
+			} catch (JAXBException | IOException e) {
+				response = Response.status(Status.BAD_REQUEST).build();
+				e.printStackTrace();
+			}
 		} else {
 			response = Response.status(Status.FORBIDDEN).build();
 		}
@@ -78,10 +85,10 @@ public class FakturaService {
 
 		System.out.println("Id poslovnog partnera: " + id);
 
-		List<Faktura> fakture = null;
+		Fakture fakture = null;
 
 		try {
-			fakture = fakturaDao.findAllById(id);
+			fakture = faktureDao.findAllById(id);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,9 +142,43 @@ public class FakturaService {
 	@POST
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke")
 	@Produces("application/xml")
-	public void addStavka(@PathParam("id_dobavljaca") String idDobavljaca,
-			@PathParam("id_fakture") String idFakture) {
+	public Response addStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
+			@PathParam("id_fakture") Long idFakture, StavkaFakture stavka) throws URISyntaxException {
 
+		Response response;
+		
+		
+		URI uri = new URI("/partneri/" + idDobavljaca + "/fakture/" + stavka.getRedniBroj());
+		
+		Faktura faktura;
+		
+		try {
+			faktura = fakturaDao.findById(idFakture);
+			
+			if(checkDobavljac(idDobavljaca)){
+				try {
+					faktura.getStavkeFakture().getStavkaFakture().add(stavka);
+					fakturaDao.merge(faktura, idFakture);
+					
+					response = Response.status(Status.CREATED).contentLocation(uri).build();
+	
+				} catch (JAXBException | IOException e) {
+					response = Response.status(Status.BAD_REQUEST).build();
+					e.printStackTrace();
+				}
+			} else {
+				response = Response.status(Status.FORBIDDEN).build();
+			}
+			
+		} catch (JAXBException | IOException e1) {
+			response = Response.status(Status.NOT_FOUND).build();
+			e1.printStackTrace();
+		}		
+
+		
+		return response;
+		
+		
 	}
 
 	@GET
@@ -213,30 +254,4 @@ public class FakturaService {
 		}
 		return true;
 	}
-	
-	/**
-	 * Vrsi validaciju i upisuje novi entitet u bazu
-	 * 
-	 * @param dao	- daoBean entiteta koji se upisuje
-	 * @param data	- konkretan novi podatak
-	 * @param uri	- kontekstna putanja na kojoj ce biti upisan novi podatak
-	 * @return	uspesnost operacije
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Response postResponsePack(GenericDaoLocal dao, Object data, URI uri) {
-		Response response;
-		
-		try {
-			dao.persist(data);
-			response = Response.status(Status.CREATED).contentLocation(uri).build();
-
-		} catch (JAXBException | IOException e) {
-			response = Response.status(Status.BAD_REQUEST).build();
-			e.printStackTrace();
-		}
-
-		
-		return response;
-	}
-	
 }
