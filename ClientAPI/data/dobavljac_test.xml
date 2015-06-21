@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dobavljac xmlns="PoslovnaXWS/Dobavljac"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="PoslovnaXWS/Dobavljac file:/C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/XMLSchemas/Dobavljac.xsd">
+    <naziv xmlns="PoslovnaXWS/Common"></naziv>
+    <racun xmlns="PoslovnaXWS/Common">111-1111111111111-11</racun>
+    <model xmlns="PoslovnaXWS/Common">12</model>
+    <pozivNaBroj xmlns="PoslovnaXWS/Common">ADADA</pozivNaBroj>
+    <pib xmlns="PoslovnaXWS/Common">14234512432</pib>
+    <adresa xmlns="PoslovnaXWS/Common">Atlantida BB</adresa>
+    <id>14234512432</id>
+</dobavljac>
