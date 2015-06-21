@@ -1,0 +1,3 @@
+<div ng-controller="InvoicesCtrl">
+	<p>{{scope.text}}</p>
+</div>

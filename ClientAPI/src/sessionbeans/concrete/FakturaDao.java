@@ -1,17 +1,17 @@
 package sessionbeans.concrete;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBException;
 
 import sessionbeans.common.GenericDao;
-import entity.dobavljac.Dobavljac;
 import entity.fakture.Faktura;
+import entity.fakture.Fakture;
+
 
 @Stateless
 @Local(FakturaDaoLocal.class)
@@ -25,22 +25,6 @@ public class FakturaDao extends GenericDao<Faktura, Long> implements
 	
 	public FakturaDao() {
 		super(contextPath, schemaName);
-	}
-
-
-	@Override
-	public List<Faktura> findAllById(String id) throws IOException, JAXBException {
-		List<Faktura> invoices = em.findAll();
-		List<Faktura> result = new ArrayList<Faktura>();
-		
-		
-		for(Faktura invoice : invoices) {
-			if(invoice.getZaglavlje().getDobavljac().getPib().equals(id)) {
-				result.add(invoice);
-			}
-		}
-		
-		return result;
 	}
 
 
@@ -66,5 +50,8 @@ public class FakturaDao extends GenericDao<Faktura, Long> implements
 		
 		return null;
 	}
+
+
+
 
 }
