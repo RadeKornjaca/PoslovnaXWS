@@ -4,18 +4,19 @@ import java.io.File;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import poslovnaxws.banke.Presek;
 import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.Status;
@@ -48,32 +49,33 @@ public class MT102Test {
 
 			// testValid();
 
-			/*File file = new File("C:/Users/Lazar/Desktop/Faks/mt900.xml");
-			JAXBContext jaxbContext = JAXBContext.newInstance(MT900.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			MT900 mt900 = (MT900) jaxbUnmarshaller.unmarshal(file);
+			/*
+			 * File file = new File("C:/Users/Lazar/Desktop/Faks/mt900.xml");
+			 * JAXBContext jaxbContext = JAXBContext.newInstance(MT900.class);
+			 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			 * MT900 mt900 = (MT900) jaxbUnmarshaller.unmarshal(file);
+			 * 
+			 * // Status response = banka.receiveMT900(mt900);
+			 * 
+			 * ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
+			 * 
+			 * XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
+			 * .newXMLGregorianCalendarDate(2015, 6, 19,
+			 * DatatypeConstants.FIELD_UNDEFINED);
+			 * 
+			 * zahtev.setDatum(xmlDate);
+			 * 
+			 * zahtev.setRedniBrojPreseka(new BigInteger("0"));
+			 * 
+			 * Presek presek = banka.zahtevZaIzvod(zahtev);
+			 * 
+			 * testValidMT102();
+			 * 
+			 * testInvalidMT102();
+			 */
+			testZahtev();
 
-			// Status response = banka.receiveMT900(mt900);
-
-			ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
-
-			XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
-					.newXMLGregorianCalendarDate(2015, 6, 19,
-							DatatypeConstants.FIELD_UNDEFINED);
-
-			zahtev.setDatum(xmlDate);
-
-			zahtev.setRedniBrojPreseka(new BigInteger("0"));
-
-			Presek presek = banka.zahtevZaIzvod(zahtev);
-
-			testValidMT102();
-
-			testInvalidMT102();*/
-			
 			testValidUplata();
-			
-			
 
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
@@ -85,30 +87,32 @@ public class MT102Test {
 
 	}
 
-	private void testZahtev() {
+	private static void testZahtev() {
 		ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
 
-		zahtev.setBrojRacuna("111111111111111111");
+		zahtev.setBrojRacuna("111-1111111111111-11");
 		zahtev.setRedniBrojPreseka(new BigInteger("1"));
 
-		GregorianCalendar datumTemp = new GregorianCalendar();
-		datumTemp.setTime(new Date());
+		GregorianCalendar datumTemp = new GregorianCalendar(2015, 4, 22);
 		XMLGregorianCalendar datum;
 		try {
-			datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					datumTemp);
+			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					2015, 4, 22,
+					DatatypeConstants.FIELD_UNDEFINED);
 
 			zahtev.setDatum(datum);
-
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			banka.zahtevZaIzvod(new ZahtevZaIzvod());
+		for(int i = 1; ;i++){
+			zahtev.setRedniBrojPreseka(new BigInteger(String.valueOf(i)));
+			Presek presek = banka.zahtevZaIzvod(zahtev);
+			System.out.println(presek.getZaglavlje().getNovoStanje());
+		}
 		} catch (NotificationMessage e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -141,7 +145,7 @@ public class MT102Test {
 				+ response.getOpis());
 
 	}
-	
+
 	private static void testValidUplata() throws JAXBException {
 
 		File file = new File("C:/Users/Lazar/Desktop/Faks/testMT103Valid.xml");

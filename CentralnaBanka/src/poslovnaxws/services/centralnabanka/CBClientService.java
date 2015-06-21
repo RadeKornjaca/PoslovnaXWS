@@ -129,6 +129,8 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt102(@Context UriInfo query) {
 		try {
+			
+			query.getQueryParameters().add("vrsta", "102");
 
 			String ret = getAll(mt10xDao, query);
 
@@ -145,6 +147,8 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt103(@Context UriInfo query) {
 		try {
+			
+			query.getQueryParameters().add("vrsta", "103");
 
 			String ret = getAll(mt10xDao, query);
 
@@ -161,6 +165,8 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt900(@Context UriInfo query) {
 		try {
+			
+			query.getQueryParameters().add("vrsta", "900");
 
 			String ret = getAll(mt9xyDao, query);
 
@@ -177,6 +183,8 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt910(@Context UriInfo query) {
 		try {
+			
+			query.getQueryParameters().add("vrsta", "910");
 
 			String ret = getAll(mt9xyDao, query);
 

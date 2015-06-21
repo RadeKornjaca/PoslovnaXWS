@@ -7,8 +7,6 @@ package poslovnaxws.services.banka;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -18,6 +16,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBSource;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -120,18 +119,45 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		poslovnaxws.common.Status status = validate(zahtevZaIzvod, BANKE_XSD);
 
 		// 0 = OK
-		if (status.getKod() != 0)
-			throw new NotificationMessage();
+		if (status.getKod() != 0) {
+			NotificationMessage e = new NotificationMessage(status.getOpis(),
+					status);
+			throw e;
+		}
 
 		try {
-			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString());
-			System.out.println(zahtevZaIzvod.getRedniBrojPreseka().intValue());
-			return preseci.getPresek().get(
-					zahtevZaIzvod.getRedniBrojPreseka().intValue());
 
+			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString());
+
+			// Počinje od 1
+			int redniBroj = zahtevZaIzvod.getRedniBrojPreseka().intValue() - 1;
+
+			// Ako nema više, javi se exception-om (mora tako)
+			// Kod je 0 jer je sve ok.
+			if (redniBroj >= preseci.getPresek().size()) {
+				status.setKod(0);
+				status.setOpis("Ne postoji presek broj " + (redniBroj + 1)
+						+ " za datum: " + zahtevZaIzvod.getDatum().toString()
+						+ "; broj preseka: " + preseci.getPresek().size());
+				throw new NotificationMessage(status.getOpis(), status);
+			} else
+				return preseci.getPresek().get(redniBroj);
+
+		} catch (NullPointerException e) {
+			status.setKod(5);
+			status.setOpis("Banka : Presek nije pronađen za datum: "
+					+ zahtevZaIzvod.getDatum().toString());
+			NotificationMessage ex = new NotificationMessage(status.getOpis(),
+					status);
+			throw ex;
+		} catch (NotificationMessage e) {
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NotificationMessage();
+			status.setKod(5);
+			status.setOpis("Banka : Greška na serveru.");
+			NotificationMessage ex = new NotificationMessage(status.getOpis(),
+					status);
+			throw ex;
 		}
 	}
 
@@ -209,8 +235,6 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		MT103 mt103 = new MT103();
 
 		mt103.setUplata(nalog);
-		
-		mt103.setId("123");
 
 		mt103.setBankaDuznik((TBanka) nalog.getDuznik());
 		mt103.setBankaPoverioc((TBanka) nalog.getPrimalac());
