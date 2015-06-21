@@ -1,0 +1,12 @@
+'use strict';
+
+(function() {
+	var InvoicesCtrl = function($scope) {
+		console.log("Jebem ti se sa mamarom!");
+		$scope.text = "Hello!";
+	};
+
+	var app = angular.module("firmApp");
+	app.controller("InvoicesCtrl", InvoicesCtrl);
+
+}());
