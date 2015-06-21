@@ -6,11 +6,11 @@
     <xs:element name="MT102">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id">
+                <xs:element name="id" nillable="true">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="50"/>
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -44,11 +44,11 @@
     <xs:element name="MT103">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id">
+                <xs:element name="id" nillable="true">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="50"/>
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -61,11 +61,11 @@
     <xs:element name="MT900">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id">
+                <xs:element name="id" nillable="true">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="50"/>
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -93,11 +93,11 @@
     <xs:element name="MT910">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id">
+                <xs:element name="id" nillable="true">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="50"/>
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>

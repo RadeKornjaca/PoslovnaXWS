@@ -1,25 +1,27 @@
 package poslovnaxws.test;
 
-import java.math.BigDecimal;
+import java.io.File;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import poslovnaxws.banke.Presek;
+import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.Status;
-import poslovnaxws.common.TBanka;
-import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
-import poslovnaxws.poruke.MT102.Uplate;
+import poslovnaxws.poruke.MT103;
 import poslovnaxws.services.banka.BankaServiceMessages;
 import poslovnaxws.services.banka.NotificationMessage;
 
@@ -30,11 +32,11 @@ public class MT102Test {
 	public static Service service;
 	public static BankaServiceMessages banka;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NotificationMessage,
+			DatatypeConfigurationException {
 		URL wsdl;
 		try {
-			wsdl = new URL(
-					"http://localhost:8080/banka/services/BankaService?wsdl");
+			wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
 
 			serviceName = new QName("PoslovnaXWS/services/banka",
 					"BankaService");
@@ -45,170 +47,118 @@ public class MT102Test {
 
 			banka = service.getPort(portName, BankaServiceMessages.class);
 
-			testValid();
+			// testValid();
 
-			// testInvalid();
+			/*
+			 * File file = new File("C:/Users/Lazar/Desktop/Faks/mt900.xml");
+			 * JAXBContext jaxbContext = JAXBContext.newInstance(MT900.class);
+			 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			 * MT900 mt900 = (MT900) jaxbUnmarshaller.unmarshal(file);
+			 * 
+			 * // Status response = banka.receiveMT900(mt900);
+			 * 
+			 * ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
+			 * 
+			 * XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
+			 * .newXMLGregorianCalendarDate(2015, 6, 19,
+			 * DatatypeConstants.FIELD_UNDEFINED);
+			 * 
+			 * zahtev.setDatum(xmlDate);
+			 * 
+			 * zahtev.setRedniBrojPreseka(new BigInteger("0"));
+			 * 
+			 * Presek presek = banka.zahtevZaIzvod(zahtev);
+			 * 
+			 * testValidMT102();
+			 * 
+			 * testInvalidMT102();
+			 */
+			testZahtev();
+
+			testValidUplata();
 
 		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JAXBException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 	}
 
-	private static void testValid() {
-
-		MT102 message = new MT102();
-
-		TBanka duznik = new TBanka();
-		duznik.setModel(new BigInteger("97"));
-		duznik.setNaziv("Duznik");
-		duznik.setPozivNaBroj("asdasgh");
-		duznik.setRacun("111-1111111111111-11");
-		duznik.setSwiftKod("BANKAS12");
-
-		TBanka poverioc = new TBanka();
-		poverioc.setModel(new BigInteger("97"));
-		poverioc.setNaziv("Poverioc");
-		poverioc.setPozivNaBroj("asdasgh");
-		poverioc.setRacun("111-1111111111111-11");
-		poverioc.setSwiftKod("BANKAS34");
-
-		message.setBankaDuznik(duznik);
-		message.setBankaPoverioc(poverioc);
-
-		TNalog nalog = new TNalog();
-
-		GregorianCalendar datumTemp = new GregorianCalendar();
-		datumTemp.setTime(new Date());
-		XMLGregorianCalendar datum;
-		try {
-			datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					datumTemp);
-
-			message.setDatum(datum);
-			message.setDatumValute(datum);
-
-			nalog.setDatumNaloga(datum);
-			nalog.setDatumValute(datum);
-
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-
-		message.setId("123");
-		message.setSifraValute("RSD");
-		BigDecimal ukupanIznos = new BigDecimal(1235.24);
-		ukupanIznos = ukupanIznos.setScale(2, RoundingMode.CEILING);
-		message.setUkupanIznos(ukupanIznos);
-
-		Uplate uplate = new Uplate();
-
-		nalog.setDuznik(duznik);
-		nalog.setPrimalac(poverioc);
-		nalog.setHitno(false);
-		nalog.setId("111");
-		nalog.setIznos(ukupanIznos);
-		nalog.setOznakaValute("RSD");
-		nalog.setSvrhaPlacanja("Uplata silnih novaca.");
-
-		uplate.getUplata().add(nalog);
-
-		message.setUplate(uplate);
-		Status response = banka.receiveMT102(message);
-
-		System.out.println("response: " + response);
-
-	}
-
-	private static void testInvalid() {
-
-		MT102 message = new MT102();
-
-		TBanka duznik = new TBanka();
-		duznik.setModel(new BigInteger("97"));
-		duznik.setNaziv("Duznik");
-		duznik.setPozivNaBroj("asdasgh");
-		duznik.setRacun("111-11111111111111111111111111111111-11");
-		duznik.setSwiftKod("123");
-
-		TBanka poverioc = new TBanka();
-		duznik.setModel(new BigInteger("97"));
-		duznik.setNaziv("Poverioc");
-		duznik.setPozivNaBroj("asdasgh");
-		duznik.setRacun("111-11111111111111111111111111111111-11");
-		duznik.setSwiftKod("345");
-
-		message.setBankaDuznik(duznik);
-		message.setBankaPoverioc(poverioc);
-
-		TNalog nalog = new TNalog();
-
-		GregorianCalendar datumTemp = new GregorianCalendar();
-		datumTemp.setTime(new Date());
-		XMLGregorianCalendar datum;
-		try {
-			datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					datumTemp);
-
-			message.setDatum(datum);
-			message.setDatumValute(datum);
-
-			nalog.setDatumNaloga(datum);
-			nalog.setDatumValute(datum);
-
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-
-		message.setId("123");
-		message.setSifraValute("RSD");
-		message.setUkupanIznos(new BigDecimal(1235.24));
-
-		Uplate uplate = new Uplate();
-
-		nalog.setDuznik(duznik);
-		nalog.setPrimalac(poverioc);
-		nalog.setHitno(false);
-		nalog.setId("111");
-		nalog.setIznos(new BigDecimal(1235.24));
-		nalog.setOznakaValute("RSD");
-		nalog.setSvrhaPlacanja("Uplata silnih novaca.");
-
-		uplate.getUplata().add(nalog);
-
-		message.setUplate(uplate);
-		Status response = banka.receiveMT102(message);
-		
-		System.out.println("response: " + response);
-
-	}
-
-	private void testZahtev() {
+	private static void testZahtev() {
 		ZahtevZaIzvod zahtev = new ZahtevZaIzvod();
 
-		zahtev.setBrojRacuna("111111111111111111");
+		zahtev.setBrojRacuna("111-1111111111111-11");
 		zahtev.setRedniBrojPreseka(new BigInteger("1"));
 
-		GregorianCalendar datumTemp = new GregorianCalendar();
-		datumTemp.setTime(new Date());
+		GregorianCalendar datumTemp = new GregorianCalendar(2015, 4, 22);
 		XMLGregorianCalendar datum;
 		try {
-			datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					datumTemp);
+			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					2015, 4, 22,
+					DatatypeConstants.FIELD_UNDEFINED);
 
 			zahtev.setDatum(datum);
-
 		} catch (DatatypeConfigurationException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			banka.zahtevZaIzvod(new ZahtevZaIzvod());
-		} catch (NotificationMessage e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for(int i = 1; ;i++){
+			zahtev.setRedniBrojPreseka(new BigInteger(String.valueOf(i)));
+			Presek presek = banka.zahtevZaIzvod(zahtev);
+			System.out.println(presek.getZaglavlje().getNovoStanje());
 		}
+		} catch (NotificationMessage e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private static void testValidMT102() throws JAXBException {
+
+		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
+
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
+
+		Status response = banka.receiveMT102(message);
+		System.out.println("response: " + +response.getKod() + ":"
+				+ response.getOpis());
+
+	}
+
+	private static void testInvalidMT102() throws JAXBException {
+
+		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
+
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		MT102 message = (MT102) jaxbUnmarshaller.unmarshal(file);
+
+		message.getBankaDuznik().setRacun("123-123-12312-3123-123-123");
+
+		Status response = banka.receiveMT102(message);
+		System.out.println("response: " + +response.getKod() + ":"
+				+ response.getOpis());
+
+	}
+
+	private static void testValidUplata() throws JAXBException {
+
+		File file = new File("C:/Users/Lazar/Desktop/Faks/testMT103Valid.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(MT103.class);
+
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		MT103 message = (MT103) jaxbUnmarshaller.unmarshal(file);
+		Uplata uplata = new Uplata();
+		uplata.setNalog(message.getUplata());
+		Status response = banka.receiveUplata(uplata);
+		System.out.println("response: " + +response.getKod() + ":"
+				+ response.getOpis());
+
 	}
 
 }

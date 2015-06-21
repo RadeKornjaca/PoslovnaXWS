@@ -1,0 +1,42 @@
+<!--Polja su opisana u $scope.meta, a sami podaci su u $scope.data-->
+<p>
+	<div>
+
+		<div class="col-xs-8 ">
+			<div class="input-group">
+				<div class="input-group-btn search-panel">
+					<button type="button" class="btn btn-default">
+						<select ng-model="searchParams.field" ng-options="field.name for field in meta">
+							<option></option>
+						</select>
+					</button>
+				</div>
+				<input type="hidden" name="search_param" value="" id="search_param">         
+				<input type="text" class="form-control" placeholder="Pretraga..." ng-model="searchParams.term">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit" ng-click="search()">
+						<i class="glyphicon glyphicon-search"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+</p>
+<p>
+	<div ng-include="'views/table.html'"></div>
+</p>
+
+<div ng-controller="ZoomCtrl">
+	<button class = "btn btn-success" ng-click="pick()">Odaberi</button>
+	<button class = "btn btn-danger" ng-click="cancel()">Odustanak</button>
+
+	<div class="alert alert-success" role="alert" ng-show="success" >
+		<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		<b>Uspeh!</b> {{response}}
+	</div>
+	<div class="alert alert-danger" role="alert" ng-show="error">
+		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		<b>Greška!</b> {{response}}
+	</div>
+
+</div>

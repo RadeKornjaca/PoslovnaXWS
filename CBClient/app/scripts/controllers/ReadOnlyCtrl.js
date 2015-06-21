@@ -48,12 +48,12 @@
 			 		if($scope.meta[i].type === 'zoom'
 			 			|| $scope.meta[i].type === 'link'){
 			 			//Nisu implementirani svi linkovi; npr za nalog
-			 			if ($scope.entries[j][$scope.meta[i].name] == undefined)
-			 				continue;
-			 			var path = window.location.origin+window.location.pathname;
-			 			$scope.entries[j][$scope.meta[i].name] = 
-			 					$scope.entries[j][$scope.meta[i].name]
-			 						.replace("http://localhost:8080/CentralnaBanka/services/restService/", path+"#/");
+			 		if ($scope.entries[j][$scope.meta[i].name] == undefined)
+			 			continue;
+			 		var path = window.location.origin+window.location.pathname;
+			 		$scope.entries[j][$scope.meta[i].name] = 
+			 		$scope.entries[j][$scope.meta[i].name]
+			 		.replace("http://localhost:8080/CentralnaBanka/services/restService/", path+"#/");
 
 			 	}
 
@@ -118,13 +118,22 @@
 
 			cbService.getResourceFiltered($scope.type, $scope.query + $scope.sortQuery).then(onResourceComplete, onError);
 		}
+		$scope.selectedEntry = null;
+		$scope.select = function(entry){
+			$scope.selectedEntry = entry;
+		}
 
 		/* Uzima putanju do kontrolera.
-		 * npr: za CBClient/#/drzave će vratiti /drzave
+		 * npr: za CBClient/#/drzava će vratiti /drzava
 		 * Ovo služi da se konkatenira na URL ka resursu
 		 * kako bi se znalo o kom tipu resursa se radi. 
+		 * Pošto ovaj kontroler služi i za zoom forme,
+		 * poslednji u tip će biti onaj koji se prikazuje.
+		 * npr: 4/naseljenoMesto/drzava
 		 */
-		 $scope.type = $route.current.$$route.originalPath;
+		 var route = $route.current.$$route.originalPath.split("/");
+
+		 $scope.type = "/"+route[route.length - 1];
 
 		 cbService.getResource($scope.type).then(onResourceComplete, onError);
 		};

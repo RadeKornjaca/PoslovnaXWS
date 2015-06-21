@@ -68,7 +68,7 @@ import poslovnaxws.common.TBanka;
 @XmlRootElement(name = "MT900")
 public class MT900 {
 
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected String id;
     @XmlElement(required = true)
     protected TBanka banka;

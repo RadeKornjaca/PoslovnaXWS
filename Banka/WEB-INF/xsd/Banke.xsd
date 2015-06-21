@@ -92,4 +92,21 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:element name="preseci">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="datum" type="xs:date"/>
+                <xs:sequence maxOccurs="unbounded" minOccurs="1">
+                    <xs:element ref="presek"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="uplata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="nalog" type="xws:TNalog"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

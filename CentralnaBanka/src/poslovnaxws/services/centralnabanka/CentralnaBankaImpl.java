@@ -8,6 +8,7 @@ package poslovnaxws.services.centralnabanka;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,17 +22,17 @@ import javax.ejb.EJBException;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
+import javax.xml.ws.Service;
 
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import poslovnaxws.common.Status;
-import poslovnaxws.poruke.MT103;
+import poslovnaxws.services.banka.BankaServiceMessages;
 import session.dao.BankaDaoLocal;
 import session.dao.DnevnoStanjeRacunaDaoLocal;
 import session.dao.Mt10xDaoLocal;
@@ -66,9 +67,18 @@ import entity.StavkaPoruke;
                       
 public class CentralnaBankaImpl implements CentralnaBanka {
 
+	
+	public static QName serviceName;
+	public static QName portName;
+	public static Service service;
+	public static BankaServiceMessages banka;
+	
     private static final Logger LOG = Logger.getLogger(CentralnaBankaImpl.class.getName());
     
-    
+	private static String PORUKE_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd";
+	private static String BANKE_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Banke.xsd";
+	private static String COMMON_XSD = "../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Common.xsd";
+
     @EJB
 	private NalogDaoLocal nalogDao = JndiUtils.getLocalEJB(JndiUtils.NALOG_EJB);
    
@@ -98,95 +108,45 @@ public class CentralnaBankaImpl implements CentralnaBanka {
      */
     public poslovnaxws.common.Status receiveMT103(poslovnaxws.poruke.MT103 mt103) { 
         LOG.info("Executing operation receiveMT103");
-      	//Upis naloga
-        /*MT103 message = mt103;
-		poslovnaxws.common.Status _return = new poslovnaxws.common.Status();
-		try {
-			JAXBContext jc = JAXBContext.newInstance("poslovnaxws.poruke");
-			JAXBSource source = new JAXBSource(jc, message);
-
-			SchemaFactory sf = SchemaFactory
-					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = sf.newSchema(new File(
-					"E:/Za faks/apache-tomee-plus-1.5.1/webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd"));
-			System.out.println(schema);
-
-			Validator validator = schema.newValidator();
-			validator.validate(source);
-
-			_return.setKod(0);
-			_return.setOpis("OK");
-
-		} catch (JAXBException e) {
-			_return.setKod(1);
-			_return.setOpis("JAXB exception");
-			LOG.warning(e.getMessage());
-			return _return;
-		} catch (SAXParseException e) {
-			_return.setKod(2);
-			_return.setOpis("Invalid XML");
-			LOG.warning(e.getMessage());
-			return _return;
-		} catch (SAXException e) {
-			_return.setKod(3);
-			_return.setOpis("SAX exception");
-			LOG.warning(e.getMessage());
-			e.printStackTrace();
-			return _return;
-		} catch (IOException e) {
-			_return.setKod(4);
-			_return.setOpis("IO exception");
-			LOG.warning(e.getMessage());
-			return _return;
-		} catch (Exception e) {
-			_return.setKod(0);
-			_return.setOpis("ok");
-			e.printStackTrace();
-			LOG.warning(e.getMessage());
-			System.out.println("usao ovde!!!!!!!!!!!!");
-		}
-		return _return;*/
         
+        Status status = validate(mt103, PORUKE_XSD);
         
+        //0 = OK
+        if (status.getKod() != 0)
+        	return status;
         
-        Source xmlFile = new StreamSource(new File("E:/Za faks/XML TESTOVI/testMT103Valid.xml"));
-        System.out.println("stigo do ovde, napravio source");
-        JAXBContext context;
-        System.out.println("Prazan context");
-        try {
-        	context = JAXBContext.newInstance(MT103.class);
-        	System.out.println("inicijalizovan context");
-        	Marshaller marshaller = context.createMarshaller();
-        	System.out.println("kreiran marshaller");
-        	File tempXMLFile = new File("E:/Za faks/apache-tomee-plus-1.5.1/temp/xmlForValidatin.xml");
-        	System.out.println("kreiran temp xml");
-        	System.out.println(tempXMLFile.toString());
-        	marshaller.marshal(mt103, tempXMLFile);
-        	System.out.println("odradjen marshal");
-        	System.out.println(tempXMLFile.toString());
-        	URL schemaFile = new URL(tempXMLFile.toString());
-        	SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	        Schema schema = schemaFactory.newSchema(schemaFile);
-	        Validator validator = schema.newValidator();
-	        validator.validate(xmlFile);
-	        System.out.println(xmlFile.getSystemId() + " is valid");
-        } catch (SAXException | IOException e) {
-	        System.out.println(xmlFile.getSystemId() + " is NOT valid");
-	        System.out.println("Reason: " + e.getLocalizedMessage());
-	        e.printStackTrace();
-	        System.out.println("usao u SAXException");
-        } catch (JAXBException e) {
-			// TODO Auto-generated catch block
-        	System.out.println("usao u JAXBException");
-			e.printStackTrace();
-        } catch (Exception e){
-        	e.printStackTrace();
-        }
-        //return null;
 		Mt10x mt103Base = new Mt10x(mt103);
 		Object[] ob = mt103Base.getStavkaPoruke().toArray();
 	    Nalog nalog = ((StavkaPoruke) ob[0]).getNalog();
-	    return doHardJob(nalog, mt103Base, true, "RTGS");
+	    status = doHardJob(nalog, mt103Base, true, "RTGS");
+	    
+	    if(status.getKod() != 0){
+	    	return status;
+	    }
+	    
+	    URL wsdl;
+		try {
+			wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
+
+			serviceName = new QName("PoslovnaXWS/services/banka",
+					"BankaService");
+			portName = new QName("PoslovnaXWS/services/banka",
+					"BankaServicePort");
+
+			service = Service.create(wsdl, serviceName);
+
+			banka = service.getPort(portName, BankaServiceMessages.class);
+			
+			status = banka.receiveMT103(mt103);
+			System.out.println("response code: " + status.getKod());
+			System.out.println("response: " + status.getOpis());
+			
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return status;
         
     }
 
@@ -197,7 +157,44 @@ public class CentralnaBankaImpl implements CentralnaBanka {
     	
     	Mt10x mt102Base = new Mt10x(mt102);
     	boolean porukaUBazu = true;
-    	Status status = new Status();
+    	Status status = validate(mt102, PORUKE_XSD);
+    	
+    	//0 == OK
+    	if (status.getKod() != 0)
+    		return status;
+    	
+    	for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
+    		Nalog nalog  = stavkaPoruke.getNalog();
+    		Banka bankaDuznika = bankaDao.findBanka(nalog.getNazivDuznika());	
+	        Banka bankaPoverioca = bankaDao.findBanka(nalog.getNazivPoverioca());
+	        bankaDuznika = bankaDao.getAllCollections(bankaDuznika.getBankaId());
+	        bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca.getBankaId());
+	        RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika());
+	        if(racunBankeDuznika.getBanka().getBankaId() == bankaDuznika.getBankaId() && racunBankeDuznika.isLikvidan()){
+	        	if(racunBankeDuznika.getStanjeRacuna()>= nalog.getIznos()){
+	            	RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca());
+	            	if(racunBankePoverioca.getBanka().getBankaId() == bankaPoverioca.getBankaId()){
+	            		
+	            	}
+	            	else{
+	            		status.setKod(7);
+	                    status.setOpis("Racun poverioca ne pripada odgovarajucoj banci!");
+	                    return status;
+	            	}
+	        	}
+	        	else{            		
+	                status.setKod(8);
+	                status.setOpis("Racun duznika nema dovoljno sredstava da se odradi RTGS servis!");
+	                return status;
+	        	}
+	        }
+	        else{
+	            status.setKod(6);
+	            status.setOpis("Racun duznika ne pripada odgovarajucoj banci ili je banka nelikvidna");
+	            return status;
+	        }
+    	}
+    	
     	for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
 			Nalog nalog = stavkaPoruke.getNalog();
 			status = doHardJob(nalog, mt102Base, porukaUBazu, "Clearing");
@@ -206,50 +203,6 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 				break;
 		}
     	return status;
-    	
-    	/*LOG.info("Executing operation receiveMT102Clearing");
-		System.out.println(mt102);
-		MT102 message = mt102;
-		poslovnaxws.common.Status _return = new poslovnaxws.common.Status();
-		try {
-			JAXBContext jc = JAXBContext.newInstance("poslovnaxws.poruke");
-			JAXBSource source = new JAXBSource(jc, message);
-
-			SchemaFactory sf = SchemaFactory
-					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = sf.newSchema(new File(
-					"../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/xsd/Poruke.xsd"));
-			System.out.println(schema);
-
-			Validator validator = schema.newValidator();
-			validator.validate(source);
-
-			_return.setKod(0);
-			_return.setOpis("OK");
-
-		} catch (JAXBException e) {
-			_return.setKod(1);
-			_return.setOpis("JAXB exception");
-			LOG.warning(e.getMessage());
-		} catch (SAXParseException e) {
-			_return.setKod(2);
-			_return.setOpis("Invalid XML");
-			LOG.warning(e.getMessage());
-		} catch (SAXException e) {
-			_return.setKod(3);
-			_return.setOpis("SAX exception");
-			LOG.warning(e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
-			_return.setKod(4);
-			_return.setOpis("IO exception");
-			LOG.warning(e.getMessage());
-		} catch (Exception e) {
-			_return.setKod(5);
-			_return.setOpis("???");
-			e.printStackTrace();
-		}
-		return _return;*/
     }
     
     public poslovnaxws.common.Status doHardJob(Nalog nalog, Mt10x mt10xBase, boolean upisiPorukuUBazu, String typeOfService){
@@ -268,6 +221,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 	        bankaDuznika = bankaDao.getAllCollections(bankaDuznika.getBankaId());
 	        bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca.getBankaId());
 	        RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika());
+	        
 	        if(racunBankeDuznika.getBanka().getBankaId() == bankaDuznika.getBankaId() && racunBankeDuznika.isLikvidan()){
 	        	if(racunBankeDuznika.getStanjeRacuna()>= nalog.getIznos()){
 	            	RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca());
@@ -365,7 +319,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		                    nalogDao.persist(nalog);*/
 	        				DnevnoStanjeRacuna dnevnoStanjeRacunaPoverioca = dnevnoStanjeRacunaDao.getAllCollections(dnevnoStanjeRacunaPoveriocaLista.get(0).getIdDnevnogStanja());
 	        				dnevnoStanjeRacunaPoverioca.setPrethodnoStanje(dnevnoStanjeRacunaPoverioca.getTrenutnoStanje());
-	        				dnevnoStanjeRacunaPoverioca.setDnevniPrometUKorist(dnevnoStanjeRacunaPoverioca.getDnevniPrometNaTeret() + nalog.getIznos());
+	        				dnevnoStanjeRacunaPoverioca.setDnevniPrometUKorist(dnevnoStanjeRacunaPoverioca.getDnevniPrometUKorist() + nalog.getIznos());
 	        				dnevnoStanjeRacunaPoverioca.setTrenutnoStanje(dnevnoStanjeRacunaPoverioca.getTrenutnoStanje() + nalog.getIznos());
 	        				StavkaDnevnogRacuna stavkaDnevnogRacunaPoverioca = new StavkaDnevnogRacuna();
 	        				stavkaDnevnogRacunaPoverioca.setDnevnoStanjeRacuna(dnevnoStanjeRacunaPoverioca);
@@ -406,14 +360,14 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 	        else{
 	        	poslovnaxws.common.Status status = new Status();
 	            status.setKod(6);
-	            status.setOpis("Racun duznika ne pripada odgovarajucoj banci!");
+	            status.setOpis("Racun duznika ne pripada odgovarajucoj banci ili je banka nelikvidna");
 	            return status;
 	        }
     	} catch (EJBException e){
         	poslovnaxws.common.Status status = new Status();
             status.setKod(9);
             status.setOpis("Jedna od  banaka ili njihovi racuni ne postoje u bazi");
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("-------------------EJBException---------------------");
             return status;
         } catch (java.lang.Exception ex) {
@@ -422,5 +376,52 @@ public class CentralnaBankaImpl implements CentralnaBanka {
            throw new RuntimeException(ex);
         }
     }
+    
+	private Status validate(Object message, String xsdLocation) {
+		Status _return = new Status();
+		try {
+			JAXBContext jc = JAXBContext.newInstance(message.getClass());
+			JAXBSource source = new JAXBSource(jc, message);
+
+			SchemaFactory sf = SchemaFactory
+					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sf.newSchema(new File(xsdLocation));
+			System.out.println(schema);
+
+			javax.xml.validation.Validator validator = schema.newValidator();
+			validator.validate(source);
+
+			_return.setKod(0);
+			_return.setOpis("OK");
+
+		} catch (JAXBException e) {
+			_return.setKod(1);
+			_return.setOpis("JAXB exception");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (SAXParseException e) {
+			_return.setKod(2);
+			_return.setOpis("Invalid XML");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (SAXException e) {
+			_return.setKod(3);
+			_return.setOpis("SAX exception");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			_return.setKod(4);
+			_return.setOpis("IO exception");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			_return.setKod(5);
+			_return.setOpis("???");
+			LOG.warning(e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("XML is valid!");
+		return _return;
+	}
 
 }

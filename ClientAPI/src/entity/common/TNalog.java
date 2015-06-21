@@ -9,12 +9,15 @@
 package entity.common;
 
 import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import entity.iface.Identifiable;
 
 
 /**
@@ -77,7 +80,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "hitno",
     "naseljenoMesto"
 })
-public class TNalog {
+public class TNalog{
 
     @XmlElement(required = true)
     protected String id;
@@ -109,9 +112,9 @@ public class TNalog {
      *     {@link String }
      *     
      */
-    public String getId() {
+    /*public String getId() {
         return id;
-    }
+    }*/
 
     /**
      * Sets the value of the id property.
@@ -332,5 +335,11 @@ public class TNalog {
     public void setNaseljenoMesto(TNaseljenoMesto value) {
         this.naseljenoMesto = value;
     }
+
+	public String getId() {
+		return id;
+	}
+
+	
 
 }

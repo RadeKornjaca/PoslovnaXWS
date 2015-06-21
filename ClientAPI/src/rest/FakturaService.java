@@ -36,6 +36,7 @@ public class FakturaService {
 	@EJB
 	private FakturaDaoLocal fakturaDao;
 
+<<<<<<< HEAD
 	@EJB
 	private DobavljacDaoLocal dobavljacDao;
 	
@@ -44,12 +45,16 @@ public class FakturaService {
 	
 	@EJB
 	private StavkeDaoLocal stavkeDao;
+=======
+	//@EJB
+	//private DobavljacDaoLocal dobavljacDao;
+>>>>>>> ebb228cec919ca852c11045662942f5342760e87
 
 	public FakturaService() {
 
 	}
 	
-	@POST
+	/*@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
 	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) throws URISyntaxException {
@@ -73,7 +78,7 @@ public class FakturaService {
 		}
 		
 		return response;
-	}
+	}*/
 
 
 

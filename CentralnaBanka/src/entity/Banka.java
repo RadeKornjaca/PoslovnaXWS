@@ -21,22 +21,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import poslovnaxws.common.TBanka;
+import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
+import util.Restifyable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** @pdOid 116f65c3-5b1e-4bfc-8fa0-6ea419919fd8 */
 @Entity
 @JsonInclude(Include.NON_NULL)
 @Table(name = "banka")
-@NamedQuery(name = "findBanka", query="Select b from Banka b where b.naziv like :naziv")
-public class Banka{
+@NamedQuery(name = "findBanka", query = "Select b from Banka b where b.naziv like :naziv")
+public class Banka implements Restifyable {
 	/** @pdOid 8a3e2bdd-c487-4f49-a63a-9f19b52e9ff9 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "banka_id", unique = true, nullable = false)
 	private long bankaId;
-	
+
 	@Column(name = "swift_kod", unique = true, nullable = false)
 	private java.lang.String swiftKod;
 	/** @pdOid 1fd5a2b8-3ac6-4397-b62c-a1d65abf8884 */
@@ -54,10 +60,10 @@ public class Banka{
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "banka")
 	private java.util.Collection<RacunBanke> racunBanke = new HashSet<RacunBanke>();
 
-	public Banka(){
-		
+	public Banka() {
+
 	}
-	
+
 	public Banka(TBanka banka) {
 		this.naziv = banka.getNaziv();
 		this.swiftKod = banka.getSwiftKod();
@@ -103,6 +109,7 @@ public class Banka{
 		return racunBanke;
 	}
 
+	@JsonIgnore
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorRacunBanke() {
 		if (racunBanke == null)
@@ -150,5 +157,36 @@ public class Banka{
 		if (racunBanke != null)
 			racunBanke.clear();
 	}
+
+	@Override
+	public ObjectNode restify() {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ObjectNode json = objectMapper.valueToTree(this);
+
+		// Daje link cak i ako nije ucitan zbog lazy fetch-a
+		json.put("racunBanke",
+				resourceURL() + EntityInfoUtil.getTableName(RacunBanke.class));
+
+		return json;
+	}
+
+	@Override
+	public String resourceURL() {
+		return CBClientService.REST_URL + "/" + bankaId + "/banka";
+	}
+
+	@Override
+	public String tableURL() {
+		return CBClientService.REST_URL + "/banka";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Banka that = (Banka) obj;
+		return this.bankaId == that.bankaId;
+	}
+
 
 }

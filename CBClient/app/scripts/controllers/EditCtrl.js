@@ -18,6 +18,7 @@
 				$scope.response = "Neuspešno učitavanje podataka: " + reason.status +" "+ reason.statusText;
 				$scope.error = true;
 				$scope.success = false;
+				$scope.isZoom = false;
 			};
 
 			var onErrorSend = function(reason){
@@ -40,6 +41,7 @@
 			$scope.submit = function(data){
 				cbService.editResource(type, id, data).then(onSuccessSend, onErrorSend).then(resetFeedback(), 2000);
 			};
+
 
 		/* Uzima putanju do kontrolera.
 		 * npr: za CBClient/#/1/drzave će vratiti /1/drzave

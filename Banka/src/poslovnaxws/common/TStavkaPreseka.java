@@ -90,6 +90,23 @@ public class TStavkaPreseka {
     protected BigDecimal iznos;
     @XmlElement(required = true)
     protected String smer;
+    
+    public TStavkaPreseka(){
+    	
+    }
+    
+    /**
+     * Postavlja sve sem smera iz naloga.
+     * @param nalog
+     */
+    public TStavkaPreseka(TNalog nalog){
+		datumNaloga = nalog.getDatumNaloga();
+		datumValute = nalog.getDatumValute();
+		duznik = nalog.getDuznik();
+		iznos = nalog.getIznos();
+		primalac = nalog.getPrimalac();
+		svrhaPlacanja = nalog.getSvrhaPlacanja();	
+    }
 
     /**
      * Gets the value of the duznik property.

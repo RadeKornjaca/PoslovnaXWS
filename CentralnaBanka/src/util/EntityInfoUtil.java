@@ -182,4 +182,20 @@ public final class EntityInfoUtil {
 		}
 		return query.toString();
 	}
+
+	/**
+	 * 
+	 * @param clazz - klasa koja nasledjuje Restifyable
+	 * @return - ime tabele u bazi podataka. Sluzi za REST.
+	 */
+	public static <T extends Restifyable> String getTableName(Class<T> clazz) {
+		if (clazz.isAnnotationPresent(Table.class)){
+			Table table = clazz.getAnnotation(Table.class);
+			return "/"+table.name();
+		}
+		
+		return null;
+
+	}
+
 }

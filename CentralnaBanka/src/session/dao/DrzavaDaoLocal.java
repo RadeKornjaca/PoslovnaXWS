@@ -6,6 +6,6 @@ public interface DrzavaDaoLocal extends GenericDaoLocal<Drzava, Integer>{
 	
 	public Drzava findDrzava(String naziv);
 	
-	public Drzava loadFully(int id);
+	public Drzava loadFully(long idDrzave);
 
 }

@@ -40,4 +40,10 @@ public class NotificationMessage extends Exception {
     public poslovnaxws.common.Status getFaultInfo() {
         return this.status;
     }
+    
+    @Override
+    public String getMessage() {
+    	// TODO Auto-generated method stub
+    	return "Kod: " + status.getKod() + "; opis: " + status.getOpis();
+    }
 }
