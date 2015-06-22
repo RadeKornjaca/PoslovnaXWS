@@ -9,6 +9,7 @@
 package poslovnaxws.common;
 
 import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -77,8 +78,25 @@ public abstract class TKlijent {
     protected BigInteger model;
     @XmlElement(required = true)
     protected String pozivNaBroj;
+    
+    public TKlijent(){
+    	
+    }
+    
+    
 
-    /**
+    public TKlijent(String naziv, String racun, BigInteger model,
+			String pozivNaBroj) {
+		super();
+		this.naziv = naziv;
+		this.racun = racun;
+		this.model = model;
+		this.pozivNaBroj = pozivNaBroj;
+	}
+
+
+
+	/**
      * Gets the value of the naziv property.
      * 
      * @return

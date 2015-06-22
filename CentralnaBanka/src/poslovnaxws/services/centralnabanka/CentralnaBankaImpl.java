@@ -107,7 +107,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 	@EJB
 	Mt10xDaoLocal mt10xDao = JndiUtils.getLocalEJB(JndiUtils.MT10X_EJB);
-	
+
 	@EJB
 	Mt9xyDaoLocal mt9xyDao = JndiUtils.getLocalEJB(JndiUtils.MT9xy_EJB);
 
@@ -116,7 +116,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			.getLocalEJB(JndiUtils.STAVKA_PORUKE_EJB);
 
 	public CentralnaBankaImpl() {
-		
+
 		Properties prop = new Properties();
 
 		InputStream propInput = null;
@@ -183,32 +183,16 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		Object[] ob = mt103Base.getStavkaPoruke().toArray();
 		Nalog nalog = ((StavkaPoruke) ob[0]).getNalog();
 		status = doHardJob(nalog, mt103Base, true, "RTGS");
-		
+
 		if (status.getKod() != 0) {
 			return status;
 		}
 
-		//Duznik
-		banka = createBankaService(mt103.getBankaDuznik().getSwiftKod());
-		MT900 mt900 = new MT900(mt103);
-		//Mt9xy mt9xy = new Mt9xy(mt900);
-		//mt9xyDao.persist(mt9xy);
-		status = banka.receiveMT900(mt900);
-		
-		if (status.getKod() != 0)
-			return status;
-		
-		//Poverilac
-		banka = createBankaService(mt103.getBankaPoverioc().getSwiftKod());
-		MT910 mt910 = new MT910(mt103);
-		//mt9xy = new Mt9xy(mt910);
-		//mt9xyDao.persist(mt9xy);
-		status = banka.receiveMT910(mt910);
-		
+		status = sendMT9xy(mt103Base, nalog);
+
 		if (status.getKod() != 0)
 			return status;
 
-		//status = banka.receiveMT103(mt103);
 		System.out.println("response code: " + status.getKod());
 		System.out.println("response: " + status.getOpis());
 
@@ -232,9 +216,10 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		// 0 == OK
 		if (status.getKod() != 0)
 			return status;
-
+		
+		Nalog nalog = null;
 		for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
-			Nalog nalog = stavkaPoruke.getNalog();
+			nalog = stavkaPoruke.getNalog();
 			Banka bankaDuznika = bankaDao.findBanka(nalog.getNazivDuznika());
 			Banka bankaPoverioca = bankaDao
 					.findBanka(nalog.getNazivPoverioca());
@@ -270,30 +255,18 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		}
 
 		for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
-			Nalog nalog = stavkaPoruke.getNalog();
+			nalog = stavkaPoruke.getNalog();
 			status = doHardJob(nalog, mt102Base, porukaUBazu, "Clearing");
 			porukaUBazu = false;
 			if (status.getKod() != 0)
 				break;
 		}
-		
-		//Duznik
-		banka = createBankaService(mt102.getBankaDuznik().getSwiftKod());
-		MT900 mt900 = new MT900(mt102);
-		//Mt9xy mt9xy = new Mt9xy(mt900);
-		//mt9xyDao.persist(mt9xy);
-		status = banka.receiveMT900(mt900);
-		
+
+		status = sendMT9xy(mt102Base, nalog);
+
 		if (status.getKod() != 0)
 			return status;
-		
-		//Poverilac
-		banka = createBankaService(mt102.getBankaPoverioc().getSwiftKod());
-		MT910 mt910 = new MT910(mt102);
-		//mt9xy = new Mt9xy(mt910);
-		//mt9xyDao.persist(mt9xy);
-		status = banka.receiveMT910(mt910);
-		
+
 		return status;
 	}
 
@@ -590,7 +563,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		System.out.println("XML is valid!");
 		return _return;
 	}
-	
+
 	private BankaServiceMessages createBankaService(String swiftKod) {
 
 		Properties prop = new Properties();
@@ -609,24 +582,26 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		URL url, wsdl;
 		try {
 
-			url = new URL(prop.getProperty("namingUrl")  + swiftKod.toLowerCase() +"/address");
+			url = new URL(prop.getProperty("namingUrl")
+					+ swiftKod.toLowerCase() + "/address");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 
 			conn.setRequestMethod("GET");
-			
-			String line, wsdlString = "";
-			   rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		         while ((line = rd.readLine()) != null) {
-		            wsdlString += line;
-		         }
 
-			QName serviceName = new QName(
-					"PoslovnaXWS/services/banka", "BankaService");
+			String line, wsdlString = "";
+			rd = new BufferedReader(
+					new InputStreamReader(conn.getInputStream()));
+			while ((line = rd.readLine()) != null) {
+				wsdlString += line;
+			}
+
+			QName serviceName = new QName("PoslovnaXWS/services/banka",
+					"BankaService");
 			QName portName = new QName("PoslovnaXWS/services/banka",
 					"BankaServicePort");
-			
-			wsdl = new URL(wsdlString+"banka?wsdl");
+
+			wsdl = new URL(wsdlString + "banka?wsdl");
 
 			Service service = Service.create(wsdl, serviceName);
 
@@ -643,6 +618,35 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		}
 
 		return null;
+
+	}
+
+	private Status sendMT9xy(Mt10x mt10x, Nalog nalog) {
+
+		Status status = new Status();
+
+		Mt9xy mt900 = new Mt9xy(mt10x);
+		mt900.setVrsta(900);
+		mt9xyDao.persist(mt900);
+
+		Mt9xy mt910 = new Mt9xy(mt10x);
+		mt910.setVrsta(910);
+		mt9xyDao.persist(mt910);
+
+		// Poverilac
+		banka = createBankaService(mt10x.getRacunBankePoverioca().getBanka()
+				.getSwiftKod());
+		status = banka.receiveMT910(new MT910(mt910, nalog));
+		
+		if (status.getKod() != 0)
+			return status;
+		
+		// Duznik
+		banka = createBankaService(mt10x.getRacunBankeDuznika().getBanka()
+				.getSwiftKod());
+		status = banka.receiveMT900(new MT900(mt900, nalog));
+
+		return status;
 
 	}
 

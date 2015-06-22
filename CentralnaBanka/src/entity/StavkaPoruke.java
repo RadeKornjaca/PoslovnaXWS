@@ -30,7 +30,7 @@ public class StavkaPoruke implements Restifyable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_stavke_poruke", unique = true, nullable = false)
-	private long idStavkePoruke;
+	private Long idStavkePoruke;
 	/** @pdOid fa0457c0-a16f-4efe-ba23-c1c65c64976a */
 
 	@Column(name = "redni_broj_stavke", unique = false, nullable = false)
@@ -48,10 +48,9 @@ public class StavkaPoruke implements Restifyable {
 
 	}
 
-	public StavkaPoruke(long idStavkePoruke, double redniBrojStavke,
+	public StavkaPoruke( double redniBrojStavke,
 			Mt10x mt10x, Nalog nalog) {
 		super();
-		this.idStavkePoruke = idStavkePoruke;
 		this.redniBrojStavke = redniBrojStavke;
 		this.mt10x = mt10x;
 		this.nalog = nalog;

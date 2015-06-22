@@ -8,10 +8,14 @@
 
 package poslovnaxws.common;
 
+import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import entity.RacunBanke;
 
 
 /**
@@ -53,8 +57,19 @@ public class TBanka
     @XmlElement(required = true)
     protected String swiftKod;
     protected int sifra;
+    
+    public TBanka(){
+    	
+    }
 
-    /**
+    public TBanka(RacunBanke racunBankeDuznika, int model, String pozivNaBroj) {
+    	super(racunBankeDuznika.getBanka().getNaziv(), racunBankeDuznika.getBrojRacuna(),
+    			new BigInteger(String.valueOf(model)), pozivNaBroj);
+		swiftKod = racunBankeDuznika.getBanka().getSwiftKod();
+		sifra = racunBankeDuznika.getBanka().getSifra();
+	}
+
+	/**
      * Gets the value of the swiftKod property.
      * 
      * @return

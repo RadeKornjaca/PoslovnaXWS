@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class Mt9xy extends Poruka {
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_poruke", referencedColumnName = "id_poruke", nullable = false)
+	@JoinColumn(name = "id_poruke_mt10x", referencedColumnName = "id_poruke", nullable = false)
 	private Mt10x mt10x;
 
 	@JsonIgnore
@@ -67,6 +67,14 @@ public class Mt9xy extends Poruka {
 
 	public Mt9xy() {
 
+	}
+	
+
+	public Mt9xy(Mt10x mt10x) {
+		datumPoruke = mt10x.getDatumPoruke();
+		this.mt10x = mt10x;
+		this.racunBankeDuznika = mt10x.getRacunBankeDuznika();
+		this.racunBankePoverioca = mt10x.getRacunBankePoverioca();
 	}
 
 	public Mt9xy(MT900 mt900) {

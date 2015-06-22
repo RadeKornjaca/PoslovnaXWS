@@ -107,10 +107,11 @@ public class Mt10x extends Poruka {
 		this.statusPoruke = 1; // Na cekanju
 		this.svrhaPlacanja = mt102.getUplate().getUplata().get(0)
 				.getSvrhaPlacanja();
-
+		
+		int i = 0;
 		for (TNalog tNalog : uplate) {
 			Nalog nalog = new Nalog(tNalog);
-			this.stavkaPoruke.add(new StavkaPoruke(1, 1, this, nalog));
+			this.stavkaPoruke.add(new StavkaPoruke(i++, this, nalog));
 		}
 		this.ukupanIznos = mt102.getUkupanIznos().doubleValue();
 		duznik.getRacun();
@@ -129,7 +130,7 @@ public class Mt10x extends Poruka {
 		this.sifraValutePoruke = uplata.getOznakaValute();
 		this.svrhaPlacanja = uplata.getSvrhaPlacanja();
 		this.ukupanIznos = uplata.getIznos().doubleValue();
-		this.stavkaPoruke.add(new StavkaPoruke(1, 1, this, new Nalog(mt103
+		this.stavkaPoruke.add(new StavkaPoruke(1, this, new Nalog(mt103
 				.getUplata())));
 	}
 
