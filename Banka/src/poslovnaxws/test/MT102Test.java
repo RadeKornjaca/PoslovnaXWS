@@ -137,7 +137,7 @@ public class MT102Test {
 
 	private static void testValidUplata() throws JAXBException {
 
-		File file = new File("C:/Users/Lazar/Desktop/Faks/testMT103Valid.xml");
+		File file = new File("E:/Za faks/XML TESTOVI/testMT103Valid.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(MT103.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

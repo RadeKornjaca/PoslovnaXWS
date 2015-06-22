@@ -1,8 +1,6 @@
 package sessionbeans.concrete;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -10,7 +8,6 @@ import javax.xml.bind.JAXBException;
 
 import sessionbeans.common.GenericDao;
 import entity.fakture.Faktura;
-import entity.fakture.Fakture;
 
 
 @Stateless

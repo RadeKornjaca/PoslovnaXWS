@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
@@ -36,7 +37,6 @@ public class FakturaService {
 	@EJB
 	private FakturaDaoLocal fakturaDao;
 
-<<<<<<< HEAD
 	@EJB
 	private DobavljacDaoLocal dobavljacDao;
 	
@@ -45,16 +45,12 @@ public class FakturaService {
 	
 	@EJB
 	private StavkeDaoLocal stavkeDao;
-=======
-	//@EJB
-	//private DobavljacDaoLocal dobavljacDao;
->>>>>>> ebb228cec919ca852c11045662942f5342760e87
 
 	public FakturaService() {
 
 	}
 	
-	/*@POST
+	@POST
 	@Path("/{id}/fakture")
 	@Produces("application/xml")
 	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) throws URISyntaxException {
@@ -78,7 +74,7 @@ public class FakturaService {
 		}
 		
 		return response;
-	}*/
+	}
 
 
 
@@ -150,8 +146,11 @@ public class FakturaService {
 	public Response addStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
 			@PathParam("id_fakture") Long idFakture, StavkaFakture stavka) throws URISyntaxException {
 
-		Response response;
+		System.out.println("Invoking addStavka!");
+		System.out.println("idFakture: " + idFakture);
+		System.out.println("idDobavljaca: " + idDobavljaca);
 		
+		Response response;
 		
 		URI uri = new URI("/partneri/" + idDobavljaca + "/fakture/" + stavka.getRedniBroj());
 		
@@ -206,21 +205,107 @@ public class FakturaService {
 	@PUT
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
 	@Produces("application/xml")
-	public void updateStavka(@PathParam("id_dobavljaca") String idDobavljaca,
-			@PathParam("id_fakture") String idFakture,
-			@PathParam("red_br") String redBr) {
+	public Response updateStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
+			@PathParam("id_fakture") Long idFakture,
+			@PathParam("red_br") BigInteger redBr, StavkaFakture stavka) throws URISyntaxException {
+		
+		System.out.println("Invoking updateStavka!");
+		System.out.println("idFakture: " + idFakture);
+		System.out.println("idDobavljaca: " + idDobavljaca);
+		
+		Response response;
+		
+		Faktura faktura;
+		
+		try {
+			faktura = fakturaDao.findById(idFakture);
+			
+			if(checkDobavljac(idDobavljaca)){
+				try {
+					StavkaFakture oldStavka = stavkaDao.findByIdInFaktura(idDobavljaca.toString(), idFakture, redBr);
+					for(StavkaFakture s : faktura.getStavkeFakture().getStavkaFakture()) {
+						if(s.getRedniBroj().equals(oldStavka.getRedniBroj())) {
+							s.setIznosRabata(stavka.getIznosRabata());
+							s.setJedinicaMere(stavka.getJedinicaMere());
+							s.setJedinicnaCena(stavka.getJedinicnaCena());
+							s.setKolicina(stavka.getKolicina());					//ispao sam dobar covek
+							s.setNazivUsluge(stavka.getNazivUsluge());				//ali u ovom trenutku, mrzim svoj zivot
+							s.setProcenatRabata(stavka.getProcenatRabata());
+							s.setUkupanPorez(stavka.getUkupanPorez());
+							s.setUmanjenoZarabat(stavka.getUmanjenoZarabat());
+							s.setVrednost(stavka.getVrednost());
+						}
+					}
+					
+					fakturaDao.merge(faktura, idFakture);
+					
+					response = Response.ok().build();
+	
+				} catch (JAXBException | IOException e) {
+					response = Response.status(Status.BAD_REQUEST).build();
+					e.printStackTrace();
+				}
+			} else {
+				response = Response.status(Status.FORBIDDEN).build();
+			}
+			
+		} catch (JAXBException | IOException e1) {
+			response = Response.status(Status.NOT_FOUND).build();
+			e1.printStackTrace();
+		}	
+		
+		return response;
 
 	}
 
 	@DELETE
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
 	@Produces("application/xml")
-	public Response deleteStavka(@PathParam("id_dobavljaca") String idDob,
-			@PathParam("id_fakture") String idFak,
-			@PathParam("red_br") String br) {
+	public Response deleteStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
+			@PathParam("id_fakture") Long idFakture,
+			@PathParam("red_br") BigInteger redBr) {
 				
+		System.out.println("Invoking deleteStavka!");
+		System.out.println("idFakture: " + idFakture);
+		System.out.println("idDobavljaca: " + idDobavljaca);
+		System.out.println("redBr: " + redBr);
 		
-		return null;
+		Response response = Response.status(Status.NOT_FOUND).build();
+		
+		Faktura faktura;
+		
+		try {
+			faktura = fakturaDao.findById(idFakture);
+			
+			if(checkDobavljac(idDobavljaca)){
+				try {
+					StavkaFakture oldStavka = stavkaDao.findByIdInFaktura(idDobavljaca.toString(), idFakture, redBr);
+					
+					Iterator<StavkaFakture> iterStavka = faktura.getStavkeFakture().getStavkaFakture().iterator();
+					while(iterStavka.hasNext()) {
+						if(iterStavka.next().getRedniBroj().equals(oldStavka.getRedniBroj())) {
+							iterStavka.remove();
+						}
+					}
+					
+					fakturaDao.merge(faktura, idFakture);
+					
+					response = Response.status(Status.NO_CONTENT).build();
+	
+				} catch (JAXBException | IOException e) {
+					response = Response.status(Status.BAD_REQUEST).build();
+					e.printStackTrace();
+				}
+			} else {
+				response = Response.status(Status.FORBIDDEN).build();
+			}
+			
+		} catch (JAXBException | IOException e1) {
+			response = Response.status(Status.NOT_FOUND).build();
+			e1.printStackTrace();
+		}	
+		
+		return response;
 
 
 	}
