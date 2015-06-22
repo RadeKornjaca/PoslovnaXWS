@@ -12,33 +12,34 @@ import org.basex.BaseXHTTP;
  *
  */
 public class BaseXStart {
-	
+
 	private static BaseXHTTP http;
 
-	private static BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-	
+	private static BufferedReader keyboard = new BufferedReader(
+			new InputStreamReader(System.in));
+
 	public static void main(String[] args) throws Exception {
-		System.out.println("Recognized commands (case-insensitive): START|STOP|EXIT");
+		System.out
+				.println("Recognized commands (case-insensitive): START|STOP|EXIT");
 		System.out.print(">");
-		
+
 		for (String command; (command = keyboard.readLine()) != null;) {
-			if (command.equalsIgnoreCase("exit")) 
+			if (command.equalsIgnoreCase("exit"))
 				System.exit(0);
-			else if (command.equalsIgnoreCase("start") && http == null) 
+			else if (command.equalsIgnoreCase("start") && http == null)
 				try {
 					http = new BaseXHTTP("-Uadmin", "-Padmin");
-				}
-				catch(Exception e) {
-					System.out.println("There was a problem with starting the database. Try again.");
+				} catch (Exception e) {
+					System.out
+							.println("There was a problem with starting the database. Try again.");
 					System.exit(1);
 				}
 			else if (command.equalsIgnoreCase("stop") && http != null) {
 				http.stop();
 				System.exit(0);
-			}
-			else if(command.equalsIgnoreCase("init")) {
-				if(http instanceof BaseXHTTP) {
-					InitDatabase.init();
+			} else if (command.equalsIgnoreCase("init")) {
+				if (http instanceof BaseXHTTP) {
+				//	InitDatabase.init();
 				}
 			}
 			System.out.print(">");

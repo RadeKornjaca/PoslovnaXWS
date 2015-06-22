@@ -2,6 +2,7 @@
 package poslovnaxws.poruke;
 
 import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import poslovnaxws.common.TBanka;
 
 
@@ -81,6 +83,26 @@ public class MT910 {
     protected BigDecimal iznos;
     @XmlElement(required = true)
     protected String sifraValute;
+    
+    public MT910(){
+    	
+    }
+    
+    public MT910(MT102 mt102){
+    	banka = mt102.getBankaPoverioc();
+    	idPorukeNaloga = mt102.getId();
+    	datumValute = mt102.getDatumValute();
+    	iznos = mt102.getUkupanIznos();
+    	sifraValute = mt102.getSifraValute();
+    }
+    
+    public MT910(MT103 mt103){
+    	banka = mt103.getBankaPoverioc();
+    	idPorukeNaloga = mt103.getId();
+    	datumValute = mt103.getUplata().getDatumValute();
+    	iznos = mt103.getUplata().getIznos();
+    	sifraValute = mt103.getUplata().getOznakaValute();
+    }
 
     /**
      * Gets the value of the id property.

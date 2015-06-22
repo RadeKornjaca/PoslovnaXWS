@@ -72,9 +72,9 @@ public class MT102Test {
 
 		 //testValidMT102();
 
-		testZahtev();
+		//testZahtev();
 
-		// testValidUplata();
+		 testValidUplata();
 
 	}
 
@@ -84,7 +84,6 @@ public class MT102Test {
 		zahtev.setBrojRacuna("111-1111111111111-11");
 		zahtev.setRedniBrojPreseka(new BigInteger("1"));
 
-		GregorianCalendar datumTemp = new GregorianCalendar(2015, 4, 22);
 		XMLGregorianCalendar datum;
 		try {
 			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(

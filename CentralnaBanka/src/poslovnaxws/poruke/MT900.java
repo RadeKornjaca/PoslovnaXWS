@@ -81,6 +81,27 @@ public class MT900 {
     protected BigDecimal iznos;
     @XmlElement(required = true)
     protected String sifraValute;
+    
+    
+    public MT900(){
+    	
+    }
+    
+    public MT900(MT102 mt102){
+    	banka = mt102.getBankaDuznik();
+    	idPorukeNaloga = mt102.getId();
+    	datumValute = mt102.getDatumValute();
+    	iznos = mt102.getUkupanIznos();
+    	sifraValute = mt102.getSifraValute();
+    }
+    
+    public MT900(MT103 mt103){
+    	banka = mt103.getBankaDuznik();
+    	idPorukeNaloga = mt103.getId();
+    	datumValute = mt103.getUplata().getDatumValute();
+    	iznos = mt103.getUplata().getIznos();
+    	sifraValute = mt103.getUplata().getOznakaValute();
+    }
 
     /**
      * Gets the value of the id property.

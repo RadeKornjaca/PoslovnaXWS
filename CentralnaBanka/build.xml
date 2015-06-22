@@ -62,11 +62,12 @@
 				<include name="*.css" />
 				<include name="*.js" />
 				<include name="w3school.xml" />
+
 			</zipfileset>
 			<classes dir="build">
 				<!--<include name="servlet/*.class" />-->
 				<include name="entity/*.class" />
-				
+
 				<!--<include name="messages/*.properties"/>!-->
 				<include name="log4j.properties" />
 			</classes>
@@ -77,6 +78,7 @@
 				<include name="wsdl/**" />
 				<include name="xsd/**" />
 				<include name="cxf-servlet.xml" />
+				<include name="config.properties" />
 			</webinf>
 		</war>
 	</target>
