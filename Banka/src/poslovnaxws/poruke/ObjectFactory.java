@@ -68,5 +68,9 @@ public class ObjectFactory {
     public MT102 .Uplate createMT102Uplate() {
         return new MT102 .Uplate();
     }
+    
+    public Poruka createPoruka(){
+    	return new Poruka();
+    }
 
 }

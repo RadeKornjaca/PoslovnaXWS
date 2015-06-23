@@ -33,7 +33,7 @@ public abstract class GenericDao<T extends Identifiable, ID extends Serializable
 
 	public T persist(T entity) throws JAXBException, IOException {
 
-		if (entity.getId() == null) {
+		if (entity.getId() == null || entity.getId().equals("null")) {
 			Long id = em.getIdentity();
 			entity.setId(id.toString());
 			System.out.println("ID: " + id);

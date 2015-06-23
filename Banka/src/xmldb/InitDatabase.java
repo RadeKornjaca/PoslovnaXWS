@@ -114,32 +114,89 @@ public final class InitDatabase {
 	}
 	
 	public static void main(String[] args) throws HttpException, IOException, JAXBException {
-        
+
 		URL url = new URL(REST_URL + "mt102");
-		
+
 		System.out.println(url);
-		
-		
+
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setDoOutput(true);
-		
+
 		conn.setRequestMethod(RequestMethod.PUT);
-		
+
 		int responseCode = conn.getResponseCode();
 		String message = conn.getResponseMessage();
-		System.out.println("\n* HTTP response: " + responseCode + " (" + message + ')');
-		
+		System.out.println("\n* HTTP response: " + responseCode + " ("
+				+ message + ')');
+
+		url = new URL(REST_URL + "mt103");
+
+		System.out.println(url);
+
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+
+		conn.setRequestMethod(RequestMethod.PUT);
+
+		responseCode = conn.getResponseCode();
+		message = conn.getResponseMessage();
+		System.out.println("\n* HTTP response: " + responseCode + " ("
+				+ message + ')');
+
+		url = new URL(REST_URL + "mt900");
+
+		System.out.println(url);
+
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+
+		conn.setRequestMethod(RequestMethod.PUT);
+
+		responseCode = conn.getResponseCode();
+		message = conn.getResponseMessage();
+		System.out.println("\n* HTTP response: " + responseCode + " ("
+				+ message + ')');
+
+		url = new URL(REST_URL + "mt910");
+
+		System.out.println(url);
+
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+
+		conn.setRequestMethod(RequestMethod.PUT);
+
+		responseCode = conn.getResponseCode();
+		message = conn.getResponseMessage();
+		System.out.println("\n* HTTP response: " + responseCode + " ("
+				+ message + ')');
+
+		url = new URL(REST_URL + "preseci");
+
+		System.out.println(url);
+
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+
+		conn.setRequestMethod(RequestMethod.PUT);
+
+		responseCode = conn.getResponseCode();
+		message = conn.getResponseMessage();
+		System.out.println("\n* HTTP response: " + responseCode + " ("
+				+ message + ')');
+
 		conn.disconnect();
-		
-		/*File file = new File("C:/Users/Lazar/Desktop/Faks/presek.xml");
-		JAXBContext jaxbContext = JAXBContext.newInstance(Preseci.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		Preseci preseci = (Preseci) jaxbUnmarshaller.unmarshal(file);
-        
-		PreseciDao dao = new PreseciDao();
-		
-		dao.persist(preseci);*/
-		
-		
+
+		/*
+		 * File file = new File("C:/Users/Lazar/Desktop/Faks/presek.xml");
+		 * JAXBContext jaxbContext = JAXBContext.newInstance(Preseci.class);
+		 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		 * Preseci preseci = (Preseci) jaxbUnmarshaller.unmarshal(file);
+		 * 
+		 * PreseciDao dao = new PreseciDao();
+		 * 
+		 * dao.persist(preseci);
+		 */
+
 	}
 }

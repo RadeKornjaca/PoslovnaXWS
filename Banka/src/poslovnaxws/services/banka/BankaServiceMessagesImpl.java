@@ -43,6 +43,7 @@ import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TStavkaPreseka;
 import poslovnaxws.poruke.MT103;
+import poslovnaxws.poruke.Poruka;
 import poslovnaxws.services.centralnabanka.CentralnaBanka;
 import sessionbeans.concrete.MT102DaoLocal;
 import sessionbeans.concrete.MT103DaoLocal;
@@ -145,7 +146,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			return status;
 
 		try {
-			mt103Dao.persist(mt103);
+			mt103Dao.persist(new Poruka(mt103));
 
 			Uplata uplata = new Uplata();
 			uplata.setNalog(mt103.getUplata());
@@ -180,7 +181,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			return status;
 
 		try {
-			mt102Dao.persist(mt102);
+			mt102Dao.persist(new Poruka(mt102));
 
 			for (int i = 0; i < mt102.getUplate().getUplata().size(); i++) {
 				Uplata uplata = new Uplata();
@@ -220,7 +221,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			return status;
 
 		try {
-			mt900Dao.persist(mt900);
+			mt900Dao.persist(new Poruka(mt900));
 		} catch (JAXBException e1) {
 			status.setKod(4);
 			status.setOpis("BANKE exception :JAXB: Couldn't save to database.");
@@ -247,7 +248,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			return status;
 
 		try {
-			mt910Dao.persist(mt910);
+			mt910Dao.persist(new Poruka(mt910));
 		} catch (JAXBException e1) {
 			status.setKod(4);
 			status.setOpis("BANKE exception :JAXB: Couldn't save to database.");

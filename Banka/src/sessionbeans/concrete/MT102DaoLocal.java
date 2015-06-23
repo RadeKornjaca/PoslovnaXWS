@@ -1,7 +1,7 @@
 package sessionbeans.concrete;
 
-import poslovnaxws.poruke.MT102;
+import poslovnaxws.poruke.Poruka;
 import sessionbeans.common.GenericDaoLocal;
 
-public interface MT102DaoLocal extends GenericDaoLocal<MT102, Long> {
+public interface MT102DaoLocal extends GenericDaoLocal<Poruka, Long> {
 }
