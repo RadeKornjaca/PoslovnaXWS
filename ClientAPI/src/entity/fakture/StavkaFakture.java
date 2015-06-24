@@ -152,6 +152,10 @@ public class StavkaFakture implements Identifiable{
     @XmlElement(name = "UkupanPorez", required = true)
     protected BigDecimal ukupanPorez;
 
+    public StavkaFakture() {
+    	
+    }
+    
     /**
      * Gets the value of the redniBroj property.
      * 

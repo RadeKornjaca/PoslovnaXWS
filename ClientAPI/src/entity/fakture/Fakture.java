@@ -48,7 +48,11 @@ public class Fakture implements Identifiable{
 
     @XmlElement(required = true)
     protected List<Faktura> faktura;
-
+    
+    public Fakture() {
+    	
+    }
+    
     /**
      * Gets the value of the faktura property.
      * 

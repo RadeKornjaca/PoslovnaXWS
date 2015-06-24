@@ -142,6 +142,10 @@ public class Faktura implements Identifiable{
     @XmlAttribute(name = "id", required = true)
     protected long id;
 
+    public Faktura() {
+    	
+    }
+    
     /**
      * Gets the value of the zaglavlje property.
      * 

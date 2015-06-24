@@ -68,9 +68,11 @@
 			<lib dir="${lib.dir}">
 				<include name="spring-*.jar" />
 				<include name="commons-httpclient-*.jar" />
+				<include name="jackson*.jar" />
 			</lib>
 			<webinf dir="${webinf.dir}">
 				<include name="cxf-servlet.xml" />
+				<include name="openejb-jar.xml" />
 			</webinf>
 		</war>
 	</target>

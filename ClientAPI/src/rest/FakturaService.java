@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
@@ -23,6 +25,10 @@ import sessionbeans.concrete.FakturaDaoLocal;
 import sessionbeans.concrete.FaktureDaoLocal;
 import sessionbeans.concrete.StavkaFaktureDaoLocal;
 import sessionbeans.concrete.StavkeDaoLocal;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import entity.fakture.Faktura;
 import entity.fakture.Fakture;
 import entity.fakture.StavkaFakture;
@@ -52,26 +58,38 @@ public class FakturaService {
 	
 	@POST
 	@Path("/{id}/fakture")
-	@Produces("application/xml")
-	public Response addFaktura(@PathParam("id") Long id, Faktura faktura) throws URISyntaxException {
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addFaktura(@PathParam("id") Long id, String jsonFaktura) throws URISyntaxException {
 		System.out.println("Invoking addFaktura!");
 		
 		Response response;
 		
-		URI uri = new URI("/partneri/" + id + "/fakture/" + faktura.getId());
+		ObjectMapper mapper = new ObjectMapper();
+		Faktura faktura;
 		
-		if(checkDobavljac(id)){
-			try {
-				fakturaDao.persist(faktura);
-				response = Response.status(Status.CREATED).contentLocation(uri).build();
+		try {
+			faktura = mapper.readValue(jsonFaktura, Faktura.class);
+			URI uri = new URI("/partneri/" + id + "/fakture/" + fakturaDao.getIdentity());
+			
+			if(checkDobavljac(id)){
+				try {
+					fakturaDao.persist(faktura);
+					response = Response.status(Status.CREATED).contentLocation(uri).build();
 
-			} catch (JAXBException | IOException e) {
-				response = Response.status(Status.BAD_REQUEST).build();
-				e.printStackTrace();
+				} catch (JAXBException | IOException e) {
+					response = Response.status(Status.BAD_REQUEST).build();
+					e.printStackTrace();
+				}
+			} else {
+				response = Response.status(Status.FORBIDDEN).build();
 			}
-		} else {
-			response = Response.status(Status.FORBIDDEN).build();
+		} catch (IOException e1) {
+			response = Response.status(Status.BAD_REQUEST).build();
+			e1.printStackTrace();
 		}
+		
+
 		
 		return response;
 	}
@@ -80,7 +98,7 @@ public class FakturaService {
 
 	@GET
 	@Path("/{id}/fakture")
-	@Produces("application/xml")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFakture(@PathParam("id") String id) {
 		System.out.println("Invoking getFakture with id poslovnog partnera !");
 
@@ -106,7 +124,7 @@ public class FakturaService {
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}")
-	@Produces("application/xml")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFakturaFromDobavljac(
 			@PathParam("id_dobavljaca") String idDobavljaca,
 			@PathParam("id_fakture") Long idFakture) {
@@ -123,7 +141,7 @@ public class FakturaService {
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke")
-	@Produces("application/xml")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStavke(
 			@PathParam("id_dobavljaca") String idDobavljaca,
 			@PathParam("id_fakture") Long idFakture) {
@@ -142,9 +160,10 @@ public class FakturaService {
 
 	@POST
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response addStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
-			@PathParam("id_fakture") Long idFakture, StavkaFakture stavka) throws URISyntaxException {
+			@PathParam("id_fakture") Long idFakture, String jsonStavka) throws URISyntaxException {
 
 		System.out.println("Invoking addStavka!");
 		System.out.println("idFakture: " + idFakture);
@@ -152,12 +171,15 @@ public class FakturaService {
 		
 		Response response;
 		
-		URI uri = new URI("/partneri/" + idDobavljaca + "/fakture/" + stavka.getRedniBroj());
-		
 		Faktura faktura;
+		ObjectMapper mapper = new ObjectMapper();
+		StavkaFakture stavka;
 		
 		try {
 			faktura = fakturaDao.findById(idFakture);
+			
+			stavka = mapper.readValue(jsonStavka, StavkaFakture.class);
+			URI uri = new URI("/partneri/" + idDobavljaca + "/fakture" + idFakture + "/stavke/" + stavka.getId());
 			
 			if(checkDobavljac(idDobavljaca)){
 				try {
@@ -187,7 +209,7 @@ public class FakturaService {
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
-	@Produces("application/xml")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStavka(
 			@PathParam("id_dobavljaca") String idDobavljaca,
 			@PathParam("id_fakture") Long idFakture,
@@ -204,10 +226,11 @@ public class FakturaService {
 
 	@PUT
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
 			@PathParam("id_fakture") Long idFakture,
-			@PathParam("red_br") BigInteger redBr, StavkaFakture stavka) throws URISyntaxException {
+			@PathParam("red_br") BigInteger redBr, String jsonStavka) throws URISyntaxException {
 		
 		System.out.println("Invoking updateStavka!");
 		System.out.println("idFakture: " + idFakture);
@@ -217,8 +240,12 @@ public class FakturaService {
 		
 		Faktura faktura;
 		
+		ObjectMapper mapper = new ObjectMapper();
+		StavkaFakture stavka;
+		
 		try {
 			faktura = fakturaDao.findById(idFakture);
+			stavka = mapper.readValue(jsonStavka, StavkaFakture.class);
 			
 			if(checkDobavljac(idDobavljaca)){
 				try {
@@ -260,7 +287,8 @@ public class FakturaService {
 
 	@DELETE
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
-	@Produces("application/xml")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteStavka(@PathParam("id_dobavljaca") Long idDobavljaca,
 			@PathParam("id_fakture") Long idFakture,
 			@PathParam("red_br") BigInteger redBr) {
@@ -321,8 +349,12 @@ public class FakturaService {
 	 */
 	private Response getResponsePack(Object data) {
 		Response response;
+		
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode json = mapper.valueToTree(data);
+		
 		if(data != null) {
-			response = Response.ok(data).build();
+			response = Response.ok(json.toString()).build();
 		}
 		else {
 			response = Response.status(Status.NOT_FOUND).build();

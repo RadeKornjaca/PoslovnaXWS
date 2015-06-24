@@ -49,6 +49,10 @@ public class StavkeFakture implements Identifiable{
     @XmlElement(required = true)
     protected List<StavkaFakture> stavkaFakture;
 
+    public StavkeFakture() {
+    	
+    }
+    
     /**
      * Gets the value of the stavkaFakture property.
      * 
