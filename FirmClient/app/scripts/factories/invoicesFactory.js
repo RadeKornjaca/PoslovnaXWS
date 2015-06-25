@@ -1,5 +1,7 @@
-angular.module('resource.invoice', ['ngResource'])
-	.factory('Invoice', function ($resource) {
+'use strict';
+
+angular.module('resource.invoices', ['ngResource'])
+	.factory('Invoices', function ($resource) {
 	
-	return $resource.get('http://localhost:8080/client-rest-ws/partneri/' + '14234512432' + '/fakture');		//PAZNJA!!! HARD KODIRANO!
+	return $resource('http://localhost:8080/client-rest-ws/partneri/:idDobavljaca/fakture');
 })

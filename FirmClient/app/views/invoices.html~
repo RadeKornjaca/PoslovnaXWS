@@ -1,3 +1,42 @@
 <div ng-controller="InvoicesCtrl">
-	<p>{{scope.text}}</p>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>
+								#
+							</th>
+							<th>
+								Iznos za uplatu
+							</th>
+							<th>
+								Datum računa
+							</th>
+							<th>
+								Status
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-click="go('/invoice')" ng-repeat="invoice in invoices">
+							<td>
+								{{ invoice.zaglavlje.id }}
+							</td>
+							<td>
+								{{ invoice.zaglavlje.iznosZaUplatu }}
+							</td>
+							<td>
+								{{ invoice.zaglavlje.datumRacuna }}
+							</td>
+							<td>
+								Default
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>

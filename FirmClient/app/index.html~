@@ -15,6 +15,7 @@
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/simple-sidebar.css">
+  <link rel="stylesheet" href="styles/both.css">
   <!-- endbuild -->
 </head>
 <body ng-app="firmApp">
@@ -35,14 +36,7 @@
               </a>
             </li>
             <li>
-              <a href="#">Opcije</a>
-              <ul>
-                <li>Kreiraj fakturu</li>
-                <li>Prikazi fakture</li>
-              </ul>
-            </li>
-            <li>
-              <a href="#">Kreiraj fakturu</a>
+              <a href="#/createInvoice">Kreiraj fakturu</a>
             </li>
             <li>
               <a href="#/invoices">Prikaži fakture</a>
@@ -82,13 +76,18 @@
      <script src="bower_components/angular-route/angular-route.js"></script>
      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
      <script src="bower_components/angular-touch/angular-touch.js"></script>
+     <script src="bower_components/x2js/xml2json.min.js"></script>
      <!-- endbower -->
      <!-- endbuild -->
 
      <!-- build:js({.tmp,app}) scripts/scripts.js -->
      <script src="scripts/app.js"></script>
      <script src="scripts/controllers/main.js"></script>
+     <script src="scripts/controllers/invoicesController.js"></script>
+     <script src="scripts/factories/invoicesFactory.js"></script>
      <script src="scripts/controllers/invoiceController.js"></script>
+     <script src="scripts/factories/invoiceFactory.js"></script>
+     <script src="scripts/util/dateFormatter.js"></script>
      <!-- endbuild -->
    </body>
    </html>
