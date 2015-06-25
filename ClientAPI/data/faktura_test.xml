@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="PoslovnaXWS/Fakture file:/C:/Users/Rade/Desktop/PoslovnaXWS/XMLSchemas/Fakture.xsd" id="1">
     <zaglavlje>
-        <id></id>
+        <id>1a</id>
         <dobavljac>
             <naziv xmlns="PoslovnaXWS/Common">Avakari</naziv>
             <racun xmlns="PoslovnaXWS/Common">111-1111111111111-11</racun>

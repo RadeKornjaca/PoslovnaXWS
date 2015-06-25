@@ -10,7 +10,7 @@
 			$log.info(response);
 			
 			$scope.zaglavlje = response.zaglavlje;
-			$scope.stavkeFakture = response.stavkeFakture;
+			//$scope.stavkeFakture = response.stavkeFakture;
 			
 			$log.info("Successfully obtained invoice data from REST.");
  		});

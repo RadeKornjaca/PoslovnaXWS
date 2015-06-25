@@ -6,7 +6,7 @@
  		$log.info(InvoiceParams.idFakture);
  		$log.info(InvoiceParams.idDobavljaca);
  		
- 		Invoice.get({idDobavljaca : InvoiceParams.getIdDobavljaca, idFakture : InvoiceParams.getIdFakture}, function(response) {
+ 		Invoice.get({idDobavljaca : InvoiceParams.idDobavljaca, idFakture : InvoiceParams.idFakture}, function(response) {
 			$log.info(response);
 			
 			$scope.zaglavlje = response.zaglavlje;
