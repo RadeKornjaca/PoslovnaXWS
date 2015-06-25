@@ -72,6 +72,7 @@
 			</lib>
 			<webinf dir="${webinf.dir}">
 				<include name="cxf-servlet.xml" />
+				<include name="config.properties" />
 				<include name="openejb-jar.xml" />
 			</webinf>
 		</war>

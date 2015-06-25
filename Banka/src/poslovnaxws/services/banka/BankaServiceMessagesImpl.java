@@ -111,7 +111,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			conn.setRequestMethod(RequestMethod.PUT);
 
 			conn.setRequestProperty("Content-Type", "application/json");
-			String input = prop.getProperty("swiftKod") + "!"
+			
+			
+			String input = prop.getProperty("sifra") + "!"
 					+ prop.getProperty("url");
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes());

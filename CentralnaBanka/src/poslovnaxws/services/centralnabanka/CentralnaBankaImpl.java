@@ -216,7 +216,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		// 0 == OK
 		if (status.getKod() != 0)
 			return status;
-		
+
 		Nalog nalog = null;
 		for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
 			nalog = stavkaPoruke.getNalog();
@@ -634,16 +634,14 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		mt9xyDao.persist(mt910);
 
 		// Poverilac
-		banka = createBankaService(mt10x.getRacunBankePoverioca().getBanka()
-				.getSwiftKod());
+		banka = createBankaService(String.valueOf(mt10x.getRacunBankePoverioca().getBanka().getSifra()));
 		status = banka.receiveMT910(new MT910(mt910, nalog));
-		
+
 		if (status.getKod() != 0)
 			return status;
-		
+
 		// Duznik
-		banka = createBankaService(mt10x.getRacunBankeDuznika().getBanka()
-				.getSwiftKod());
+		banka = createBankaService(String.valueOf(mt10x.getRacunBankeDuznika().getBanka().getSifra()));
 		status = banka.receiveMT900(new MT900(mt900, nalog));
 
 		return status;
