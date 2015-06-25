@@ -36,5 +36,13 @@
 	<classpathentry kind="lib" path="lib/velocity-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-jaxrs-base-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-jaxrs-json-provider-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-module-jaxb-annotations-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/openejb-cxf-rs-4.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/resteasy-jaxb-provider-3.0.10.Final.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations-2.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
