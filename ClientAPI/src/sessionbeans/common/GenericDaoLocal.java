@@ -21,4 +21,5 @@ public interface GenericDaoLocal<T, ID extends Serializable> {
 	
 	public InputStream findBy(String xQuery, boolean wrap) throws IOException;
 
+	public Long getIdentity() throws IOException;
 } 

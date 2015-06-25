@@ -64,4 +64,8 @@ public abstract class GenericDao<T extends Identifiable, ID extends Serializable
 		return entity;
 	}
 	
+	public Long getIdentity() throws IOException {
+		return em.getIdentity();
+	}
+	
 } 
