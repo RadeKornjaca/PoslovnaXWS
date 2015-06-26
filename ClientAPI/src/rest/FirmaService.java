@@ -49,13 +49,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import entity.dobavljac.Partneri;
 import entity.fakture.Faktura;
 import entity.fakture.Fakture;
 import entity.fakture.StavkaFakture;
 import entity.fakture.StavkeFakture;
 
 @Path("/partneri")
-public class FakturaService {
+public class FirmaService {
 
 	@EJB
 	private FaktureDaoLocal faktureDao;
@@ -72,7 +73,7 @@ public class FakturaService {
 	@EJB
 	private StavkeDaoLocal stavkeDao;
 
-	public FakturaService() {
+	public FirmaService() {
 
 	}
 
@@ -564,4 +565,22 @@ public class FakturaService {
 		return null;
 
 	}
+	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPartneri() {
+		Response response;
+		Partneri result = new Partneri();
+		
+		try {
+			result.setPartneri(dobavljacDao.findAll());
+		} catch (IOException | JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response = getResponsePack(result);
+		return response;
+	}
+	
 }

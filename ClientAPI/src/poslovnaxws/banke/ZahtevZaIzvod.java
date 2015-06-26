@@ -11,8 +11,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.jboss.resteasy.annotations.providers.jaxb.IgnoreMediaTypes;
-
 import wrapper.ZahtevResponse;
 
 
