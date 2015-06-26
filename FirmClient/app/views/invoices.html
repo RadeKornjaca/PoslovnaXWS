@@ -2,25 +2,28 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
+				<select ng-repeat="partner in partners">
+					<option ng-click="obtainResources({{ partner.pib }})">{{ partner.naziv }}</option>
+				</select>
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>
-								#
+							<th ng-click="order('zaglavlje.id')">
+								Id
+								<span ng-show="predicate === 'zaglavlje.id'" class="{{ cssClass }}"></span>
 							</th>
-							<th>
+							<th ng-click="order('zaglavlje.iznosZaUplatu')">
 								Iznos za uplatu
+								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
 							</th>
-							<th>
+							<th ng-click="order('zaglavlje.datumRacuna')">
 								Datum računa
-							</th>
-							<th>
-								Status
+								<span ng-show="predicate === 'zaglavlje.datumRacuna'" class="{{ cssClass }}"></span>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices">
+						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | orderBy:predicate:reverse">
 							<td>
 								{{ invoice.zaglavlje.id }}
 							</td>
@@ -28,10 +31,7 @@
 								{{ invoice.zaglavlje.iznosZaUplatu }}
 							</td>
 							<td>
-								{{ invoice.zaglavlje.datumRacuna }}
-							</td>
-							<td>
-								Default
+								{{ invoice.zaglavlje.datumRacunaFormatted }}
 							</td>
 						</tr>
 					</tbody>

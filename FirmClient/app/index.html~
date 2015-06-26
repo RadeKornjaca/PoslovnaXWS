@@ -36,6 +36,9 @@
               </a>
             </li>
             <li>
+            	<br />
+            </li>
+            <li>
               <a href="#/createInvoice">Kreiraj fakturu</a>
             </li>
             <li>
@@ -88,6 +91,7 @@
      <script src="scripts/controllers/invoiceController.js"></script>
      <script src="scripts/factories/invoiceFactory.js"></script>
      <script src="scripts/factories/invoiceParamsFactory.js"></script>
+     <script src="scripts/factories/partnerFactory.js"></script>
      <script src="scripts/util/dateFormatter.js"></script>
      <!-- endbuild -->
    </body>

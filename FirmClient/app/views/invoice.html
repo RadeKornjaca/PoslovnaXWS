@@ -1,0 +1,34 @@
+<div ng-controller="InvoiceCtrl">
+	<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jumbotron">
+				<h2>Faktura {{ zaglavlje.id }}</h2>
+
+				<h3>Podaci o dobavljaču</h3>
+				<p>Naziv: {{ zaglavlje.dobavljac.naziv }}</p>
+				<p>Račun: {{ zaglavlje.dobavljac.racun }}</p>
+				<p>Poziv na broj: {{ zaglavlje.dobavljac.pozivNaBroj }}</p>
+				<p>PIB: {{ zaglavlje.dobavljac.pib }}</p>
+				<p>Adresa: {{ zaglavlje.dobavljac.adresa }}</p>
+
+				<p>Broj računa: {{ zaglavlje.brojRacuna }}</p>
+				<p>Datum računa: {{ zaglavlje.datumRacuna }}</p>
+				<p>Vrednost robe: {{ zaglavlje.vrednostRobe }}</p>
+				<p>Vrednost usluge: {{ zaglavlje.vrednostUsluge }}</p>
+				<p>Ukupno roba i usluge: {{ zaglavlje.ukupnoRobaIUsluge }}</p>
+				<p>Ukupan rabat: {{ zaglavlje.ukupanRabat }}</p>
+				<p>Ukupan porez: {{ zaglavlje.ukupanPorez }}</p>
+				<p>Oznaka valute: {{ zaglavlje.oznakaValute }}</p>
+				<p>Iznos za uplatu: {{ zaglavlje.iznosZaUplatu }}</p>
+				<p>Uplata na račun: {{ zaglavlje.uplataNaRacun }}</p>
+				<p>Datum valute: {{ zaglavlje.datumValute }}</p>
+				
+				<p>
+					<a class="btn btn-primary btn-large" href="#/items">Stavke fakture</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

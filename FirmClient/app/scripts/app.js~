@@ -19,7 +19,9 @@
   'invoices',
   'resource.invoices',
   'invoice',
-  'resource.invoice'
+  'resource.invoice',
+  'resource.invoiceParams',
+  'resource.partners'
   ])
  .config(function ($routeProvider) {
   $routeProvider
