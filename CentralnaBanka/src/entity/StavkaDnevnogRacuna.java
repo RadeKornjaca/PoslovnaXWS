@@ -45,7 +45,7 @@ public class StavkaDnevnogRacuna implements Restifyable {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_naloga", referencedColumnName = "id_naloga", nullable = false)
+	@JoinColumn(name = "id_naloga", referencedColumnName = "id_naloga", nullable = true)
 	private Nalog nalog;
 
 	public StavkaDnevnogRacuna() {

@@ -17,6 +17,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,6 +36,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Entity
 @DiscriminatorValue("mt10x")
 @Table(name = "mt10x")
+@NamedQuery(name="findByMessageStatus", query="Select p from Mt10x p where p.statusPoruke like :status")
 public class Mt10x extends Poruka {
 	/** @pdOid bd899746-12b5-41d7-956d-fdb8787e9355 */
 	@Column(name = "svrha_placanja", unique = false, nullable = false)

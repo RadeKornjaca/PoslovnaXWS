@@ -12,4 +12,6 @@ public interface Mt10xDaoLocal extends GenericDaoLocal<Mt10x, Integer> {
 
 	public Mt10x getAllCollections(long id);
 	
+	public List<Mt10x> findAllMessagesWithStatus();
+	
 }

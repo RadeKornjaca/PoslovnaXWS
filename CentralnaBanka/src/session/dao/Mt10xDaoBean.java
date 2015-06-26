@@ -20,6 +20,8 @@ public class Mt10xDaoBean extends GenericDaoBean<Mt10x, Integer> implements Mt10
 		//mt10x.getMt9xy().size();
 		return mt10x;
 	}
+	
+	
 
 	@Override
 	public List<Mt10x> findAllMT102() {
@@ -33,6 +35,18 @@ public class Mt10xDaoBean extends GenericDaoBean<Mt10x, Integer> implements Mt10
 		Query q = em.createQuery("SELECT x FROM Poruka x WHERE x.vrsta = '" + Poruka.Vrsta.MT103 + "'");
 		List<Mt10x> result = q.getResultList();
 		return result;
+	}
+
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Mt10x> findAllMessagesWithStatus() {
+		Query q = em.createNamedQuery("findByMessageStatus");
+		q.setParameter("status", 1);
+		//Query q = em.createNativeQuery("select * from Mt10x where status_poruke like 1", Mt10x.class);
+		List<Mt10x> mt10xs = (List<Mt10x>)q.getResultList();
+		return mt10xs;
 	}
 
 }

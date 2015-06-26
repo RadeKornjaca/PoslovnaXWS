@@ -31,4 +31,8 @@ public interface CentralnaBanka {
         @WebParam(partName = "mt102", name = "MT102", targetNamespace = "PoslovnaXWS/Poruke")
         poslovnaxws.poruke.MT102 mt102
     );
+    
+    @WebResult(name = "status", targetNamespace = "PoslovnaXWS/Common", partName = "clearingResponse")
+    @WebMethod
+    public poslovnaxws.common.Status doClearing();
 }

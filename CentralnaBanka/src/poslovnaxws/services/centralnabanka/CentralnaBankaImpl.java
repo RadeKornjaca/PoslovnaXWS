@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -197,7 +198,6 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		System.out.println("response: " + status.getOpis());
 
 		return status;
-
 	}
 
 	/*
@@ -218,55 +218,67 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			return status;
 
 		Nalog nalog = null;
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Date date = cal.getTime();
+		mt102Base.setDatumPoruke(date);
+		List<StavkaPoruke> stavke = new ArrayList<StavkaPoruke>();
 		for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
-			nalog = stavkaPoruke.getNalog();
-			Banka bankaDuznika = bankaDao.findBanka(nalog.getNazivDuznika());
-			Banka bankaPoverioca = bankaDao
-					.findBanka(nalog.getNazivPoverioca());
-			bankaDuznika = bankaDao
-					.getAllCollections(bankaDuznika.getBankaId());
-			bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca
-					.getBankaId());
-			RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog
-					.getBrojRacunaDuznika());
-			if (racunBankeDuznika.getBanka().getBankaId() == bankaDuznika
-					.getBankaId() && racunBankeDuznika.isLikvidan()) {
-				if (racunBankeDuznika.getStanjeRacuna() >= nalog.getIznos()) {
-					RacunBanke racunBankePoverioca = racunBankeDao
-							.findByBrojRacuna(nalog.getBrojRacunaPoverioca());
-					if (racunBankePoverioca.getBanka().getBankaId() == bankaPoverioca
-							.getBankaId()) {
-
-					} else {
-						status.setKod(7);
-						status.setOpis("Racun poverioca ne pripada odgovarajucoj banci!");
-						return status;
+			stavke.add(stavkaPoruke);
+		}
+		mt102Base.setStavkaPoruke(new HashSet<StavkaPoruke>());
+		
+		try{
+			RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(mt102Base.getRacunBankeDuznika().getBrojRacuna());
+			if(racunBankeDuznika.getStanjeRacuna()>= mt102Base.getUkupanIznos() && racunBankeDuznika.isAktivan() && racunBankeDuznika.isLikvidan()){
+				RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(mt102Base.getRacunBankePoverioca().getBrojRacuna());
+				if(racunBankePoverioca.isAktivan() && racunBankePoverioca.isLikvidan()){
+					mt102Base.setRacunBankeDuznika(racunBankeDuznika);
+					mt102Base.setRacunBankePoverioca(racunBankePoverioca);
+					mt10xDao.persist(mt102Base);
+					//FOREACH DA GA BOLJE VIDIM
+					for (StavkaPoruke stavkaPoruke : stavke) {
+						stavkaPoruke.getNalog().setNaseljenoMesto(naseljenoMestoDao.findNaseljenoMesto(stavkaPoruke.getNalog().getNaseljenoMesto().getNazivMesta()));
+						stavkaPoruke.getNalog().setAdresaDuznika("duznik ulica");
+						stavkaPoruke.getNalog().setAdresaPoverioca("poverilac ulica");
+						nalogDao.persist(stavkaPoruke.getNalog());
+						stavkaPoruke.setMt10x(mt102Base);
+						stavkaPorukeDao.persist(stavkaPoruke);
+						mt102Base.addStavkaPoruke(stavkaPoruke);
 					}
-				} else {
-					status.setKod(8);
-					status.setOpis("Racun duznika nema dovoljno sredstava da se odradi RTGS servis!");
-					return status;
+					mt10xDao.merge(mt102Base);
+					
+					System.out.println(mt102Base.getRacunBankeDuznika().getBrojRacuna());
+					
+					
+					
+					//status = sendMT9xy(mt102Base, nalog);
+			
+					if (status.getKod() != 0)
+						return status;
 				}
-			} else {
-				status.setKod(6);
-				status.setOpis("Racun duznika ne pripada odgovarajucoj banci ili je banka nelikvidna");
-				return status;
+				else{
+					status.setKod(8);
+					status.setOpis("Racun banke poverioca nije aktivan ili nije likvidan");
+				}
 			}
-		}
-
-		for (StavkaPoruke stavkaPoruke : mt102Base.getStavkaPoruke()) {
-			nalog = stavkaPoruke.getNalog();
-			status = doHardJob(nalog, mt102Base, porukaUBazu, "Clearing");
-			porukaUBazu = false;
-			if (status.getKod() != 0)
-				break;
-		}
-
-		status = sendMT9xy(mt102Base, nalog);
-
-		if (status.getKod() != 0)
+			else{
+				status.setKod(8);
+				status.setOpis("Banka duznik nema dovoljno sredstava da ih prebaci banci poverioca ili racun nije aktivan ili nije likvidan");
+			}
+		} catch(EJBException e){
+			e.printStackTrace();
+			System.out.println("EJB exception");
+			status.setOpis("EJB exception");
 			return status;
-
+		} catch (Exception e){
+			e.printStackTrace();
+			System.out.println("Obican exception");
+			status.setOpis("Obican exception");
+			return status;
+		}
 		return status;
 	}
 
@@ -283,21 +295,23 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			mt10xBase.setDatumPoruke(date);
 			nalog.setAdresaDuznika("ulica");
 			nalog.setAdresaPoverioca("ulica");
-			Banka bankaDuznika = bankaDao.findBanka(nalog.getNazivDuznika());
+			if(typeOfService.equals("RTGS")){
+				nalog.setStatus(0);
+			}
+			Banka bankaDuznika = bankaDao.findBanka(mt10xBase.getRacunBankeDuznika().getBanka().getNaziv());
 			Banka bankaPoverioca = bankaDao
-					.findBanka(nalog.getNazivPoverioca());
+					.findBanka(mt10xBase.getRacunBankePoverioca().getBanka().getNaziv());
 			bankaDuznika = bankaDao
 					.getAllCollections(bankaDuznika.getBankaId());
 			bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca
 					.getBankaId());
-			RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog
-					.getBrojRacunaDuznika());
+			RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(mt10xBase.getRacunBankeDuznika().getBrojRacuna());
 
 			if (racunBankeDuznika.getBanka().getBankaId() == bankaDuznika
 					.getBankaId() && racunBankeDuznika.isLikvidan()) {
 				if (racunBankeDuznika.getStanjeRacuna() >= nalog.getIznos()) {
 					RacunBanke racunBankePoverioca = racunBankeDao
-							.findByBrojRacuna(nalog.getBrojRacunaPoverioca());
+							.findByBrojRacuna(mt10xBase.getRacunBankePoverioca().getBrojRacuna());
 					if (racunBankePoverioca.getBanka().getBankaId() == bankaPoverioca
 							.getBankaId()) {
 						naseljenoMestoDao.merge(nm);
@@ -309,7 +323,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 						mt10xBase.setRacunBankeDuznika(racunBankeDuznika);
 						mt10xBase.setRacunBankePoverioca(racunBankePoverioca);
 						mt10xBase.setVrsta(103);
-
+						mt10xBase.setStatusPoruke(0);
 						mt10xDao.persist(mt10xBase);
 						StavkaPoruke stavkaPoruke = new StavkaPoruke();
 						stavkaPoruke.setMt10x(mt10xBase);
@@ -646,6 +660,221 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		return status;
 
+	}
+
+	@Override
+	public Status doClearing() {
+		
+		List<Mt10x> mt10xs = mt10xDao.findAllMessagesWithStatus();
+		System.out.println("Ima nas:" + mt10xs.size());
+		Status status = new Status();
+		status.setKod(0);
+		status.setOpis("Sve OK!");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Date date = cal.getTime();
+		SimpleDateFormat dt = new SimpleDateFormat(
+				"yyyy-MM-dd 00:00:00");
+		String dateS = dt.format(date);
+		
+		for (Mt10x mt10x : mt10xs) {
+			System.out.println("Usao u for petlju");
+			try{
+				RacunBanke racunBankeDuznika = mt10x.getRacunBankeDuznika();
+				System.out.println(racunBankeDuznika);
+				System.out.println(racunBankeDuznika.getIdRacuna());
+				RacunBanke racunBankePoverioca = mt10x.getRacunBankePoverioca();
+				System.out.println("Nasao banke");
+				//Podesavanje za duznika
+				StavkaDnevnogRacuna stavkaDR = new StavkaDnevnogRacuna();
+				stavkaDR.setNalog(null);
+				stavkaDR.setPrometNaTeret(mt10x.getUkupanIznos());
+				stavkaDR.setPrometUKorist(0);
+				System.out.println("sprema se za vucenje liste");
+				List<DnevnoStanjeRacuna> dsr = new ArrayList<DnevnoStanjeRacuna>();
+				try{
+					dsr = dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDuznika.getIdRacuna());
+				}catch (EJBException e) {
+					System.out.println("EJB PUKO");
+				} catch (java.lang.Exception ex) {
+					System.out.println("Puko exception");
+				}
+				System.out.println("izvucen");
+				if(!dsr.isEmpty()){
+					System.out.println("postoji dnevno stanje");
+					DnevnoStanjeRacuna dsRacuna = dsr.get(0);
+					dsRacuna.setDnevniPrometNaTeret(dsRacuna.getDnevniPrometNaTeret() + mt10x.getUkupanIznos());
+					stavkaDR.setDnevnoStanjeRacuna(dsRacuna);
+					dsRacuna.setPrethodnoStanje(dsRacuna.getTrenutnoStanje());
+					dsRacuna.setTrenutnoStanje(dsRacuna.getTrenutnoStanje() -  mt10x.getUkupanIznos());
+					dnevnoStanjeRacunaDao.merge(dsRacuna);
+					stavkaDnevnogRacunaDao.persist(stavkaDR);
+				}
+				else{
+					System.out.println("Kreira se novo dnevno stanje za duznika");
+					DnevnoStanjeRacuna dnevnoStanjeRacuna = new DnevnoStanjeRacuna();
+					dnevnoStanjeRacuna.setDatum(date);
+					System.out.println("spremanje za postavljanje iznosa");
+					dnevnoStanjeRacuna.setDnevniPrometNaTeret(mt10x.getUkupanIznos());
+					dnevnoStanjeRacuna.setDnevniPrometUKorist(0);
+					System.out.println("postavljanje predhodnog stanja racuna");
+					dnevnoStanjeRacuna.setPrethodnoStanje(racunBankeDuznika.getStanjeRacuna());
+					dnevnoStanjeRacuna.setTrenutnoStanje(racunBankeDuznika.getStanjeRacuna() - mt10x.getUkupanIznos());
+					System.out.println("postavljanje racuna banke duznika za dnevno stanje");
+					dnevnoStanjeRacuna.setRacunBanke(racunBankeDuznika);
+					System.out.println("spremanje za persist");
+					dnevnoStanjeRacunaDao.persist(dnevnoStanjeRacuna);
+					System.out.println("spremanje za vucenje liste");
+					List<DnevnoStanjeRacuna> dsr1 =  dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDuznika.getIdRacuna());
+					System.out.println("spremanje za postavljanje iz liste");
+					stavkaDR.setDnevnoStanjeRacuna(dsr1.get(0));
+					System.out.println("Kreirano i postavljeno u stavku");
+					stavkaDnevnogRacunaDao.persist(stavkaDR);
+				}
+				
+				//Podesavanje za poverioca
+				stavkaDR = new StavkaDnevnogRacuna();
+				stavkaDR.setNalog(null);
+				stavkaDR.setPrometUKorist(mt10x.getUkupanIznos());
+				stavkaDR.setPrometNaTeret(0);
+				dsr = dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankePoverioca.getIdRacuna());
+				if(!dsr.isEmpty()){
+					System.out.println("postoji dnevno stanje");
+					DnevnoStanjeRacuna dsRacuna = dsr.get(0);
+					dsRacuna.setDnevniPrometUKorist(dsRacuna.getDnevniPrometUKorist() + mt10x.getUkupanIznos());
+					stavkaDR.setDnevnoStanjeRacuna(dsRacuna);
+					dsRacuna.setPrethodnoStanje(dsRacuna.getTrenutnoStanje());
+					dsRacuna.setTrenutnoStanje(dsRacuna.getTrenutnoStanje() +  mt10x.getUkupanIznos());
+					dnevnoStanjeRacunaDao.merge(dsRacuna);
+					stavkaDnevnogRacunaDao.persist(stavkaDR);
+				}
+				else{
+					System.out.println("Kreira se novo dnevno stanje za poverioca");
+					DnevnoStanjeRacuna dnevnoStanjeRacuna = new DnevnoStanjeRacuna();
+					dnevnoStanjeRacuna.setDatum(date);
+					dnevnoStanjeRacuna.setDnevniPrometUKorist(mt10x.getUkupanIznos());
+					dnevnoStanjeRacuna.setDnevniPrometNaTeret(0);
+					dnevnoStanjeRacuna.setPrethodnoStanje(racunBankePoverioca.getStanjeRacuna());
+					dnevnoStanjeRacuna.setTrenutnoStanje(racunBankePoverioca.getStanjeRacuna() + mt10x.getUkupanIznos());
+					dnevnoStanjeRacuna.setRacunBanke(racunBankePoverioca);
+					dnevnoStanjeRacunaDao.persist(dnevnoStanjeRacuna);
+					List<DnevnoStanjeRacuna> dsr1 =  dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankePoverioca.getIdRacuna());
+					stavkaDR.setDnevnoStanjeRacuna(dsr1.get(0));
+					System.out.println("Kreirano i postavljeno u stavku poverioc");
+					stavkaDnevnogRacunaDao.persist(stavkaDR);
+				}
+				System.out.println("racunanje stanja racuna duznika i poverioca");
+				racunBankeDuznika.setStanjeRacuna(racunBankeDuznika.getStanjeRacuna() - mt10x.getUkupanIznos());
+				racunBankePoverioca.setStanjeRacuna(racunBankePoverioca.getStanjeRacuna() + mt10x.getUkupanIznos());
+				System.out.println("Izracunato");
+				mt10x.setStatusPoruke(0);
+				System.out.println("promenjen status poruke");
+				mt10xDao.merge(mt10x);
+				System.out.println("mergeovana poruka");
+				racunBankeDao.merge(racunBankeDuznika);
+				racunBankeDao.merge(racunBankePoverioca);
+				System.out.println("mergeovani racuni duznika i poverioca");
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		/*List<Nalog> nalozi = nalogDao.executeProcedure();
+		Status status = new Status();
+		status.setKod(0);
+		status.setOpis("Sve OK!");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Date date = cal.getTime();
+		SimpleDateFormat dt = new SimpleDateFormat(
+				"yyyy-MM-dd 00:00:00");
+		String dateS = dt.format(date);
+		Map<String, StavkaDnevnogRacuna> stavke = new HashMap<String, StavkaDnevnogRacuna>();
+		for (Nalog nalog : nalozi) {
+			//Za duznika
+			if(!stavke.containsKey(nalog.getBrojRacunaDuznika())){
+				StavkaDnevnogRacuna stavkaDR = new StavkaDnevnogRacuna();
+				stavkaDR.setNalog(null);
+				stavkaDR.setPrometNaTeret(nalog.getIznos());
+				stavkaDR.setPrometUKorist(0);
+				List<DnevnoStanjeRacuna> dsr = dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika()).getIdRacuna());
+				if(!dsr.isEmpty()){
+					DnevnoStanjeRacuna dsRacuna = dsr.get(0);
+					dsRacuna.setDnevniPrometNaTeret(dsRacuna.getDnevniPrometNaTeret() + nalog.getIznos());
+					stavkaDR.setDnevnoStanjeRacuna(dsRacuna);
+					
+				}
+				else{
+					DnevnoStanjeRacuna dnevnoStanjeRacuna = new DnevnoStanjeRacuna();
+					dnevnoStanjeRacuna.setDatum(date);
+					dnevnoStanjeRacuna.setDnevniPrometNaTeret(nalog.getIznos());
+					dnevnoStanjeRacuna.setDnevniPrometUKorist(0);
+					RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika());
+					dnevnoStanjeRacuna.setPrethodnoStanje(racunBankeDuznika.getStanjeRacuna());
+					dnevnoStanjeRacuna.setTrenutnoStanje(racunBankeDuznika.getStanjeRacuna() - nalog.getIznos());
+					dnevnoStanjeRacuna.setRacunBanke(racunBankeDuznika);
+					dnevnoStanjeRacunaDao.persist(dnevnoStanjeRacuna);
+					List<DnevnoStanjeRacuna> dsr1 =  dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaDuznika()).getIdRacuna());
+					stavkaDR.setDnevnoStanjeRacuna(dsr1.get(0));
+					
+				}
+				stavke.put(nalog.getBrojRacunaDuznika(), stavkaDR);
+			}
+			else{
+				StavkaDnevnogRacuna stavkaDR = stavke.get(nalog.getBrojRacunaDuznika());
+				stavkaDR.setPrometNaTeret(stavkaDR.getPrometNaTeret() + nalog.getIznos());
+				DnevnoStanjeRacuna dnevnoStanjeRacuna = stavkaDR.getDnevnoStanjeRacuna();
+				dnevnoStanjeRacuna.setDnevniPrometNaTeret(dnevnoStanjeRacuna.getDnevniPrometNaTeret() + nalog.getIznos());
+			}
+			//Za poverioca
+			if(!stavke.containsKey(nalog.getBrojRacunaPoverioca())){
+				StavkaDnevnogRacuna stavkaDR = new StavkaDnevnogRacuna();
+				stavkaDR.setNalog(null);
+				stavkaDR.setPrometUKorist(nalog.getIznos());
+				stavkaDR.setPrometNaTeret(0);
+				List<DnevnoStanjeRacuna> dsr = dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca()).getIdRacuna());
+				if(!dsr.isEmpty()){
+					DnevnoStanjeRacuna dsRacuna = dsr.get(0);
+					dsRacuna.setDnevniPrometUKorist(dsRacuna.getDnevniPrometUKorist() + nalog.getIznos());
+					stavkaDR.setDnevnoStanjeRacuna(dsRacuna);
+				}
+				else{
+					DnevnoStanjeRacuna dnevnoStanjeRacuna = new DnevnoStanjeRacuna();
+					dnevnoStanjeRacuna.setDatum(date);
+					dnevnoStanjeRacuna.setDnevniPrometUKorist(nalog.getIznos());
+					dnevnoStanjeRacuna.setDnevniPrometNaTeret(0);
+					RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca());
+					dnevnoStanjeRacuna.setPrethodnoStanje(racunBankePoverioca.getStanjeRacuna());
+					dnevnoStanjeRacuna.setTrenutnoStanje(racunBankePoverioca.getStanjeRacuna() + nalog.getIznos());
+					dnevnoStanjeRacuna.setRacunBanke(racunBankePoverioca);
+					dnevnoStanjeRacunaDao.persist(dnevnoStanjeRacuna);
+					List<DnevnoStanjeRacuna> dsr1 =  dnevnoStanjeRacunaDao.findDnevnoStanjeRacuna(dateS, racunBankeDao.findByBrojRacuna(nalog.getBrojRacunaPoverioca()).getIdRacuna());
+					stavkaDR.setDnevnoStanjeRacuna(dsr1.get(0));
+				}
+				stavke.put(nalog.getBrojRacunaPoverioca(), stavkaDR);
+			}
+			else{
+				StavkaDnevnogRacuna stavkaDR = stavke.get(nalog.getBrojRacunaPoverioca());
+				stavkaDR.setPrometUKorist(stavkaDR.getPrometUKorist() + nalog.getIznos());
+				DnevnoStanjeRacuna dnevnoStanjeRacuna = stavkaDR.getDnevnoStanjeRacuna();
+				dnevnoStanjeRacuna.setDnevniPrometUKorist(dnevnoStanjeRacuna.getDnevniPrometUKorist() + nalog.getIznos());
+			}
+		}
+		for (StavkaDnevnogRacuna stavka : stavke.values()) {
+			RacunBanke racun = racunBankeDao.findByBrojRacuna(stavka.getDnevnoStanjeRacuna().getRacunBanke().getBrojRacuna());
+			racun.setStanjeRacuna(racun.getStanjeRacuna() + stavka.getPrometUKorist() - stavka.getPrometNaTeret());
+			stavkaDnevnogRacunaDao.persist(stavka);
+			dnevnoStanjeRacunaDao.merge(stavka.getDnevnoStanjeRacuna());
+			racunBankeDao.merge(racun);
+		}*/
+		
+		return status;
 	}
 
 }
