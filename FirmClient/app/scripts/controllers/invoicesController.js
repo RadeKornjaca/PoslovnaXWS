@@ -8,7 +8,7 @@
  		});
  		
  		
- 		$scope.obtainResources = function(idDobavljaca) {
+ 		//$scope.obtainResources = function(idDobavljaca) {
  		Invoices.get({idDobavljaca : '14234512432'}, function(response) {
 			$scope.invoices = response.faktura;
 			for(var i = 0; i < $scope.invoices.length; i++) {
@@ -19,7 +19,7 @@
 
 			$log.info("Successfully obtained invoices data from REST.");
  		});
-      	};
+      	//};
       	
       	$scope.order = function(predicate) {
         	$scope.reverse = !$scope.reverse;
@@ -31,7 +31,6 @@
 		$scope.go = function ( path, idDobavljaca, idFakture ) {
 			InvoiceParams.setIdDobavljaca(idDobavljaca);
 			InvoiceParams.setIdFakture(idFakture);
-  			
   			$location.path( path );
 		};
 

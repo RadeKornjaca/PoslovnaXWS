@@ -1,0 +1,39 @@
+<div ng-controller="ItemsCtrl">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th ng-click="order('zaglavlje.id')">
+								Redni broj
+								<span ng-show="predicate === 'zaglavlje.id'" class="{{ cssClass }}"></span>
+							</th>
+							<th ng-click="order('zaglavlje.iznosZaUplatu')">
+								Naziv usluge
+								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
+							</th>
+							<th ng-click="order('zaglavlje.datumRacuna')">
+								Kolicina
+								<span ng-show="predicate === 'zaglavlje.datumRacuna'" class="{{ cssClass }}"></span>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items"> <!--| orderBy:predicate:reverse-->
+							<td>
+								{{ item.redniBroj }}
+							</td>
+							<td>
+								{{ item.nazivUsluge }}
+							</td>
+							<td>
+								{{ item.kolicina }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

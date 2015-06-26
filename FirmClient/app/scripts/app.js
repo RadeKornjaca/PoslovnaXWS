@@ -16,11 +16,20 @@
   'ngRoute',
   'ngSanitize',
   'ngTouch',
+
   'invoices',
-  'resource.invoices',
   'invoice',
+  'items',
+  'item',
+
+  'resource.items',
+  'resource.item',
   'resource.invoice',
+  'resource.invoices',
+
   'resource.invoiceParams',
+  'resource.itemParams',
+
   'resource.partners'
   ])
  .config(function ($routeProvider) {
@@ -36,6 +45,14 @@
   .when('/invoice',{
   	templateUrl: 'views/invoice.html',
     controller: 'InvoiceCtrl'
+  })
+  .when('/items',{
+    templateUrl: 'views/items.html',
+    controller: 'ItemsCtrl'
+  })
+  .when('/item',{
+    templateUrl: 'views/item.html',
+    controller: 'ItemCtrl'
   })
   .otherwise({
     redirectTo: '/'
