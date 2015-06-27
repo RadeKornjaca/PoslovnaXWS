@@ -24,6 +24,7 @@ import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
 import poslovnaxws.services.banka.BankaServiceMessages;
 import poslovnaxws.services.banka.NotificationMessage;
+import poslovnaxws.services.centralnabanka.CentralnaBanka;
 
 public class MT102Test {
 
@@ -31,6 +32,7 @@ public class MT102Test {
 	public static QName portName;
 	public static Service service;
 	public static BankaServiceMessages banka;
+	public static CentralnaBanka cb;
 
 	public static void main(String[] args) throws Exception {
 		URL wsdl;
@@ -42,6 +44,17 @@ public class MT102Test {
 		service = Service.create(wsdl, serviceName);
 
 		banka = service.getPort(portName, BankaServiceMessages.class);
+		
+		/*wsdl = new URL("http://192.168.0.105:8080/CentralnaBanka/services/CBService?wsdl");
+
+		QName serviceName = new QName(
+				"PoslovnaXWS/services/centralnaBanka", "CBService");
+		QName portName = new QName("PoslovnaXWS/services/centralnaBanka",
+				"CentralnaBankaPort");
+
+		service = Service.create(wsdl, serviceName);
+
+		cb = service.getPort(portName, CentralnaBanka.class);*/
 
 		// testValid();
 
@@ -74,9 +87,10 @@ public class MT102Test {
 
 		//testZahtev();
 
-		 //testValidUplata();
+		// testValidUplata();
 		
 		banka.sendMT102();
+		//cb.doClearing();
 
 	}
 

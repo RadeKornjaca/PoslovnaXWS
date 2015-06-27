@@ -9,12 +9,19 @@
 package poslovnaxws.common;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import entity.Nalog;
 
 
 /**
@@ -101,7 +108,53 @@ public class TNalog {
     @XmlElement(required = true)
     protected TNaseljenoMesto naseljenoMesto;
 
-    /**
+    public TNalog(){
+    	super();
+    }
+    
+    public TNalog(Nalog nalog) {
+    	
+		XMLGregorianCalendar datumNaloga;
+		try {
+			datumNaloga = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					nalog.getDatumNaloga().getYear(), nalog.getDatumNaloga().getMonth(),
+					nalog.getDatumNaloga().getDay(), DatatypeConstants.FIELD_UNDEFINED);
+			this.datumNaloga = datumNaloga;
+			XMLGregorianCalendar datumValute;
+			datumValute = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					nalog.getDatumNaloga().getYear(), nalog.getDatumNaloga().getMonth(),
+					nalog.getDatumNaloga().getDay(), DatatypeConstants.FIELD_UNDEFINED);
+			this.datumValute = datumValute;
+		} catch (DatatypeConfigurationException e) {
+    		e.printStackTrace();
+    	}
+		
+		this.duznik.model = BigInteger.valueOf(Integer.parseInt(nalog.getModelZaduzenja()));
+		this.duznik.naziv = nalog.getNazivDuznika();
+		this.duznik.pozivNaBroj = nalog.getPozivNaBrojZaduzenja();
+		this.duznik.racun = nalog.getBrojRacunaDuznika();
+		
+		this.primalac.model = BigInteger.valueOf(Integer.parseInt(nalog.getModelOdobrenja()));
+		this.primalac.naziv = nalog.getNazivPoverioca();
+		this.primalac.pozivNaBroj = nalog.getPozivNaBrojOdobrenja();
+		this.primalac.racun = nalog.getBrojRacunaPoverioca();
+		
+		this.hitno = nalog.isHitno();
+		this.id = String.valueOf(nalog.getIdNaloga());
+		this.iznos = BigDecimal.valueOf(nalog.getIznos());
+		this.naseljenoMesto.drzava.nazivDrzave = nalog.getNaseljenoMesto().getDrzava().getNazivDrzave();
+		this.naseljenoMesto.drzava.sifraDrzave = nalog.getNaseljenoMesto().getDrzava().getSifraDrzave();
+		this.naseljenoMesto.nazivMesta = nalog.getNaseljenoMesto().getNazivMesta();
+		this.naseljenoMesto.sifraMesta = nalog.getNaseljenoMesto().getSifraMesta();
+		this.oznakaValute = nalog.getSifraValute();
+		this.svrhaPlacanja = nalog.getSvrhaPlacanja();
+		
+    	
+    	
+		
+	}
+
+	/**
      * Gets the value of the id property.
      * 
      * @return
