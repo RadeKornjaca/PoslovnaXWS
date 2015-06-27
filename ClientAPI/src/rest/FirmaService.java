@@ -204,6 +204,9 @@ public class FirmaService {
 
 				try {
 					faktura.getStavkeFakture().getStavkaFakture().add(stavka);
+					
+					updateZaglavljeAdd(faktura, stavka);
+					
 					fakturaDao.merge(faktura, idFakture);
 
 					response = Response.status(Status.CREATED)
@@ -225,6 +228,7 @@ public class FirmaService {
 		return response;
 
 	}
+
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
@@ -271,28 +275,26 @@ public class FirmaService {
 				try {
 					StavkaFakture oldStavka = stavkaDao.findByIdInFaktura(
 							idDobavljaca.toString(), idFakture, redBr);
+					updateZaglavljeSubtract(faktura, oldStavka);
+					
 					for (StavkaFakture s : faktura.getStavkeFakture()
 							.getStavkaFakture()) {
 						if (s.getRedniBroj().equals(oldStavka.getRedniBroj())) {
 							s.setIznosRabata(stavka.getIznosRabata());
 							s.setJedinicaMere(stavka.getJedinicaMere());
 							s.setJedinicnaCena(stavka.getJedinicnaCena());
-							s.setKolicina(stavka.getKolicina()); // ispao sam
-																	// dobar
-																	// covek
-							s.setNazivUsluge(stavka.getNazivUsluge()); // ali u
-																		// ovom
-																		// trenutku,
-																		// mrzim
-																		// svoj
-																		// zivot
+							s.setKolicina(stavka.getKolicina()); 		// ispao sam dobar covek, ali u			 
+							s.setNaziv(stavka.getNaziv()); 			 	// ovom trenutku mrzim svoj zivot
+							s.setTip(stavka.getTip());
 							s.setProcenatRabata(stavka.getProcenatRabata());
 							s.setUkupanPorez(stavka.getUkupanPorez());
-							s.setUmanjenoZarabat(stavka.getUmanjenoZarabat());
+							s.setUmanjenoZaRabat(stavka.getUmanjenoZaRabat());
 							s.setVrednost(stavka.getVrednost());
 						}
 					}
 
+					updateZaglavljeAdd(faktura, stavka);
+					
 					fakturaDao.merge(faktura, idFakture);
 
 					response = Response.ok().build();
@@ -344,6 +346,8 @@ public class FirmaService {
 					while (iterStavka.hasNext()) {
 						if (iterStavka.next().getRedniBroj()
 								.equals(oldStavka.getRedniBroj())) {
+							
+							updateZaglavljeSubtract(faktura, oldStavka);
 							iterStavka.remove();
 						}
 					}
@@ -374,7 +378,7 @@ public class FirmaService {
 	@Produces("application/json")
 	@Consumes("application/json")
 	public Response uplata(String jsonRequest) {
-		BankaServiceMessages banka = createBankaService("bankas34");
+	
 
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -416,7 +420,9 @@ public class FirmaService {
 			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-
+		
+		BankaServiceMessages banka = createBankaService(uplata.getNalog().getDuznik().getRacun().substring(0,3));
+		
 		poslovnaxws.common.Status response = banka.receiveUplata(uplata);
 
 		if (response.getKod() == 0)
@@ -453,7 +459,7 @@ public class FirmaService {
 		ObjectNode json = null;
 		try {
 			BankaServiceMessages banka = createBankaService(zahtev
-					.getBrojRacuna().substring(0, 2));
+					.getBrojRacuna().substring(0, 3));
 			presek = banka.zahtevZaIzvod(zahtev);
 
 		} catch (NotificationMessage e) {
@@ -505,6 +511,42 @@ public class FirmaService {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Sluzi da prilikom dodavanja nove stavke u fakturu azurira vrednosti
+	 * u zaglavlju koje zavise od vrednosti u stavkama
+	 * 
+	*/
+	private void updateZaglavljeAdd(Faktura faktura, StavkaFakture stavka) {
+		if(stavka.getTip().equals("roba")) {
+			faktura.getZaglavlje().setVrednostRobe(faktura.getZaglavlje().getVrednostRobe().add(stavka.getVrednost()));
+		}
+		else if(stavka.getTip().equals("usluga")){
+			faktura.getZaglavlje().setVrednostUsluge(faktura.getZaglavlje().getVrednostUsluge().add(stavka.getVrednost()));
+		}
+		faktura.getZaglavlje().setUkupnoRobaIUsluge(faktura.getZaglavlje().getVrednostRobe().add(faktura.getZaglavlje().getVrednostUsluge()));
+		faktura.getZaglavlje().setUkupanRabat(faktura.getZaglavlje().getUkupanRabat().add(stavka.getIznosRabata()));
+		faktura.getZaglavlje().setUkupanPorez(faktura.getZaglavlje().getUkupanPorez().add(stavka.getUkupanPorez()));
+		faktura.getZaglavlje().setIznosZaUplatu(faktura.getZaglavlje().getUkupnoRobaIUsluge().subtract(faktura.getZaglavlje().getUkupanRabat()).add(faktura.getZaglavlje().getUkupanPorez()));
+	}
+	
+	/**
+	 * Sluzi da prilikom brisanja stavke u fakturu azurira vrednosti
+	 * u zaglavlju koje zavise od vrednosti u stavkama
+	 * 
+	*/
+	private void updateZaglavljeSubtract(Faktura faktura, StavkaFakture stavka) {
+		if(stavka.getTip().equals("roba")) {
+			faktura.getZaglavlje().setVrednostRobe(faktura.getZaglavlje().getVrednostRobe().subtract(stavka.getVrednost()));
+		}
+		else if(stavka.getTip().equals("usluga")){
+			faktura.getZaglavlje().setVrednostUsluge(faktura.getZaglavlje().getVrednostUsluge().subtract(stavka.getVrednost()));
+		}
+		faktura.getZaglavlje().setUkupnoRobaIUsluge(faktura.getZaglavlje().getVrednostRobe().subtract(faktura.getZaglavlje().getVrednostUsluge()));
+		faktura.getZaglavlje().setUkupanRabat(faktura.getZaglavlje().getUkupanRabat().subtract(stavka.getIznosRabata()));
+		faktura.getZaglavlje().setUkupanPorez(faktura.getZaglavlje().getUkupanPorez().subtract(stavka.getUkupanPorez()));
+		faktura.getZaglavlje().setIznosZaUplatu(faktura.getZaglavlje().getUkupnoRobaIUsluge().add(faktura.getZaglavlje().getUkupanRabat()).subtract(faktura.getZaglavlje().getUkupanPorez()));
 	}
 
 	private BankaServiceMessages createBankaService(String swiftKod) {

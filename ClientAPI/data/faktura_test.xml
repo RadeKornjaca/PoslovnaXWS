@@ -33,29 +33,29 @@
         <datumValute>2006-06-01</datumValute>
     </zaglavlje>
     <stavkeFakture>
-        <stavkaFakture>
-            <RedniBroj>1</RedniBroj>
-            <NazivUsluge>Karton</NazivUsluge>
-            <Kolicina>5</Kolicina>
-            <JedinicaMere>kg</JedinicaMere>
-            <JedinicnaCena>40</JedinicnaCena>
-            <Vrednost>20</Vrednost>
-            <ProcenatRabata>0</ProcenatRabata>
-            <IznosRabata>0</IznosRabata>
-            <UmanjenoZarabat>0</UmanjenoZarabat>
-            <UkupanPorez>25</UkupanPorez>
+        <stavkaFakture tip="roba">
+            <redniBroj>1</redniBroj>
+            <nazivUsluge>Karton</nazivUsluge>
+            <kolicina>5</kolicina>
+            <jedinicaMere>kg</jedinicaMere>
+            <jedinicnaCena>40</jedinicnaCena>
+            <vrednost>20</vrednost>
+            <procenatRabata>0</procenatRabata>
+            <iznosRabata>0</iznosRabata>
+            <umanjenoZaRabat>0</umanjenoZaRabat>
+            <ukupanPorez>25</ukupanPorez>
         </stavkaFakture>
-        <stavkaFakture>
-            <RedniBroj>2</RedniBroj>
-            <NazivUsluge>Berem Karton</NazivUsluge>
-            <Kolicina>5</Kolicina>
-            <JedinicaMere>kg</JedinicaMere>
-            <JedinicnaCena>40</JedinicnaCena>
-            <Vrednost>20</Vrednost>
-            <ProcenatRabata>0</ProcenatRabata>
-            <IznosRabata>0</IznosRabata>
-            <UmanjenoZarabat>0</UmanjenoZarabat>
-            <UkupanPorez>25</UkupanPorez>
+        <stavkaFakture tip="usluga">
+            <redniBroj>2</redniBroj>
+            <naziv>Berem Karton</naziv>
+            <kolicina>5</kolicina>
+            <jedinicaMere>kg</jedinicaMere>
+            <jedinicnaCena>40</jedinicnaCena>
+            <vrednost>20</vrednost>
+            <procenatRabata>0</procenatRabata>
+            <iznosRabata>0</iznosRabata>
+            <umanjenoZaRabat>0</umanjenoZaRabat>
+            <ukupanPorez>25</ukupanPorez>
         </stavkaFakture>
     </stavkeFakture>
 </faktura>

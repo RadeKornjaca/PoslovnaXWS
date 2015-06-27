@@ -105,21 +105,21 @@
     <xs:element name="stavkaFakture">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="RedniBroj">
+                <xs:element name="redniBroj">
                     <xs:simpleType>
                         <xs:restriction base="xs:positiveInteger">
                             <xs:totalDigits value="3"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="NazivUsluge">
+                <xs:element name="Naziv">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="120"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="Kolicina">
+                <xs:element name="kolicina">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="10"/>
@@ -127,14 +127,14 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="JedinicaMere">
+                <xs:element name="jedinicaMere">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:pattern value="[a-z]{1,6}"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="JedinicnaCena">
+                <xs:element name="jedinicnaCena">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="10"/>
@@ -142,7 +142,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="Vrednost">
+                <xs:element name="vrednost">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="12"/>
@@ -150,7 +150,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="ProcenatRabata">
+                <xs:element name="procenatRabata">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="5"/>
@@ -158,7 +158,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="IznosRabata">
+                <xs:element name="iznosRabata">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:fractionDigits value="2"/>
@@ -166,7 +166,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="UmanjenoZarabat">
+                <xs:element name="umanjenoZaRabat">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="12"/>
@@ -174,7 +174,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="UkupanPorez">
+                <xs:element name="ukupanPorez">
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
                             <xs:totalDigits value="12"/>
@@ -183,6 +183,15 @@
                     </xs:simpleType>
                 </xs:element>
             </xs:sequence>
+            <xs:attribute name="tip" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="usluga"/>
+                        <xs:enumeration value="roba"/>
+                        <xs:whiteSpace value="preserve"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
 </xs:schema>
