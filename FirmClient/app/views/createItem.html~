@@ -1,0 +1,134 @@
+
+
+<div ng-controller="CreateItemCtrl">
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						 
+						<label for="redniBroj" class="col-sm-3 control-label">
+							Redni broj:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="redniBroj" type="text" />
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						 
+						<label for="naziv" class="col-sm-3 control-label">
+							Naziv:
+						</label>
+						<div class="col-sm-5">
+							<input class="form-control" id="naziv" type="text" />
+						</div>
+					</div>
+					
+					
+					<!-- dodaj combo box za uslugu ili robu -->
+					
+					<div class="form-group">
+						 
+						<label for="kolicina" class="col-sm-3 control-label">
+							Količina:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="kolicina" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="jedinicaMere" class="col-sm-3 control-label">
+							Jedinica mere:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="jedinicaMere" type="text" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						 
+						<label for="jedinicnaCena" class="col-sm-3 control-label">
+							Jedinična cena:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="jedinicnaCena" type="number" />
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						 
+						<label for="vrednost" class="col-sm-3 control-label">
+							Vrednost:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="vrednost" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="procenatRabata" class="col-sm-3 control-label">
+							Procenat rabata:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="procenatRabata" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="vrednostRabata" class="col-sm-3 control-label">
+							Vrednost rabata:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="vrednostRabata" type="number" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						 
+						<label for="umanjenoZaRabat" class="col-sm-3 control-label">
+							Umanjeno za rabat:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="umanjenoZaRabat" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						
+						<label for="ukupanPorez" class="col-sm-3 control-label">
+							Ukupan porez:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="ukupanPorez" type="number" />
+						</div>
+					</div>
+
+					
+					<!-- kraj zaglavlja -->
+					
+					
+					<div class="form-group">
+						<div class="col-sm-offset-6 col-sm-10">
+							 
+							<button type="submit" class="btn btn-default">
+								Napravi stavku
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-4">
+			</div>
+		</div>
+	</div>
+	
+</div>
