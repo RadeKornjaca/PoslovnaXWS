@@ -3,14 +3,25 @@ package poslovnaxws.poruke;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import entity.Mt10x;
+import entity.Mt9xy;
+import entity.Nalog;
+import entity.StavkaPoruke;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 
@@ -103,7 +114,47 @@ public class MT102 {
     @XmlElement(required = true)
     protected MT102 .Uplate uplate;
 
-    /**
+    public MT102(){
+    	super();
+    }
+    
+    public MT102(Mt10x mt10x) {
+		// TODO Auto-generated constructor stub
+    	StavkaPoruke[] sp = ((StavkaPoruke[]) mt10x.getStavkaPoruke().toArray());
+    	
+    	this.bankaDuznik = new TBanka(mt10x.getRacunBankeDuznika(),Integer.valueOf(sp[0].getNalog().getModelZaduzenja()), sp[0].getNalog().getPozivNaBrojZaduzenja());
+    	this.bankaPoverioc = new TBanka(mt10x.getRacunBankePoverioca(),Integer.valueOf(sp[0].getNalog().getModelOdobrenja()), sp[0].getNalog().getPozivNaBrojOdobrenja());
+    	
+    	Date datumTemp = mt10x.getDatumPoruke();
+		XMLGregorianCalendar datum;
+		try {
+			
+			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					datumTemp.getYear(), datumTemp.getMonth(),
+					datumTemp.getDay(), DatatypeConstants.FIELD_UNDEFINED);
+			this.datum = datum;
+			datumTemp = new Date();
+			datum = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+					datumTemp.getYear(), datumTemp.getMonth(),
+					datumTemp.getDay(), DatatypeConstants.FIELD_UNDEFINED);
+			this.datumValute = datum;
+		} catch (DatatypeConfigurationException e) {
+			e.printStackTrace();
+		}
+    	this.id = mt10x.getIdPoruke().toString();
+    	this.sifraValute = mt10x.getSifraValutePoruke();
+    	this.ukupanIznos = new BigDecimal(mt10x.getUkupanIznos());
+    	List<TNalog> naloziZaUplate = new ArrayList<TNalog>();
+    	TNalog tnalog;
+    	for(int i =0; i<sp.length; i++){
+    		tnalog = new TNalog(sp[i].getNalog());
+    		naloziZaUplate.add(tnalog);
+    	}
+    	this.uplate.uplata = naloziZaUplate;
+    	
+	}
+
+	/**
      * Gets the value of the id property.
      * 
      * @return

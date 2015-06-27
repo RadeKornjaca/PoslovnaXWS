@@ -40,6 +40,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import poslovnaxws.common.Status;
+import poslovnaxws.poruke.MT102;
+import poslovnaxws.poruke.MT103;
 import poslovnaxws.poruke.MT900;
 import poslovnaxws.poruke.MT910;
 import poslovnaxws.services.banka.BankaServiceMessages;
@@ -190,10 +192,10 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		}
 
 		status = sendMT9xy(mt103Base, nalog);
-
 		if (status.getKod() != 0)
 			return status;
-
+		BankaServiceMessages banka = createBankaService(String.valueOf(mt103Base.getRacunBankePoverioca().getBanka().getSifra()));
+		banka.receiveMT103(mt103);
 		System.out.println("response code: " + status.getKod());
 		System.out.println("response: " + status.getOpis());
 
@@ -218,6 +220,8 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			return status;
 
 		Nalog nalog = null;
+		Object[] st = (Object[]) mt102Base.getStavkaPoruke().toArray();
+		nalog = ((StavkaPoruke)st[0]).getNalog();			//Treba nam prvi nalog za model odobrenja i tako te stvari
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.SECOND, 0);
@@ -251,13 +255,11 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 					mt10xDao.merge(mt102Base);
 					
 					System.out.println(mt102Base.getRacunBankeDuznika().getBrojRacuna());
+					status = sendMT9xy(mt102Base, nalog);
 					
-					
-					
-					//status = sendMT9xy(mt102Base, nalog);
-			
-					if (status.getKod() != 0)
-						return status;
+					banka = createBankaService(String.valueOf(mt102Base.getRacunBankePoverioca().getBanka().getSifra()));
+					status = banka.receiveMT102(mt102);
+
 				}
 				else{
 					status.setKod(8);
@@ -279,6 +281,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			status.setOpis("Obican exception");
 			return status;
 		}
+		
 		return status;
 	}
 
@@ -633,6 +636,15 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		return null;
 
+	}
+	
+	private Status sendMt10x(Mt10x mt10x){
+		
+		banka = createBankaService(String.valueOf(mt10x.getRacunBankePoverioca().getBanka().getSifra()));
+		if(mt10x.getVrsta()==102)
+			return banka.receiveMT102(new MT102(mt10x));
+		else
+			return banka.receiveMT103(new MT103(mt10x));
 	}
 
 	private Status sendMT9xy(Mt10x mt10x, Nalog nalog) {
