@@ -107,6 +107,17 @@
             <xs:sequence>
                 <xs:element name="nalog" type="xws:TNalog"/>
             </xs:sequence>
+            <xs:attribute default="false" name="settled" type="xs:boolean"/>
+            <xs:attribute name="id" type="xs:long"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="banka">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="xws:TBanka">
+                    <xs:attribute name="id" type="xs:long"/>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 </xs:schema>

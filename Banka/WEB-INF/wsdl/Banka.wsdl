@@ -56,10 +56,12 @@
 		<wsdl:part name="uplata" element="xws_banke:uplata" />
 	</wsdl:message>
 
+	<wsdl:message name="sendMT102Request">
+	</wsdl:message>
+
 	<wsdl:message name="notificationMessage">
 		<wsdl:part name="notification" element="xws:status" />
 	</wsdl:message>
-
 
 	<!-- Port type and operations definitions -->
 
@@ -93,6 +95,11 @@
 
 		<wsdl:operation name="receiveUplata" parameterOrder="nmtokens">
 			<wsdl:input message="ws:receiveUplata" />
+			<wsdl:output message="ws:notificationMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="sendMT102" parameterOrder="nmtokens">
+			<wsdl:input message="ws:sendMT102Request" />
 			<wsdl:output message="ws:notificationMessage" />
 		</wsdl:operation>
 
@@ -156,6 +163,16 @@
 		</wsdl:operation>
 
 		<wsdl:operation name="receiveUplata">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="sendMT102">
 			<soap:operation soapAction="" style="document" />
 			<wsdl:input>
 				<soap:body use="literal" />

@@ -104,7 +104,7 @@ public class MT102 implements Identifiable{
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar datum;
     @XmlElement(required = true)
-    protected MT102 .Uplate uplate;
+    protected MT102 .Uplate uplate = new Uplate();
 
     /**
      * Gets the value of the id property.
@@ -325,7 +325,7 @@ public class MT102 implements Identifiable{
     public static class Uplate {
 
         @XmlElement(required = true)
-        protected List<TNalog> uplata;
+        protected List<TNalog> uplata = new ArrayList<TNalog>();
 
         /**
          * Gets the value of the uplata property.

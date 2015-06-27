@@ -12,10 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -32,6 +35,7 @@ import javax.xml.ws.Service;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import poslovnaxws.banke.Banka;
 import poslovnaxws.banke.Preseci;
 import poslovnaxws.banke.Presek;
 import poslovnaxws.banke.Presek.StavkePreseka;
@@ -42,14 +46,17 @@ import poslovnaxws.common.Status;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.common.TStavkaPreseka;
+import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
 import poslovnaxws.poruke.Poruka;
 import poslovnaxws.services.centralnabanka.CentralnaBanka;
+import sessionbeans.concrete.BankaDaoLocal;
 import sessionbeans.concrete.MT102DaoLocal;
 import sessionbeans.concrete.MT103DaoLocal;
 import sessionbeans.concrete.MT900DaoLocal;
 import sessionbeans.concrete.MT910DaoLocal;
 import sessionbeans.concrete.PreseciDaoLocal;
+import sessionbeans.concrete.UplataDaoLocal;
 import util.JndiUtils;
 import xmldb.RequestMethod;
 
@@ -65,6 +72,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	private static String PORUKE_XSD = "../webapps/banka/WEB-INF/xsd/Poruke.xsd";
 	private static String BANKE_XSD = "../webapps/banka/WEB-INF/xsd/Banke.xsd";
 	private static String COMMON_XSD = "../webapps/banka/WEB-INF/xsd/Common.xsd";
+	// Da bi banka znala da li je drugi nalog njen
+	private String sifraBanke;
+	private String cbAddress;
 
 	@EJB
 	private PreseciDaoLocal presekDao = JndiUtils
@@ -81,6 +91,13 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 	@EJB
 	private MT103DaoLocal mt103Dao = JndiUtils.getLocalEJB(JndiUtils.MT103_DAO);
+
+	@EJB
+	private UplataDaoLocal uplataDao = JndiUtils
+			.getLocalEJB(JndiUtils.UPLATA_DAO);
+
+	@EJB
+	private BankaDaoLocal bankaDao = JndiUtils.getLocalEJB(JndiUtils.BANKA_DAO);
 
 	private static final Logger LOG = Logger
 			.getLogger(BankaServiceMessagesImpl.class.getName());
@@ -102,7 +119,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 		URL url;
 		try {
-			url = new URL(prop.getProperty("namingUrl")+"address");
+			url = new URL(prop.getProperty("namingUrl") + "address");
 			System.out.println(url);
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -111,10 +128,10 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			conn.setRequestMethod(RequestMethod.PUT);
 
 			conn.setRequestProperty("Content-Type", "application/json");
-			
-			
+
 			String input = prop.getProperty("sifra") + "!"
 					+ prop.getProperty("url");
+			sifraBanke = prop.getProperty("sifra");
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes());
 			os.flush();
@@ -311,6 +328,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		} catch (NotificationMessage e) {
 			throw e;
 		} catch (Exception e) {
+			e.printStackTrace();
 			status.setKod(5);
 			status.setOpis("Banka : Greška na serveru.");
 			NotificationMessage ex = new NotificationMessage(status.getOpis(),
@@ -335,17 +353,99 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			return status;
 		}
 
-		TNalog nalog = uplata.getNalog();
+		try {
 
-		MT103 mt103 = new MT103();
+			TNalog nalog = uplata.getNalog();
+			// Ako je racun primaoca u istoj banci, nema slanja
+			if (nalog.getPrimalac().getRacun().substring(0, 2)
+					.equals(sifraBanke)) {
+				uplata.setSettled(true);
+			}
 
-		mt103.setUplata(nalog);
+			// Da li se salje odmah putem MT103
+			else if (nalog.isHitno() || nalog.getIznos().doubleValue() > 250000) {
+				nalog.setHitno(true);
 
-		mt103.setBankaDuznik((TBanka) nalog.getDuznik());
-		mt103.setBankaPoverioc((TBanka) nalog.getPrimalac());
+				MT103 mt103 = new MT103();
 
-		CentralnaBanka centralnaBanka = createBankaService();
-		status = centralnaBanka.receiveMT103(mt103);
+				mt103.setUplata(nalog);
+
+				mt103.setBankaDuznik((TBanka) nalog.getDuznik());
+				mt103.setBankaPoverioc((TBanka) nalog.getPrimalac());
+
+				RunnableService service = new RunnableService(mt103);
+				service.run();
+
+				uplata.setSettled(true);
+			} else {
+				uplata.setSettled(false);
+			}
+
+			uplataDao.persist(uplata);
+
+		} catch (JAXBException e) {
+			status.setKod(1);
+			status.setOpis("BANKE exception :JAXB exception pri čuvanju uplate");
+			e.printStackTrace();
+		} catch (IOException e) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IO exception pri čuvanju uplate");
+			e.printStackTrace();
+		}
+
+		return status;
+	}
+
+	@Override
+	public Status sendMT102() {
+
+		Status status = new Status();
+
+		try {
+			HashMap<String, List<Uplata>> zaSlanje = uplataDao.setupClearing();
+
+			for (String sifraBanke : zaSlanje.keySet()) {
+				double ukupanIznos = 0;
+				MT102 mt102 = new MT102();
+				List<Uplata> uplate = zaSlanje.get(sifraBanke);
+				for (Uplata uplata : uplate) {
+					uplata.setSettled(true);
+					mt102.getUplate().getUplata().add(uplata.getNalog());
+					ukupanIznos += uplata.getNalog().getIznos().doubleValue();
+				}
+				System.out.println(sifraBanke);
+				TBanka bankaPoverilac = bankaDao.findById(
+						Long.parseLong(sifraBanke)).getBanka();
+				mt102.setBankaPoverioc(bankaPoverilac);
+
+				System.out.println(this.sifraBanke);
+				TBanka bankaDuznik = bankaDao.findById(
+						Long.parseLong(this.sifraBanke)).getBanka();
+				mt102.setBankaDuznik(bankaDuznik);
+
+				mt102.setDatum(mt102.getUplate().getUplata().get(0)
+						.getDatumNaloga());
+
+				mt102.setDatumValute(mt102.getUplate().getUplata().get(0)
+						.getDatumValute());
+				
+				mt102.setSifraValute(mt102.getUplate().getUplata().get(0).getOznakaValute());
+				
+				mt102.setUkupanIznos(new BigDecimal(ukupanIznos));
+				
+				RunnableService runnableService = new RunnableService(mt102);
+				runnableService.run();
+			}
+
+		} catch (JAXBException e) {
+			status.setKod(1);
+			status.setOpis("BANKE exception :JAXB exception pri slanju poruke MT102.");
+			e.printStackTrace();
+		} catch (IOException e) {
+			status.setKod(4);
+			status.setOpis("BANKE exception :IO exception pri slanju poruke MT102.");
+			e.printStackTrace();
+		}
 
 		return status;
 	}
@@ -406,7 +506,8 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 					"../webapps/banka/WEB-INF/config.properties");
 			prop.load(propInput);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			// e1.printStackTrace();
+			return null;
 		}
 
 		URL url, wsdl;
@@ -417,32 +518,35 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			conn.setDoOutput(true);
 
 			conn.setRequestMethod(RequestMethod.GET);
-			
+
 			String line, wsdlString = "";
-			   rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		         while ((line = rd.readLine()) != null) {
-		            wsdlString += line;
-		         }
+			rd = new BufferedReader(
+					new InputStreamReader(conn.getInputStream()));
+			while ((line = rd.readLine()) != null) {
+				wsdlString += line;
+			}
 
 			QName serviceName = new QName(
 					"PoslovnaXWS/services/centralnaBanka", "CBService");
 			QName portName = new QName("PoslovnaXWS/services/centralnaBanka",
 					"CentralnaBankaPort");
-			
-			wsdl = new URL(wsdlString+"CBService?wsdl");
+
+			cbAddress = wsdlString;
+
+			wsdl = new URL(wsdlString + "CBService?wsdl");
 
 			Service service = Service.create(wsdl, serviceName);
 
 			return service.getPort(portName, CentralnaBanka.class);
 
 		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
+			// e1.printStackTrace();
 		} catch (ProtocolException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		return null;
@@ -522,6 +626,41 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		status.setOpis("OK");
 
 		return status;
+	}
+
+	/**
+	 * Obraca se serveru CB u odvojenom thread-u.
+	 * 
+	 * @author Tim 5
+	 *
+	 */
+	private class RunnableService implements Runnable {
+
+		private Object message;
+
+		public RunnableService(Object message) {
+			this.message = message;
+		}
+
+		@Override
+		public void run() {
+			CentralnaBanka centralnaBanka = createBankaService();
+			if (centralnaBanka == null)
+				LOG.severe("Nije pronadjen servis CB.");
+			else if (message instanceof MT103) {
+
+				Status status = centralnaBanka.receiveMT103((MT103) message);
+
+				LOG.info("Poziv receiveMT103 CB iz banke: " + status.getKod()
+						+ ":" + status.getOpis());
+			} else if (message instanceof MT102) {
+				Status status = centralnaBanka.receiveMT102((MT102) message);
+
+				LOG.info("Poziv receiveMT102 CB iz banke: " + status.getKod()
+						+ ":" + status.getOpis());
+			}
+		}
+
 	}
 
 }

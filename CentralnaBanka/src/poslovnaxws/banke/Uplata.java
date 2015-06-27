@@ -3,9 +3,11 @@ package poslovnaxws.banke;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
 import poslovnaxws.common.TNalog;
 
 
@@ -34,6 +36,12 @@ import poslovnaxws.common.TNalog;
 })
 @XmlRootElement(name = "uplata", namespace="PoslovnaXWS/Banke")
 public class Uplata {
+	
+	@XmlAttribute(required = false, name = "id")
+	protected Long id;
+
+	@XmlAttribute(required = false, name = "settled")
+	protected boolean settled;
 
     @XmlElement(required = true)
     protected TNalog nalog;
@@ -61,5 +69,23 @@ public class Uplata {
     public void setNalog(TNalog value) {
         this.nalog = value;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public boolean isSettled() {
+		return settled;
+	}
+
+	public void setSettled(boolean settled) {
+		this.settled = settled;
+	}
+    
+    
 
 }

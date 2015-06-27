@@ -1,18 +1,22 @@
-
 package poslovnaxws.banke;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import entity.iface.Identifiable;
 import poslovnaxws.common.TNalog;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -29,37 +33,60 @@ import poslovnaxws.common.TNalog;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "nalog"
-})
-@XmlRootElement(name = "uplata", namespace="PoslovnaXWS/Banke")
-public class Uplata {
+@XmlType(name = "", propOrder = { "nalog" })
+@XmlRootElement(name = "uplata", namespace = "PoslovnaXWS/Banke")
+public class Uplata implements Identifiable {
 
-    @XmlElement(required = true)
-    protected TNalog nalog;
+	@XmlAttribute(required = false, name = "id")
+	protected Long id;
 
-    /**
-     * Gets the value of the nalog property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TNalog }
-     *     
-     */
-    public TNalog getNalog() {
-        return nalog;
-    }
+	@XmlAttribute(required = false, name = "settled")
+	protected boolean settled;
 
-    /**
-     * Sets the value of the nalog property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TNalog }
-     *     
-     */
-    public void setNalog(TNalog value) {
-        this.nalog = value;
-    }
+	@XmlElement(required = true)
+	protected TNalog nalog;
+
+	/**
+	 * Gets the value of the nalog property.
+	 * 
+	 * @return possible object is {@link TNalog }
+	 * 
+	 */
+	public TNalog getNalog() {
+		return nalog;
+	}
+
+	/**
+	 * Sets the value of the nalog property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link TNalog }
+	 * 
+	 */
+	public void setNalog(TNalog value) {
+		this.nalog = value;
+	}
+
+	@Override
+	public String getId() {
+		if (id != null)
+			return id.toString();
+		else
+			return null;
+	}
+
+	@Override
+	public void setId(String value) {
+		id = Long.parseLong(value);
+
+	}
+
+	public boolean isSettled() {
+		return settled;
+	}
+
+	public void setSettled(boolean settled) {
+		this.settled = settled;
+	}
 
 }

@@ -74,7 +74,9 @@ public class MT102Test {
 
 		//testZahtev();
 
-		 testValidUplata();
+		 //testValidUplata();
+		
+		banka.sendMT102();
 
 	}
 

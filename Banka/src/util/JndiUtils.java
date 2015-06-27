@@ -43,6 +43,12 @@ public class JndiUtils {
 	
 	public static final String MT103_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "MT103Dao!sessionbeans.concrete.MT103DaoLocal";
+	
+	public static final String UPLATA_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "UplataDao!sessionbeans.concrete.UplataDaoLocal";
+	
+	public static final String BANKA_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+ "BankaDao!sessionbeans.concrete.BankaDaoLocal";
 	/**
 	 * Gets local EJB from JNDI.
 	 *

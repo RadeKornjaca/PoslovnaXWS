@@ -76,5 +76,9 @@ public class ObjectFactory {
     public Uplata createUplata() {
         return new Uplata();
     }
+    
+    public Banka createBanka(){
+    	return new Banka();
+    }
 
 }
