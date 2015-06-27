@@ -1,10 +1,7 @@
 package poslovnaxws.test;
 
-import java.math.BigInteger;
-
-import poslovnaxws.banke.Banka;
-import poslovnaxws.common.TBanka;
-import sessionbeans.concrete.BankaDao;
+import poslovnaxws.banke.Presek;
+import sessionbeans.concrete.PreseciDao;
 
 public class BazaTest {
 	public static void main(String[] args) throws Exception {
@@ -44,7 +41,11 @@ public class BazaTest {
 		 * 
 		 * uplate.get(0);
 		 */
-
-
+		PreseciDao preseci = new PreseciDao();
+		
+		preseci.findById("2015-04-22");
+		
+		//Presek presek = preseci.getPresek(3, "2015-04-22");
+		//System.out.println(presek);
 	}
 }

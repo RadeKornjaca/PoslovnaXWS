@@ -1,14 +1,18 @@
 package sessionbeans.concrete;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import poslovnaxws.banke.Preseci;
+import poslovnaxws.banke.Presek;
 import sessionbeans.common.GenericDao;
 
 @Stateless
@@ -46,6 +50,20 @@ public class PreseciDao extends GenericDao<Preseci, String> implements
 	public Preseci persist(Preseci entity) throws JAXBException, IOException {
 		em.persist(entity, entity.getId());
 		return entity;
+	}
+
+
+	@Override
+	public Presek getPresek(int index, String id) throws IOException, JAXBException {
+		InputStream in = em.executeQuery("(//*:preseci[datum="+id+"]//*:stavka)[position() = "+index+"]", false);
+		
+		context = JAXBContext.newInstance(contextPath);
+
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		
+		Presek stavka = (Presek) unmarshaller.unmarshal(in);
+		
+		return stavka;
 	}
 
 }

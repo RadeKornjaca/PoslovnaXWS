@@ -254,7 +254,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			e1.printStackTrace();
 			return status;
 		}
-
+		
+		status.setKod(0);
+		status.setOpis("OK");
 		return status;
 	}
 
@@ -281,6 +283,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			e1.printStackTrace();
 			return status;
 		}
+		
+		status.setKod(0);
+		status.setOpis("OK");
 
 		return status;
 	}
@@ -301,8 +306,11 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		}
 
 		try {
+			
 
-			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString());
+			System.out.println(zahtevZaIzvod.getDatum());
+			//Iz nekog razloga salje Z na kraju datuma
+			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString().replace("Z", ""));
 
 			// Počinje od 1
 			int redniBroj = zahtevZaIzvod.getRedniBrojPreseka().intValue() - 1;
