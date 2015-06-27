@@ -94,6 +94,9 @@ public class MT910 {
 	public MT910(Mt9xy mt9xy, Nalog nalog) {
 		if (mt9xy.getVrsta() != 910)
 			return;
+		System.out.println(mt9xy.getRacunBankePoverioca());
+		System.out.println(nalog.getModelOdobrenja());
+		System.out.println(nalog.getPozivNaBrojOdobrenja());
 		
 		this.banka = new TBanka(mt9xy.getRacunBankePoverioca(),
 				Integer.parseInt(nalog.getModelOdobrenja()),
