@@ -30,13 +30,20 @@
   'resource.invoiceParams',
   'resource.itemParams',
 
-  'resource.partners'
+  'resource.partners',
+  
+  'createInvoice',
+  'createItem'
   ])
  .config(function ($routeProvider) {
   $routeProvider
   .when('/', {
     templateUrl: 'views/main.html',
     controller: 'MainCtrl'
+  })
+  .when('/createInvoice',{
+  	templateUrl: 'views/createInvoice.html',
+    controller: 'CreateInvoiceCtrl'
   })
   .when('/invoices',{
   	templateUrl: 'views/invoices.html',
@@ -53,6 +60,10 @@
   .when('/item',{
     templateUrl: 'views/item.html',
     controller: 'ItemCtrl'
+  })
+  .when('/createItem',{
+  	templateUrl: 'views/createItem.html',
+    controller: 'CreateItemCtrl'
   })
   .otherwise({
     redirectTo: '/'

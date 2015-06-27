@@ -22,5 +22,10 @@ angular.module('items', ['resource.items', 'resource.itemParams'])
   			
   			$location.path( path );
 		};
+		
+		$scope.goCreateItem = function(path) {
+			$log.info("Hi!");
+			$location.path(path);
+		}
 
 	});

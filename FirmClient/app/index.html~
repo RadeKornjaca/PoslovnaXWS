@@ -86,12 +86,24 @@
      <!-- build:js({.tmp,app}) scripts/scripts.js -->
      <script src="scripts/app.js"></script>
      <script src="scripts/controllers/main.js"></script>
+
      <script src="scripts/controllers/invoicesController.js"></script>
      <script src="scripts/factories/invoicesFactory.js"></script>
      <script src="scripts/controllers/invoiceController.js"></script>
      <script src="scripts/factories/invoiceFactory.js"></script>
      <script src="scripts/factories/invoiceParamsFactory.js"></script>
-     <script src="scripts/factories/partnerFactory.js"></script>
+
+     <script src="scripts/factories/partnersFactory.js"></script>
+
+
+     <script src="scripts/controllers/itemsController.js"></script>
+     <script src="scripts/factories/itemsFactory.js"></script>
+     <script src="scripts/controllers/itemController.js"></script>
+     <script src="scripts/factories/itemFactory.js"></script>
+     <script src="scripts/factories/itemsParamsFactory.js"></script>
+     
+     <script src="scripts/controllers/createInvoiceController.js"></script>
+     
      <script src="scripts/util/dateFormatter.js"></script>
      <!-- endbuild -->
    </body>

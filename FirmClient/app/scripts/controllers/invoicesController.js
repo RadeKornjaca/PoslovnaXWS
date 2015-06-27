@@ -8,18 +8,18 @@
  		});
  		
  		
- 		//$scope.obtainResources = function(idDobavljaca) {
- 		Invoices.get({idDobavljaca : '14234512432'}, function(response) {
-			$scope.invoices = response.faktura;
-			for(var i = 0; i < $scope.invoices.length; i++) {
-				var date = new Date($scope.invoices[i].zaglavlje.datumRacuna);
-				$scope.invoices[i].zaglavlje.datumRacuna = date;												//	za svaki slucaj da sortira datume kako treba, ne da serenda
-				$scope.invoices[i].zaglavlje.datumRacunaFormatted = date.customFormat( "#DD#.#MM#.#YYYY#." );	//	customFormat metoda se nalazi u util/dateFormatter.js
-			}
+ 		$scope.obtainResources = function(idDobavljaca) {
+	 		Invoices.get({idDobavljaca : idDobavljaca}, function(response) {
+				$scope.invoices = response.faktura;
+				for(var i = 0; i < $scope.invoices.length; i++) {
+					var date = new Date($scope.invoices[i].zaglavlje.datumRacuna);
+					$scope.invoices[i].zaglavlje.datumRacuna = date;												//	za svaki slucaj da sortira datume kako treba, ne da serenda
+					$scope.invoices[i].zaglavlje.datumRacunaFormatted = date.customFormat( "#DD#.#MM#.#YYYY#." );	//	customFormat metoda se nalazi u util/dateFormatter.js
+				}
 
-			$log.info("Successfully obtained invoices data from REST.");
- 		});
-      	//};
+				$log.info("Successfully obtained invoices data from REST.");
+	 		});
+      	};
       	
       	$scope.order = function(predicate) {
         	$scope.reverse = !$scope.reverse;
