@@ -1,8 +1,28 @@
 'use strict';
 
- angular.module('createItem', [])
- 	.controller('CreateItemCtrl', function($scope, $location, $log) {
+ angular.module('createItem', ['resource.items', 'resource.invoiceParams'])
+ 	.controller('CreateItemCtrl', function(Items, InvoiceParams , $scope, $location, $log) {
 
-	
+	$scope.submit = function(){
+		this.stavkaFakture.id = this.stavkaFakture.redniBroj;
+		
+		var newItem = new Items();
+		
+		newItem.id = this.stavkaFakture.id;							//mrzim svoj zivot
+		newItem.redniBroj = this.stavkaFakture.redniBroj;
+		newItem.tip = this.stavkaFakture.tip;
+		newItem.naziv = this.stavkaFakture.naziv;
+		newItem.kolicina = this.stavkaFakture.kolicina;
+		newItem.jedinicaMere = this.stavkaFakture.jedinicaMere;
+		newItem.jedinicnaCena = this.stavkaFakture.jedinicnaCena;
+		newItem.vrednost = this.stavkaFakture.jedinicnaCena * this.stavkaFakture.kolicina;
+		newItem.procenatRabata = this.stavkaFakture.procenatRabata;
+		newItem.iznosRabata = this.stavkaFakture.iznosRabata;
+		newItem.umanjenoZaRabat = this.stavkaFakture.umanjenoZaRabat;
+		newItem.ukupanPorez = this.stavkaFakture.ukupanPorez;
+		
+		
+		newItem.$save({idDobavljaca : InvoiceParams.idDobavljaca, idFakture : InvoiceParams.idFakture});
+	};
 
  	});

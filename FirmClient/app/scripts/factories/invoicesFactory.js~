@@ -3,5 +3,5 @@
 angular.module('resource.invoices', ['ngResource'])
 	.factory('Invoices', function ($resource) {
 	
-	return $resource('http://localhost:8080/client-rest-ws/partneri/:id_dobavljaca/fakture', {id_dobavljaca : '14234512432'});
+	return $resource('http://localhost:8080/client-rest-ws/partneri/:idDobavljaca/fakture');
 })

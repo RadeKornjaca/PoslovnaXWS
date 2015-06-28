@@ -59,6 +59,31 @@ public final class InitDatabase {
         	 
             put.releaseConnection();
         }
+        
+        System.out.println("\n");
+        System.out.println("Sent HTTP PUT request to add bussiness partner");
+
+        input = new File("data/kupac_test.xml");
+        
+        put = new PutMethod(REST_URL + "/whoami");
+        put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
+        put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
+        entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");
+        put.setRequestEntity(entity);
+        httpclient = new HttpClient();
+
+        try {
+            int result = httpclient.executeMethod(put);
+            System.out.println("Response status code: " + result);
+            System.out.println("Response body: ");
+            System.out.println(put.getResponseBodyAsString());
+        } finally {
+        	
+        	 //* Oslobodi konekciju...
+        	 
+            put.releaseConnection();
+        }
+        
 
         //	*****kreiranje kolekcije faktura*****
         

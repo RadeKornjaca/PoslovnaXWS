@@ -17,8 +17,8 @@
 					</div>
 					
 					<!-- Combobox za dobavljaca -->
-					<select ng-repeat="partner in partners" ng-model="index">
-						<option value="index=index+1">{{ partner.naziv }}</option>
+					<select ng-repeat="partner in partners" ng-model="i">
+						<option value="$index">{{ partner.naziv }}</option>
 					</select>
 					
 					<div class="form-group">
@@ -33,13 +33,11 @@
 					
 					<!-- date picker za datum racuna -->
 					<div class="form-group">
-						<label>Datum racuna</label>
-						<div class="input-group">
-							<div class="col-sm-7">
-								<input type="text" class="form-control" datepicker-popup="dd.MM.yyyy." ng-model="datumRacuna" is-open="dateOpened" close-text="Close" />
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default" ng-click="openDatepicker($event, 'dateOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
-								</span>
+						<label for="datumRacuna" class="col-sm-3 control-label">Datum računa</label>
+						<div class="col-sm-7">
+							<div class="input-group">
+							
+								<input id="datumRacuna" type="date" placeholder="" class="form-control input-md ng-invalid ng-dirty ng-valid-date ng-valid-required ng-invalid-pattern ng-touched" required="" ng-model="datumRacuna" style="">
 							</div>
 						</div>
 					</div>
@@ -66,13 +64,10 @@
 					
 					<!-- date picker za datum valute -->
 					<div class="form-group">
-						<label>Datum valute</label>
+						<label for="datumValute" class="col-sm-3 control-label">Datum valute</label>
 						<div class="input-group">
 							<div class="col-sm-7">
-								<input type="text" class="form-control" datepicker-popup="dd.MM.yyyy." ng-model="datumValute" is-open="dateOpened" close-text="Close" />
-								<span class="input-group-btn">
-									<button type="button" class="btn btn-default" ng-click="openDatepicker($event, 'dateOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
-								</span>
+								<input id="datumValute" type="date" pattern="yyyy-MM-dd" placeholder="" class="form-control input-md ng-invalid ng-dirty ng-valid-date ng-valid-required ng-invalid-pattern ng-touched" required="" ng-model="datumValute" style="">
 							</div>
 						</div>
 					</div>

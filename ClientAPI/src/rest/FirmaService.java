@@ -208,6 +208,9 @@ public class FirmaService {
 			if (checkDobavljac(idDobavljaca)) {
 
 				try {
+					if(faktura.getStavkeFakture() == null) {
+						faktura.setStavkeFakture(new StavkeFakture()); 			//za slucaj da u fakturi postoji samo zaglavlje
+					}
 					faktura.getStavkeFakture().getStavkaFakture().add(stavka);
 
 					updateZaglavljeAdd(faktura, stavka);

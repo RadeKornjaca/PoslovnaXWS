@@ -13,9 +13,16 @@
 								Naziv usluge
 								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
 							</th>
+							<th ng-click="order('zaglavlje.iznosZaUplatu')">
+								Tip
+								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
+							</th>
 							<th ng-click="order('zaglavlje.datumRacuna')">
 								Kolicina
 								<span ng-show="predicate === 'zaglavlje.datumRacuna'" class="{{ cssClass }}"></span>
+							</th>
+							<th>
+								Brisanje
 							</th>
 						</tr>
 					</thead>
@@ -25,10 +32,16 @@
 								{{ item.redniBroj }}
 							</td>
 							<td>
-								{{ item.nazivUsluge }}
+								{{ item.naziv }}
+							</td>
+							<td>
+								{{ item.tip }}
 							</td>
 							<td>
 								{{ item.kolicina }}
+							</td>
+							<td ng-click="remove(item.redniBroj)" stop-event='click'>
+								<span class="glyphicon glyphicon-remove"></span>
 							</td>
 						</tr>
 					</tbody>
