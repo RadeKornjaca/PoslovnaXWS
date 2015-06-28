@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import wrapper.ZahtevResponse;
 
 
@@ -55,6 +57,7 @@ public class ZahtevZaIzvod {
     @XmlElement(required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar datum;
+    @JsonIgnore
     @XmlElement(required = true)
     protected BigInteger redniBrojPreseka;
     

@@ -22,6 +22,7 @@
   'items',
   'item',
   'uplata',
+  'zahtevZaPresek',
 
   'resource.items',
   'resource.item',
@@ -34,6 +35,8 @@
   'resource.partners',
 
   'resource.uplata',
+
+  'resource.presek',
 
   
   'createInvoice',
@@ -72,6 +75,10 @@
   .when('/uplata',{
     templateUrl: 'views/uplata.html',
     controller: 'UplataController'
+  })
+  .when('/presek',{
+    templateUrl: 'views/presek.html',
+    controller: 'PresekController'
   })
   .otherwise({
     redirectTo: '/'

@@ -37,6 +37,7 @@ import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.TBanka;
 import poslovnaxws.common.TFirma;
+import poslovnaxws.common.TStavkaPreseka;
 import poslovnaxws.services.banka.BankaServiceMessages;
 import poslovnaxws.services.banka.NotificationMessage;
 import sessionbeans.concrete.DobavljacDaoLocal;
@@ -464,12 +465,26 @@ public class FirmaService {
 		try {
 			BankaServiceMessages banka = createBankaService(zahtev
 					.getBrojRacuna().substring(0, 3));
-			presek = banka.zahtevZaIzvod(zahtev);
+			for (int i = 1;;i++){
+				zahtev.setRedniBrojPreseka(new BigInteger(String.valueOf(i)));
+				if (presek == null)
+					presek = banka.zahtevZaIzvod(zahtev);
+				else{
+					Presek novi  = banka.zahtevZaIzvod(zahtev);
+					for (TStavkaPreseka stavka : novi.getStavkePreseka().getStavka()){
+						presek.addStavka(stavka);
+					}
+				}
+			}
 
 		} catch (NotificationMessage e) {
 			System.out.println(e.getMessage());
 			if (presek == null)
 				return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			else if (e.getStatus().getKod() == 0){
+				json = mapper.valueToTree(presek);
+				return Response.ok(json.toString()).build();
+			}
 		}
 
 		json = mapper.valueToTree(presek);
