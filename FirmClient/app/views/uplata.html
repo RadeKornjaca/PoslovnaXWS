@@ -1,0 +1,207 @@
+<form class="form-horizontal">
+  <fieldset>
+
+    <!-- Form Name -->
+    <legend>Uplata</legend>
+    <div class="row col-md-12">
+      <div class="col-xs-6">
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="duznik.naziv" >Naziv dužnika</label>  
+          <div class="col-md-8">
+            <input id="duznik.naziv" name="duznik.naziv" type="text" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.duznik.naziv">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="duznik.racun">Račun dužnika</label>  
+          <div class="col-md-8">
+            <input id="duznik.racun" name="duznik.racun" type="text" pattern="[0-9]{3}-[0-9]{13}-[0-9]{2}" placeholder="111-1111111111111-11" class="form-control input-md" required="" ng-model="uplata.nalog.duznik.racun">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="duznik.pib">PIB dužnika</label>  
+          <div class="col-md-8">
+            <input id="duznik.pib" name="duznik.pib" type="text" pattern="[A-Za-z0-9]{11}" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.duznik.pib">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="duznik.adresa">Adresa dužnika</label>  
+          <div class="col-md-8">
+            <input id="duznik.adresa" name="duznik.adresa" type="text" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.duznik.adresa">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="modelZaduzenja">Model zaduženja</label>  
+          <div class="col-md-8">
+            <input id="modelZaduzenja" name="modelZaduzenja" type="text" pattern="[1-9]?[0-9]" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.duznik.model">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="pozivNaBrojZaduzenja">Poziv na broj zaduženja</label>  
+          <div class="col-md-8">
+            <input id="pozivNaBrojZaduzenja" name="pozivNaBrojZaduzenja" type="text" pattern="[A-Za-z]{1,20}" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.duznik.pozivNaBroj">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="svrhaUplate">Svrha uplate</label>  
+          <div class="col-md-8">
+            <input id="svrhaUplate" name="svrhaUplate" type="text" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.svrhaPlacanja">
+
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="primalac.naziv">Naziv primaoca</label>  
+          <div class="col-md-8">
+            <input id="primalac.naziv" name="primalac.naziv" type="text" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.primalac.naziv">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="primalac.racun">Račun primaoca</label>  
+          <div class="col-md-8">
+            <input id="primalac.racun" name="primalac.racun" type="text" class="form-control input-md" required="" pattern="[0-9]{3}-[0-9]{13}-[0-9]{2}" placeholder="111-1111111111111-11" ng-model="uplata.nalog.primalac.racun">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="primalac.pib">PIB primaoca</label>  
+          <div class="col-md-8">
+            <input id="primalac.pib" name="primalac.pib" type="text" pattern="[A-Za-z0-9]{11}" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.primalac.pib">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="primalac.adresa">Adresa primaoca</label>  
+          <div class="col-md-8">
+            <input id="primalac.adresa" name="primalac.adresa" type="text" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.primalac.adresa">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="modelZaduzenja">Model odobrenja</label>  
+          <div class="col-md-8">
+            <input id="modelZaduzenja" name="modelZaduzenja" type="text" pattern="[1-9]?[0-9]" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.primalac.model">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="pozivNaBrojZaduzenja">Poziv na broj odobrenja</label>  
+          <div class="col-md-8">
+          <input id="pozivNaBrojZaduzenja" name="pozivNaBrojZaduzenja" type="text" pattern="[A-Za-z]{1,20}" placeholder="" class="form-control input-md" required="" ng-model="uplata.nalog.primalac.pozivNaBroj">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="datumNaloga">Datum naloga</label>  
+          <div class="col-md-8">
+            <input id="datumNaloga" name="datumNaloga" type="date" pattern="yyyy-MM-dd" placeholder="" class="form-control input-md" required=""
+            ng-model="datumNaloga">
+
+          </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="datumValute">Datum valute</label>
+          <div class="col-md-8">
+            <input id="datumValute" name="datumValute" type="date" pattern="yyyy-MM-dd" placeholder="" class="form-control input-md" required=""
+            ng-model="datumValute">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="iznos">Iznos</label>  
+          <div class="col-md-8">
+            <input id="iznos" name="iznos" type="number" pattern="[0-9]+([\.|,][0-9]+)?" step="0.01" placeholder="" class="form-control input-md" required=""  ng-model="uplata.nalog.iznos">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="mesto">Mesto prijema</label>  
+          <div class="col-md-8">
+            <input id="mesto" name="mesto" type="text" placeholder="" class="form-control input-md" required=""
+            ng-model="uplata.nalog.naseljenoMesto.nazivMesta">
+
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="mesto">Šifra mesta</label>  
+          <div class="col-md-8">
+            <input id="mesto" name="mesto" type="text" placeholder="" pattern="[A-Za-z]{1,3}" class="form-control input-md" required=""
+            ng-model="uplata.nalog.naseljenoMesto.sifraMesta">
+
+          </div>
+        </div>
+
+
+        <!-- Multiple Checkboxes -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="hitno"></label>
+          <div class="col-md-8">
+            <div class="checkbox">
+              <label for="hitno">
+                <input type="checkbox" name="hitno" id="hitno" ng-model="uplata.nalog.hitno">
+                Hitno
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row col-md-12">
+      <!-- Button -->
+      <div class="form-group">
+       <div class="col-md-8">
+        <button id="submit" name="submit" class="btn btn-primary" type="submit" ng-click="submit()">Pošalji</button>
+      </div>
+    </div>
+  </div>
+
+
+</fieldset>
+</form>
