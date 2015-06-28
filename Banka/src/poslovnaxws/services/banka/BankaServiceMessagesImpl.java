@@ -254,7 +254,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			e1.printStackTrace();
 			return status;
 		}
-		
+
 		status.setKod(0);
 		status.setOpis("OK");
 		return status;
@@ -283,7 +283,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			e1.printStackTrace();
 			return status;
 		}
-		
+
 		status.setKod(0);
 		status.setOpis("OK");
 
@@ -306,11 +306,11 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		}
 
 		try {
-			
 
 			System.out.println(zahtevZaIzvod.getDatum());
-			//Iz nekog razloga salje Z na kraju datuma
-			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString().replace("Z", ""));
+			// Iz nekog razloga salje Z na kraju datuma
+			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString()
+					.replace("Z", ""));
 
 			// Počinje od 1
 			int redniBroj = zahtevZaIzvod.getRedniBrojPreseka().intValue() - 1;
@@ -365,21 +365,39 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 			TNalog nalog = uplata.getNalog();
 			// Ako je racun primaoca u istoj banci, nema slanja
-			if (nalog.getPrimalac().getRacun().substring(0, 2)
+			if (nalog.getPrimalac().getRacun().substring(0, 3)
 					.equals(sifraBanke)) {
 				uplata.setSettled(true);
+				return status;
 			}
 
 			// Da li se salje odmah putem MT103
 			else if (nalog.isHitno() || nalog.getIznos().doubleValue() > 250000) {
 				nalog.setHitno(true);
-
+				System.out.println("MT103!");
 				MT103 mt103 = new MT103();
 
 				mt103.setUplata(nalog);
+				Banka bankaDuznik = bankaDao.findById(Long.parseLong(nalog
+						.getDuznik().getRacun().substring(0, 3)));
+				
+				Banka bankaPoverilac = bankaDao.findById(Long.parseLong(nalog
+						.getDuznik().getRacun().substring(0, 3)));
+				
+				if (bankaDuznik == null){
+					status.setKod(5);
+					status.setOpis("Banka: Racun duznika ne odgovara ni jednoj banci.");
+					return status;
+				}
+				
+				if (bankaPoverilac == null){
+					status.setKod(5);
+					status.setOpis("Banka: Racun poverioca ne odgovara ni jednoj banci.");
+					return status;
+				}
 
-				mt103.setBankaDuznik((TBanka) nalog.getDuznik());
-				mt103.setBankaPoverioc((TBanka) nalog.getPrimalac());
+				mt103.setBankaDuznik(bankaDuznik.getBanka());
+				mt103.setBankaPoverioc(bankaPoverilac.getBanka());
 
 				RunnableService service = new RunnableService(mt103);
 				service.run();
@@ -436,11 +454,12 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 				mt102.setDatumValute(mt102.getUplate().getUplata().get(0)
 						.getDatumValute());
-				
-				mt102.setSifraValute(mt102.getUplate().getUplata().get(0).getOznakaValute());
-				
+
+				mt102.setSifraValute(mt102.getUplate().getUplata().get(0)
+						.getOznakaValute());
+
 				mt102.setUkupanIznos(new BigDecimal(ukupanIznos));
-				
+
 				RunnableService runnableService = new RunnableService(mt102);
 				runnableService.run();
 			}
@@ -519,10 +538,11 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		}
 
 		URL url, wsdl;
+		HttpURLConnection conn = null;
 		try {
 
 			url = new URL(prop.getProperty("namingUrl") + "cb");
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 
 			conn.setRequestMethod(RequestMethod.GET);
@@ -544,6 +564,8 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			wsdl = new URL(wsdlString + "CBService?wsdl");
 
 			Service service = Service.create(wsdl, serviceName);
+			
+			conn.disconnect();
 
 			return service.getPort(portName, CentralnaBanka.class);
 
@@ -555,6 +577,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+		} finally{
+			if (conn != null)
+				conn.disconnect();
 		}
 
 		return null;

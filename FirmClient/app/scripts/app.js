@@ -21,6 +21,7 @@
   'invoice',
   'items',
   'item',
+  'uplata',
 
   'resource.items',
   'resource.item',
@@ -31,6 +32,9 @@
   'resource.itemParams',
 
   'resource.partners',
+
+  'resource.uplata',
+
   
   'createInvoice',
   'createItem'
@@ -64,6 +68,10 @@
   .when('/createItem',{
   	templateUrl: 'views/createItem.html',
     controller: 'CreateItemCtrl'
+  })
+  .when('/uplata',{
+    templateUrl: 'views/uplata.html',
+    controller: 'UplataController'
   })
   .otherwise({
     redirectTo: '/'

@@ -48,5 +48,12 @@ public class UplataDao extends GenericDao<Uplata, Long> implements
 		return uplatePoBanci;
 
 	}
+	
+	@Override
+	public Uplata persist(Uplata entity) throws JAXBException, IOException {
+		//Ne bi trebalo da ima ID kada stigne
+		entity.setId(null);
+		return super.persist(entity);
+	}
 
 }

@@ -597,11 +597,12 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		}
 
 		URL url, wsdl;
+		HttpURLConnection conn = null;
 		try {
 
 			url = new URL(prop.getProperty("namingUrl")
 					+ swiftKod.toLowerCase() + "/address");
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 
 			conn.setRequestMethod("GET");
@@ -621,6 +622,8 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			wsdl = new URL(wsdlString + "banka?wsdl");
 
 			Service service = Service.create(wsdl, serviceName);
+			
+			conn.disconnect();
 
 			return service.getPort(portName, BankaServiceMessages.class);
 
@@ -632,6 +635,9 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally{
+			if (conn != null)
+				conn.disconnect();
 		}
 
 		return null;

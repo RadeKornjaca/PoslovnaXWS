@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -57,6 +58,9 @@ import entity.fakture.StavkeFakture;
 
 @Path("/partneri")
 public class FirmaService {
+
+	private static final Logger LOG = Logger.getLogger(FirmaService.class
+			.getName());
 
 	@EJB
 	private FaktureDaoLocal faktureDao;
@@ -204,9 +208,9 @@ public class FirmaService {
 
 				try {
 					faktura.getStavkeFakture().getStavkaFakture().add(stavka);
-					
+
 					updateZaglavljeAdd(faktura, stavka);
-					
+
 					fakturaDao.merge(faktura, idFakture);
 
 					response = Response.status(Status.CREATED)
@@ -228,7 +232,6 @@ public class FirmaService {
 		return response;
 
 	}
-
 
 	@GET
 	@Path("/{id_dobavljaca}/fakture/{id_fakture}/stavke/{red_br}")
@@ -276,15 +279,19 @@ public class FirmaService {
 					StavkaFakture oldStavka = stavkaDao.findByIdInFaktura(
 							idDobavljaca.toString(), idFakture, redBr);
 					updateZaglavljeSubtract(faktura, oldStavka);
-					
+
 					for (StavkaFakture s : faktura.getStavkeFakture()
 							.getStavkaFakture()) {
 						if (s.getRedniBroj().equals(oldStavka.getRedniBroj())) {
 							s.setIznosRabata(stavka.getIznosRabata());
 							s.setJedinicaMere(stavka.getJedinicaMere());
 							s.setJedinicnaCena(stavka.getJedinicnaCena());
-							s.setKolicina(stavka.getKolicina()); 		// ispao sam dobar covek, ali u			 
-							s.setNaziv(stavka.getNaziv()); 			 	// ovom trenutku mrzim svoj zivot
+							s.setKolicina(stavka.getKolicina()); // ispao sam
+																	// dobar
+																	// covek,
+																	// ali u
+							s.setNaziv(stavka.getNaziv()); // ovom trenutku
+															// mrzim svoj zivot
 							s.setTip(stavka.getTip());
 							s.setProcenatRabata(stavka.getProcenatRabata());
 							s.setUkupanPorez(stavka.getUkupanPorez());
@@ -294,7 +301,7 @@ public class FirmaService {
 					}
 
 					updateZaglavljeAdd(faktura, stavka);
-					
+
 					fakturaDao.merge(faktura, idFakture);
 
 					response = Response.ok().build();
@@ -346,7 +353,7 @@ public class FirmaService {
 					while (iterStavka.hasNext()) {
 						if (iterStavka.next().getRedniBroj()
 								.equals(oldStavka.getRedniBroj())) {
-							
+
 							updateZaglavljeSubtract(faktura, oldStavka);
 							iterStavka.remove();
 						}
@@ -378,7 +385,6 @@ public class FirmaService {
 	@Produces("application/json")
 	@Consumes("application/json")
 	public Response uplata(String jsonRequest) {
-	
 
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -420,15 +426,13 @@ public class FirmaService {
 			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
-		
-		BankaServiceMessages banka = createBankaService(uplata.getNalog().getDuznik().getRacun().substring(0,3));
-		
-		poslovnaxws.common.Status response = banka.receiveUplata(uplata);
 
-		if (response.getKod() == 0)
-			return Response.ok().build();
-		else
-			return Response.status(Status.BAD_REQUEST).build();
+		RunnableService service = new RunnableService(uplata, uplata.getNalog()
+				.getDuznik().getRacun().substring(0, 3));
+		service.run();
+
+		return Response.ok().build();
+
 	}
 
 	@PUT
@@ -512,41 +516,65 @@ public class FirmaService {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Sluzi da prilikom dodavanja nove stavke u fakturu azurira vrednosti
-	 * u zaglavlju koje zavise od vrednosti u stavkama
+	 * Sluzi da prilikom dodavanja nove stavke u fakturu azurira vrednosti u
+	 * zaglavlju koje zavise od vrednosti u stavkama
 	 * 
-	*/
+	 */
 	private void updateZaglavljeAdd(Faktura faktura, StavkaFakture stavka) {
-		if(stavka.getTip().equals("roba")) {
-			faktura.getZaglavlje().setVrednostRobe(faktura.getZaglavlje().getVrednostRobe().add(stavka.getVrednost()));
+		if (stavka.getTip().equals("roba")) {
+			faktura.getZaglavlje().setVrednostRobe(
+					faktura.getZaglavlje().getVrednostRobe()
+							.add(stavka.getVrednost()));
+		} else if (stavka.getTip().equals("usluga")) {
+			faktura.getZaglavlje().setVrednostUsluge(
+					faktura.getZaglavlje().getVrednostUsluge()
+							.add(stavka.getVrednost()));
 		}
-		else if(stavka.getTip().equals("usluga")){
-			faktura.getZaglavlje().setVrednostUsluge(faktura.getZaglavlje().getVrednostUsluge().add(stavka.getVrednost()));
-		}
-		faktura.getZaglavlje().setUkupnoRobaIUsluge(faktura.getZaglavlje().getVrednostRobe().add(faktura.getZaglavlje().getVrednostUsluge()));
-		faktura.getZaglavlje().setUkupanRabat(faktura.getZaglavlje().getUkupanRabat().add(stavka.getIznosRabata()));
-		faktura.getZaglavlje().setUkupanPorez(faktura.getZaglavlje().getUkupanPorez().add(stavka.getUkupanPorez()));
-		faktura.getZaglavlje().setIznosZaUplatu(faktura.getZaglavlje().getUkupnoRobaIUsluge().subtract(faktura.getZaglavlje().getUkupanRabat()).add(faktura.getZaglavlje().getUkupanPorez()));
+		faktura.getZaglavlje().setUkupnoRobaIUsluge(
+				faktura.getZaglavlje().getVrednostRobe()
+						.add(faktura.getZaglavlje().getVrednostUsluge()));
+		faktura.getZaglavlje().setUkupanRabat(
+				faktura.getZaglavlje().getUkupanRabat()
+						.add(stavka.getIznosRabata()));
+		faktura.getZaglavlje().setUkupanPorez(
+				faktura.getZaglavlje().getUkupanPorez()
+						.add(stavka.getUkupanPorez()));
+		faktura.getZaglavlje().setIznosZaUplatu(
+				faktura.getZaglavlje().getUkupnoRobaIUsluge()
+						.subtract(faktura.getZaglavlje().getUkupanRabat())
+						.add(faktura.getZaglavlje().getUkupanPorez()));
 	}
-	
+
 	/**
-	 * Sluzi da prilikom brisanja stavke u fakturu azurira vrednosti
-	 * u zaglavlju koje zavise od vrednosti u stavkama
+	 * Sluzi da prilikom brisanja stavke u fakturu azurira vrednosti u zaglavlju
+	 * koje zavise od vrednosti u stavkama
 	 * 
-	*/
+	 */
 	private void updateZaglavljeSubtract(Faktura faktura, StavkaFakture stavka) {
-		if(stavka.getTip().equals("roba")) {
-			faktura.getZaglavlje().setVrednostRobe(faktura.getZaglavlje().getVrednostRobe().subtract(stavka.getVrednost()));
+		if (stavka.getTip().equals("roba")) {
+			faktura.getZaglavlje().setVrednostRobe(
+					faktura.getZaglavlje().getVrednostRobe()
+							.subtract(stavka.getVrednost()));
+		} else if (stavka.getTip().equals("usluga")) {
+			faktura.getZaglavlje().setVrednostUsluge(
+					faktura.getZaglavlje().getVrednostUsluge()
+							.subtract(stavka.getVrednost()));
 		}
-		else if(stavka.getTip().equals("usluga")){
-			faktura.getZaglavlje().setVrednostUsluge(faktura.getZaglavlje().getVrednostUsluge().subtract(stavka.getVrednost()));
-		}
-		faktura.getZaglavlje().setUkupnoRobaIUsluge(faktura.getZaglavlje().getVrednostRobe().subtract(faktura.getZaglavlje().getVrednostUsluge()));
-		faktura.getZaglavlje().setUkupanRabat(faktura.getZaglavlje().getUkupanRabat().subtract(stavka.getIznosRabata()));
-		faktura.getZaglavlje().setUkupanPorez(faktura.getZaglavlje().getUkupanPorez().subtract(stavka.getUkupanPorez()));
-		faktura.getZaglavlje().setIznosZaUplatu(faktura.getZaglavlje().getUkupnoRobaIUsluge().add(faktura.getZaglavlje().getUkupanRabat()).subtract(faktura.getZaglavlje().getUkupanPorez()));
+		faktura.getZaglavlje().setUkupnoRobaIUsluge(
+				faktura.getZaglavlje().getVrednostRobe()
+						.subtract(faktura.getZaglavlje().getVrednostUsluge()));
+		faktura.getZaglavlje().setUkupanRabat(
+				faktura.getZaglavlje().getUkupanRabat()
+						.subtract(stavka.getIznosRabata()));
+		faktura.getZaglavlje().setUkupanPorez(
+				faktura.getZaglavlje().getUkupanPorez()
+						.subtract(stavka.getUkupanPorez()));
+		faktura.getZaglavlje().setIznosZaUplatu(
+				faktura.getZaglavlje().getUkupnoRobaIUsluge()
+						.add(faktura.getZaglavlje().getUkupanRabat())
+						.subtract(faktura.getZaglavlje().getUkupanPorez()));
 	}
 
 	private BankaServiceMessages createBankaService(String swiftKod) {
@@ -565,11 +593,12 @@ public class FirmaService {
 		}
 
 		URL url, wsdl;
+		HttpURLConnection conn = null;
 		try {
 
 			url = new URL(prop.getProperty("namingUrl")
 					+ swiftKod.toLowerCase() + "/address");
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 
 			conn.setRequestMethod("GET");
@@ -592,6 +621,8 @@ public class FirmaService {
 
 			Service service = Service.create(wsdl, serviceName);
 
+			conn.disconnect();
+
 			return service.getPort(portName, BankaServiceMessages.class);
 
 		} catch (MalformedURLException e1) {
@@ -602,19 +633,22 @@ public class FirmaService {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (conn != null)
+				conn.disconnect();
 		}
 
 		return null;
 
 	}
-	
+
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPartneri() {
 		Response response;
 		Partneri result = new Partneri();
-		
+
 		try {
 			result.setPartneri(dobavljacDao.findAll());
 		} catch (IOException | JAXBException e) {
@@ -624,5 +658,38 @@ public class FirmaService {
 		response = getResponsePack(result);
 		return response;
 	}
-	
+
+	/**
+	 * Obraca se serveru banke u odvojenom thread-u.
+	 * 
+	 * @author Tim 5
+	 *
+	 */
+	private class RunnableService implements Runnable {
+
+		private Object message;
+		private String sifra;
+
+		public RunnableService(Object message, String sifra) {
+			this.message = message;
+			this.sifra = sifra;
+		}
+
+		@Override
+		public void run() {
+			BankaServiceMessages banka = createBankaService(sifra);
+			if (banka == null)
+				LOG.severe("Nije pronadjen servis banke.");
+			else if (message instanceof Uplata) {
+
+				poslovnaxws.common.Status status = banka
+						.receiveUplata((Uplata) message);
+
+				LOG.info("Poziv receiveUplata banke iz firme: "
+						+ status.getKod() + ":" + status.getOpis());
+			}
+		}
+
+	}
+
 }
