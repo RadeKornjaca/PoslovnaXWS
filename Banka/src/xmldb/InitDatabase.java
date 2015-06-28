@@ -133,7 +133,7 @@ public final class InitDatabase {
 		System.out.println("\n* HTTP response: " + responseCode + " ("
 				+ message + ')');
 
-		/*url = new URL(REST_URL + "mt103");
+		url = new URL(REST_URL + "mt103");
 
 		System.out.println(url);
 
@@ -201,7 +201,7 @@ public final class InitDatabase {
 		responseCode = conn.getResponseCode();
 		message = conn.getResponseMessage();
 		System.out.println("\n* HTTP response: " + responseCode + " ("
-				+ message + ')');*/
+				+ message + ')');
 
 		url = new URL(REST_URL + "banka");
 
