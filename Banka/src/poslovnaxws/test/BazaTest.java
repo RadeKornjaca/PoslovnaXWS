@@ -1,5 +1,7 @@
 package poslovnaxws.test;
 
+import java.util.Date;
+
 import poslovnaxws.banke.Presek;
 import sessionbeans.concrete.PreseciDao;
 
@@ -43,7 +45,7 @@ public class BazaTest {
 		 */
 		PreseciDao preseci = new PreseciDao();
 		
-		preseci.findById("2015-04-22");
+		//preseci.findById("2015-04-22");
 		
 		//Presek presek = preseci.getPresek(3, "2015-04-22");
 		//System.out.println(presek);

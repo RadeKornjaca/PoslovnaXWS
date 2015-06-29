@@ -77,7 +77,10 @@ public class Uplata implements Identifiable {
 
 	@Override
 	public void setId(String value) {
-		id = Long.parseLong(value);
+		if (value != null)
+			id = Long.parseLong(value);
+		else
+			id = null;
 
 	}
 

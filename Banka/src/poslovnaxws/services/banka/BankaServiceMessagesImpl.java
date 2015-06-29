@@ -368,6 +368,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			if (nalog.getPrimalac().getRacun().substring(0, 3)
 					.equals(sifraBanke)) {
 				uplata.setSettled(true);
+				uplataDao.persist(uplata);
 				return status;
 			}
 
@@ -382,7 +383,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 						.getDuznik().getRacun().substring(0, 3)));
 				
 				Banka bankaPoverilac = bankaDao.findById(Long.parseLong(nalog
-						.getDuznik().getRacun().substring(0, 3)));
+						.getPrimalac().getRacun().substring(0, 3)));
 				
 				if (bankaDuznik == null){
 					status.setKod(5);
