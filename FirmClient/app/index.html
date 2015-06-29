@@ -35,13 +35,16 @@
                 Firma
               </a>
             </li>
-            <li>
-            	<br />
+            <li ng-hide="loggedIn">
+            	<a href="#/login">Logovanje</a>
             </li>
-            <li>
-              <a href="#/createInvoice">Kreiraj fakturu</a>
+            <li ng-show="loggedIn">
+            	<a href="#/logout">Izloguj se</a>
             </li>
-            <li>
+            <li ng-show="ownerView">
+              <a  href="#/createInvoice">Kreiraj fakturu</a>
+            </li>
+            <li ng-show="ownerView">
               <a href="#/invoices">Prikaži fakture</a>
             </li>
           </ul>
@@ -92,7 +95,7 @@
      <script src="scripts/factories/invoiceFactory.js"></script>
      <script src="scripts/factories/invoiceParamsFactory.js"></script>
 
-     <script src="scripts/factories/partnersFactory.js"></script>
+     <script src="scripts/factories/partnerFactory.js"></script>
 
 
      <script src="scripts/controllers/itemsController.js"></script>
@@ -103,15 +106,25 @@
      
      <script src="scripts/controllers/createInvoiceController.js"></script>
      <script src="scripts/controllers/createItemController.js"></script>
+     <script src="scripts/controllers/updateController.js"></script>
      <script src="scripts/util/dateFormatter.js"></script>
 
      <script src="scripts/controllers/UplataController.js"></script>
 
      <script src="scripts/factories/uplataFactory.js"></script>
 
+     
+     <script src="scripts/controllers/loginController.js"></script>
+     <script src="scripts/controllers/logoutController.js"></script>
+     <script src="scripts/factories/userFactory.js"></script>
+     <script src="scripts/factories/ownerFactory.js"></script>
+     
+
+
      <script src="scripts/controllers/PresekController.js"></script>
 
      <script src="scripts/factories/zahtevZaPresekFactory.js"></script>
+
      <!-- endbuild -->
    </body>
    </html>
