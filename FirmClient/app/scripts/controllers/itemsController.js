@@ -25,7 +25,12 @@ angular.module('items', ['resource.items', 'resource.item', 'resource.itemParams
 		$scope.goCreateItem = function(path) {
 			$location.path(path);
 		};
-
+		
+		$scope.update = function(path, redniBroj) {
+			ItemParams.setRedniBrojStavke(redniBroj);
+			$location.path(path);
+		};		
+		
 		$scope.remove = function(redniBroj) {
 			Item.delete({idDobavljaca : ItemParams.InvoiceParams.idDobavljaca, idFakture : ItemParams.InvoiceParams.idFakture, redniBroj : redniBroj}, function(){
 					

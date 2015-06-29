@@ -31,13 +31,20 @@
   'resource.invoiceParams',
   'resource.itemParams',
 
-  'resource.partners',
+  'resource.partner',
+  'resource.owner',
 
   'resource.uplata',
 
   
   'createInvoice',
-  'createItem'
+  'createItem',
+  'updateItem',
+  
+  'login',
+  'logout',
+  'resource.user'
+  
   ])
  .config(function ($routeProvider) {
   $routeProvider
@@ -45,8 +52,12 @@
     templateUrl: 'views/main.html',
     controller: 'MainCtrl'
   })
+  .when('/login', {
+    templateUrl: 'views/login.html',
+    controller: 'LoginCtrl'
+  })
   .when('/createInvoice',{
-  	templateUrl: 'views/createInvoice.html',
+  	templateUrl: 'views/create_invoice.html',
     controller: 'CreateInvoiceCtrl'
   })
   .when('/invoices',{
@@ -66,12 +77,20 @@
     controller: 'ItemCtrl'
   })
   .when('/createItem',{
-  	templateUrl: 'views/createItem.html',
+  	templateUrl: 'views/create_item.html',
     controller: 'CreateItemCtrl'
+  })
+  .when('/updateItem',{
+  	templateUrl: 'views/update.html',
+    controller: 'UpdateItemCtrl'
   })
   .when('/uplata',{
     templateUrl: 'views/uplata.html',
     controller: 'UplataController'
+  })
+  .when('/logout', {
+    templateUrl: 'views/login.html',
+    controller: 'LogoutCtrl'
   })
   .otherwise({
     redirectTo: '/'
