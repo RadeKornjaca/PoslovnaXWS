@@ -22,6 +22,7 @@
   'items',
   'item',
   'uplata',
+  'zahtevZaPresek',
 
   'resource.items',
   'resource.item',
@@ -35,6 +36,8 @@
   'resource.owner',
 
   'resource.uplata',
+
+  'resource.presek',
 
   
   'createInvoice',
@@ -91,6 +94,9 @@
   .when('/logout', {
     templateUrl: 'views/login.html',
     controller: 'LogoutCtrl'
+  .when('/presek',{
+    templateUrl: 'views/presek.html',
+    controller: 'PresekController'
   })
   .otherwise({
     redirectTo: '/'
