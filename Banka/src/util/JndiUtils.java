@@ -49,6 +49,13 @@ public class JndiUtils {
 	
 	public static final String BANKA_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
 			+ "BankaDao!sessionbeans.concrete.BankaDaoLocal";
+	
+	public static final String PRESEK_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+  "PresekDao!sessionbeans.concrete.PresekDaoLocal";
+	
+	public static final String RACUNBANKE_DAO = JAVA_GLOBAL + APP_NAME + APP_EJB
+			+  "RacunBankeDao!sessionbeans.concrete.RacunBankeDaoLocal";
+	
 	/**
 	 * Gets local EJB from JNDI.
 	 *
