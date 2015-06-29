@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;post&apos; in &apos;xmldb.InitDatabase.init()&apos; to &apos;put&apos;&#x0A;- Original project: &apos;ClientAPI&apos;&#x0A;- Original element: &apos;xmldb.InitDatabase.init().post&apos;&#x0A;- Renamed element: &apos;post&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;post&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;xmldb{InitDatabase.java[InitDatabase~init@post!1107!1161!1117!1120!QPutMethod;!0!false" name="put" references="true" stamp="1433893761600" version="1.0"/>
+</session>

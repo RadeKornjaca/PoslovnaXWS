@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kupac xmlns="PoslovnaXWS/Kupac"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="PoslovnaXWS/Kupac file:/C:/Users/Lazar/Desktop/Faks/PI/PoslovnaXWS/XMLSchemas/Dobavljac.xsd">
+    <naziv xmlns="PoslovnaXWS/Common">Kafana As</naziv>
+    <racun xmlns="PoslovnaXWS/Common">222-2222222222222-22</racun>
+    <model xmlns="PoslovnaXWS/Common">97</model>
+    <pozivNaBroj xmlns="PoslovnaXWS/Common">ADADAEDA</pozivNaBroj>
+    <pib xmlns="PoslovnaXWS/Common">35234515422</pib>
+    <adresa xmlns="PoslovnaXWS/Common">Beznadezna BB</adresa>
+    <id>35234515422</id>
+</kupac>

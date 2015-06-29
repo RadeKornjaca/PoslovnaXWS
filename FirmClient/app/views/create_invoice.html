@@ -1,0 +1,93 @@
+
+
+<div ng-controller="CreateInvoiceCtrl">
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8">
+				<form class="form-horizontal" role="form" ng-submit="submit()">
+					<div class="form-group">
+						 
+						<label for="id" class="col-sm-2 control-label">
+							ID
+						</label>
+						<div class="col-sm-7">
+							<input class="form-control" id="id" ng-model="id" type="text" />
+						</div>
+					</div>
+					
+					<!-- Combobox za dobavljaca -->
+					<select ng-repeat="partner in partners" ng-model="i">
+						<option value="$index">{{ partner.naziv }}</option>
+					</select>
+					
+					<div class="form-group">
+						 
+						<label for="brojRacuna" class="col-sm-3 control-label">
+							Broj računa
+						</label>
+						<div class="col-sm-5">
+							<input class="form-control" id="brojRacuna" ng-model="brojRacuna" type="text" />
+						</div>
+					</div>
+					
+					<!-- date picker za datum racuna -->
+					<div class="form-group">
+						<label for="datumRacuna" class="col-sm-3 control-label">Datum računa</label>
+						<div class="col-sm-7">
+							<div class="input-group">
+							
+								<input id="datumRacuna" type="date" placeholder="" class="form-control input-md ng-invalid ng-dirty ng-valid-date ng-valid-required ng-invalid-pattern ng-touched" required="" ng-model="datumRacuna" style="">
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="oznakaValute" class="col-sm-3 control-label">
+							Oznaka valute
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="Oznaka valute" ng-model="oznakaValute" type="text" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="uplataNaRacun" class="col-sm-3 control-label">
+							Uplata na račun
+						</label>
+						<div class="col-sm-7">
+							<input class="form-control" id="uplataNaRacun" ng-model="uplataNaRacun" type="text" />
+						</div>
+					</div>
+					
+					<!-- date picker za datum valute -->
+					<div class="form-group">
+						<label for="datumValute" class="col-sm-3 control-label">Datum valute</label>
+						<div class="col-sm-7">
+							<div class="input-group">
+								<input id="datumValute" type="date" placeholder="" class="form-control input-md ng-invalid ng-dirty ng-valid-date ng-valid-required ng-invalid-pattern ng-touched" required="" ng-model="datumValute" style="">
+							</div>
+						</div>
+					</div>
+					
+					<!-- kraj zaglavlja -->
+					
+					
+					<div class="form-group">
+						<div class="col-sm-offset-6 col-sm-10">
+							 
+							<button type="submit" class="btn btn-default">
+								Napravi fakturu
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-4">
+			</div>
+		</div>
+	</div>
+	
+</div>

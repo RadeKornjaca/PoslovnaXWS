@@ -1,0 +1,7 @@
+package sessionbeans.concrete;
+
+import sessionbeans.common.GenericDao;
+
+public class KupacDao extends GenericDao<Kupac, Long> {
+
+}

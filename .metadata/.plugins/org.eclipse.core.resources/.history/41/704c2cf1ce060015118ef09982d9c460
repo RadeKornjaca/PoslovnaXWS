@@ -1,0 +1,138 @@
+<project name="ClientAPI" default="main" basedir=".">
+
+	<property file="ant.properties" />
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="bin.dir" value="${basedir}/bin" />
+	<property name="data.dir" value="${basedir}/data" />
+	<property name="gen.dir" value="${basedir}/gen" />
+	<property name="metainf.dir" value="${src.dis/META-INF" />
+	<property name="webinf.dir" value="${src.dir}/WEB-INF" />
+
+
+	<!-- Koraci za pokretanje REST servisa -->
+
+	<target name="check-war-name" unless="war.name">
+		<fail>
+			Property "war.name" is not set. Please use the file
+			"ant.properties" in this directory ${basedir} to
+			set this property.
+		</fail>
+	</target>
+
+	<target name="check-tomee" unless="tomee.dir">
+		<fail>
+			Property "tomee.dir" is not set. Please use the file
+			"build.properties" in this directory ${basedir} to
+			set this property. It must point to the directory which
+			contains the following directory: "bin", "conf", "webapps"
+			etc.
+		</fail>
+	</target>
+
+	<target name="check-environment">
+		<antcall target="check-war-name" />
+		<antcall target="check-tomee" />
+	</target>
+
+	<target name="init" depends="check-environment">
+		<echo message="java.home = ${java.home}" />
+		<echo message="deploy.dir = ${tomee.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac destdir="${bin.dir}" debug="on">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<src path="${src.dir}" />
+		</javac>
+	</target>
+
+	<target name="copy-non-java" depends="compile" description="Copies non java files to bin directory">
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<!-- War -->
+	<target name="war" depends="compile">
+		<delete file="${war.name}" />
+		<war warfile="war/${war.name}" webxml="${webinf.dir}/web.xml">
+			<classes dir="${bin.dir}">
+				<include name="**/*.class" />
+			</classes>
+			<lib dir="${lib.dir}">
+				<include name="spring-*.jar" />
+				<include name="commons-httpclient-*.jar" />
+			</lib>
+			<webinf dir="${webinf.dir}">
+				<include name="cxf-servlet.xml" />
+			</webinf>
+		</war>
+	</target>
+
+	<!-- Jar -->
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist}" />
+		<jar destfile="${dist}/${jarname}">
+			<zipfileset dir="${metainf.dir}" prefix="META-INF">
+				<include name="persistence.xml" />
+			</zipfileset>
+			<zipfileset dir="${build}">
+				<include name="entity/common*.class" />
+				<include name="entity/fakture*.class" />
+				<include name="entity/result*.class" />
+			</zipfileset>
+		</jar>
+	</target>
+	
+	<!-- Ear -->
+	<target name="ear" depends="jar,war">
+		<mkdir dir="${dist}" />
+		<ear destfile="${dist}/${earname}" appxml="${build}/META-INF/application.xml">
+			<zipfileset dir="${dist}">
+				<include name="${jarname}" />
+				<include name="${warname}" />
+			</zipfileset>
+		</ear>
+	</target>
+
+	<target name="deploy" depends="ear">
+		<copy todir="${tomee.dir}/webapps">
+			<fileset dir="war" includes="${war.name}" />
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete file="war/${war.name}" />
+		<delete file="${tomee.dir}/webapps/${war.name}" />
+	</target>
+
+	<!-- Koraci za generisanje JaxB bean-ova -->
+
+	<!-- Task za generisanje objektnog modela na osnovu XSD seme -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${lib.dir}" includes="*.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="initJaxB">
+		<echo message="basedir = ${basedir}" />
+		<echo message="build.compiler = ${build.compiler}" />
+		<echo message="java.home = ${java.home}" />
+		<echo message="java.class.path = ${java.class.path}" />
+	</target>
+
+	<target name="generate_classes" depends="initJaxB">
+		<xjc schema="${data.dir}/Fakture.xsd" destdir="${gen.dir}" />
+	</target>
+
+	<!-- Main korak, odnosi se na deploy .war fajla na TomEE -->
+
+	<target name="main" depends="deploy" />
+</project>
