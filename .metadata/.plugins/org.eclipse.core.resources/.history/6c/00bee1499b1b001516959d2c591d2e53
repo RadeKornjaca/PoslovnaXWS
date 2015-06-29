@@ -1,0 +1,15 @@
+package entity.dobavljac;
+
+import java.util.ArrayList;
+
+public class Partneri {
+	private ArrayList<Dobavljac> partneri;
+
+	public ArrayList<Dobavljac> getPartneri() {
+		return partneri;
+	}
+
+	public void setPartneri(ArrayList<Dobavljac> partneri) {
+		this.partneri = partneri;
+	}
+}

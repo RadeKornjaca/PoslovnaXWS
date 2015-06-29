@@ -31,9 +31,15 @@ public class StavkaFaktureDao extends GenericDao<StavkaFakture, Long> implements
 	@Override
 	public StavkaFakture findByIdInFaktura(String idDobavljaca, Long idFakture, BigInteger redBr) {
 		Faktura faktura = null;
+		StavkaFakture stavka = null;
 		
 		try {
 			faktura = fakturaDao.findById(idFakture);
+			int index = redBr.intValue() - 1;
+			
+			if(index < faktura.getStavkeFakture().getStavkaFakture().size()) {
+				stavka = faktura.getStavkeFakture().getStavkaFakture().get(index);		//indeksiranje pocinje od nule
+			}
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,10 +47,7 @@ public class StavkaFaktureDao extends GenericDao<StavkaFakture, Long> implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		int index = redBr.intValue() - 1;
-		
-		StavkaFakture stavka = faktura.getStavkeFakture().getStavkaFakture().get(index);		//indeksiranje pocinje od nule
+
 		
 		return stavka;
 	}

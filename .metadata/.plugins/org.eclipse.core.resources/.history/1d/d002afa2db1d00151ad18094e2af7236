@@ -1,0 +1,4 @@
+jar.name=client-rest-ws.jar
+war.name=client-rest-ws.war
+ear.name=client-rest-ws.ear
+tomee.dir=C:/Program Files/apache-tomee-plus-1.5.0

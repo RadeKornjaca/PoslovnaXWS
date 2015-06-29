@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faktura xmlns="PoslovnaXWS/Fakture"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="PoslovnaXWS/Fakture file:/C:/Users/Rade/Desktop/PoslovnaXWS/XMLSchemas/Fakture.xsd" id="1">
+    <zaglavlje>
+        <id>1a</id>
+        <dobavljac>
+            <naziv xmlns="PoslovnaXWS/Common">Avakari</naziv>
+            <racun xmlns="PoslovnaXWS/Common">111-1111111111111-11</racun>
+            <model xmlns="PoslovnaXWS/Common">97</model>
+            <pozivNaBroj xmlns="PoslovnaXWS/Common">az</pozivNaBroj>
+            <pib xmlns="PoslovnaXWS/Common">14234512432</pib>
+            <adresa xmlns="PoslovnaXWS/Common">Karton</adresa>
+        </dobavljac>
+        <kupac>
+            <naziv xmlns="PoslovnaXWS/Common">Mengava</naziv>
+            <racun xmlns="PoslovnaXWS/Common">222-2222222222222-22</racun>
+            <model xmlns="PoslovnaXWS/Common">97</model>
+            <pozivNaBroj xmlns="PoslovnaXWS/Common">aze</pozivNaBroj>
+            <pib xmlns="PoslovnaXWS/Common">1523a241532</pib>
+            <adresa xmlns="PoslovnaXWS/Common">Dudara</adresa>
+        </kupac>
+        <brojRacuna>12</brojRacuna>
+        <datumRacuna>2006-06-01</datumRacuna>
+        <vrednostRobe>200</vrednostRobe>
+        <vrednostUsluge>200</vrednostUsluge>
+        <ukupnoRobaIUsluge>200</ukupnoRobaIUsluge>
+        <ukupanRabat>0</ukupanRabat>
+        <ukupanPorez>50</ukupanPorez>
+        <oznakaValute>RSD</oznakaValute>
+        <iznosZaUplatu>200</iznosZaUplatu>
+        <uplataNaRacun>111-1111111111111-11</uplataNaRacun>
+        <datumValute>2006-06-01</datumValute>
+    </zaglavlje>
+    <stavkeFakture>
+        <stavkaFakture tip="roba">
+            <RedniBroj>1</RedniBroj>
+            <NazivUsluge>Karton</NazivUsluge>
+            <Kolicina>5</Kolicina>
+            <JedinicaMere>kg</JedinicaMere>
+            <JedinicnaCena>40</JedinicnaCena>
+            <Vrednost>20</Vrednost>
+            <ProcenatRabata>0</ProcenatRabata>
+            <IznosRabata>0</IznosRabata>
+            <UmanjenoZarabat>0</UmanjenoZarabat>
+            <UkupanPorez>25</UkupanPorez>
+        </stavkaFakture>
+        <stavkaFakture tip="usluga">
+            <RedniBroj>2</RedniBroj>
+            <NazivUsluge>Berem Karton</NazivUsluge>
+            <Kolicina>5</Kolicina>
+            <JedinicaMere>kg</JedinicaMere>
+            <JedinicnaCena>40</JedinicnaCena>
+            <Vrednost>20</Vrednost>
+            <ProcenatRabata>0</ProcenatRabata>
+            <IznosRabata>0</IznosRabata>
+            <UmanjenoZarabat>0</UmanjenoZarabat>
+            <UkupanPorez>25</UkupanPorez>
+        </stavkaFakture>
+    </stavkeFakture>
+</faktura>

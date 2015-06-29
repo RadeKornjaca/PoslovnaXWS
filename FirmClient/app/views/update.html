@@ -1,0 +1,135 @@
+
+
+<div ng-controller="UpdateItemCtrl">
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8">
+				<form class="form-horizontal" role="form" ng-submit="submit()">
+					<div class="form-group">
+						 
+						<label for="redniBroj" class="col-sm-3 control-label">
+							Redni broj:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="redniBroj" ng-init="oldItem.redniBroj" ng-model="stavkaFakture.redniBroj" type="text" />
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						 
+						<label for="naziv" class="col-sm-3 control-label">
+							Naziv:
+						</label>
+						<div class="col-sm-5">
+							<input class="form-control" id="naziv" ng-model="stavkaFakture.naziv" type="text" />
+						</div>
+					</div>
+					
+					
+					<select ng-model="stavkaFakture.tip">
+						<option value="roba">roba</option>
+						<option value="usluga">usluga</option>
+					</select>
+					
+					<div class="form-group">
+						 
+						<label for="kolicina" class="col-sm-3 control-label">
+							Količina:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="kolicina" ng-model="stavkaFakture.kolicina" ng-init="stavkaFakture.kolicina=0" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="jedinicaMere" class="col-sm-3 control-label">
+							Jedinica mere:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="jedinicaMere" ng-model="stavkaFakture.jedinicaMere" type="text" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						 
+						<label for="jedinicnaCena" class="col-sm-3 control-label">
+							Jedinična cena:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="jedinicnaCena" ng-init="stavkaFakture.jedinicnaCena=0" ng-model="stavkaFakture.jedinicnaCena" type="number" />
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						 
+						<label class="col-sm-3 control-label">
+							Vrednost:
+						</label>
+						<label ng-model="stavkaFakture.vrednost" class="col-sm-2 control-label">
+							{{ stavkaFakture.vrednost = stavkaFakture.kolicina * stavkaFakture.jedinicnaCena }}
+						</label>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label for="procenatRabata" class="col-sm-3 control-label">
+							Procenat rabata:
+						</label>
+						<div class="col-sm-2">
+							<input class="form-control" id="procenatRabata" ng-init="stavkaFakture.procenatRabata=0" ng-model="stavkaFakture.procenatRabata" type="number" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						 
+						<label class="col-sm-3 control-label">
+							Iznos rabata: 
+						</label>
+						<label ng-model="stavkaFakture.iznosRabata" class="col-sm-2 control-label">
+							{{ stavkaFakture.iznosRabata = (stavkaFakture.procenatRabata / 100) * stavkaFakture.vrednost }}
+						</label>
+
+					</div>
+
+					<div class="form-group">
+						 
+						<label class="col-sm-3 control-label">
+							Umanjeno za rabat: 
+						</label>
+						<label ng-model="stavkaFakture.umanjenoZaRabat" class="col-sm-2 control-label">
+							{{ stavkaFakture.umanjenoZaRabat = stavkaFakture.vrednost - stavkaFakture.iznosRabata }}
+						</label>
+					</div>
+					
+					<div class="form-group">
+						
+						<label for="ukupanPorez" class="col-sm-3 control-label">
+							Ukupan porez:
+						</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="ukupanPorez" ng-model="stavkaFakture.ukupanPorez" type="number" />
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						<div class="col-sm-offset-6 col-sm-10">
+							 
+							<button type="submit" class="btn btn-default">
+								Izmeni stavku
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-4">
+			</div>
+		</div>
+	</div>
+	
+</div>

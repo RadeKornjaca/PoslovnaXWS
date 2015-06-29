@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.io.Serializable"/>
+<fullyQualifiedTypeName name="org.basex.data.Result"/>
+<fullyQualifiedTypeName name="xmldb.EntityManager"/>
+<fullyQualifiedTypeName name="java.util.ResourceBundle"/>
+<fullyQualifiedTypeName name="entity.fakture.Faktura.Zaglavlje"/>
+<fullyQualifiedTypeName name="java.math.BigDecimal"/>
+<fullyQualifiedTypeName name="java.io.OutputStream"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="org.apache.commons.io.IOUtils"/>
+<fullyQualifiedTypeName name="java.net.BindException"/>
+<fullyQualifiedTypeName name="javax.ws.rs.PUT"/>
+<fullyQualifiedTypeName name="javax.ws.rs.DELETE"/>
+<fullyQualifiedTypeName name="org.apache.commons.httpclient.util.HttpURLConnection"/>
+<fullyQualifiedTypeName name="java.net.URL"/>
+<fullyQualifiedTypeName name="java.net.HttpURLConnection"/>
+<fullyQualifiedTypeName name="java.net.URI"/>
+<fullyQualifiedTypeName name="entity.common.TFirma"/>
+<fullyQualifiedTypeName name="entity.fakture.Identifiable"/>
+<fullyQualifiedTypeName name="java.lang.Long"/>
+<fullyQualifiedTypeName name="entity.dobavljac.Dobavljac"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="entity.fakture.TStavkaFakture"/>
+<fullyQualifiedTypeName name="entity.result.Result"/>
+<fullyQualifiedTypeName name="java.math.BigInteger"/>
+<fullyQualifiedTypeName name="entity.stavkafakture.Stavka"/>
+<fullyQualifiedTypeName name="entity.fakture.StavkaFakture"/>
+<fullyQualifiedTypeName name="sessionbeans.concrete.StavkaFaktureDaoLocal"/>
+<fullyQualifiedTypeName name="entity.fakture.Faktura"/>
+<fullyQualifiedTypeName name="entity.fakture.Faktura.StavkeFakture"/>
+<fullyQualifiedTypeName name="entity.fakture.StavkeFakture"/>
+<fullyQualifiedTypeName name="sessionbeans.concrete.StavkeDaoLocal"/>
+<fullyQualifiedTypeName name="entity.result.Results"/>
+<fullyQualifiedTypeName name="sessionbeans.common.GenericDaoLocal"/>
+<fullyQualifiedTypeName name="entity.fakture.Fakture"/>
+<fullyQualifiedTypeName name="sessionbeans.concrete.FakturaDaoLocal"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="rest.FakturaService"/>
+<fullyQualifiedTypeName name="javax.ws.rs.core.Response.Status"/>
+<fullyQualifiedTypeName name="javax.ws.rs.core.Response"/>
+<fullyQualifiedTypeName name="javax.ws.rs.Produces"/>
+<fullyQualifiedTypeName name="javax.ws.rs.core.MediaType"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="entity.iface.Identifiable"/>
+</qualifiedTypeNameHistroy>

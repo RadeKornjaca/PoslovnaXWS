@@ -1,0 +1,14 @@
+'use strict';
+
+ angular.module('logout', ['resource.user'])
+ 	.controller('LogoutCtrl', function(User, $rootScope, $scope, $location, $log) {
+
+		$log.info(User.user.naziv);
+		
+		User.setUser(null);
+
+		$rootScope.ownerView = false;
+ 		$rootScope.loggedIn = true;
+
+		$location.path('/');
+ 	});

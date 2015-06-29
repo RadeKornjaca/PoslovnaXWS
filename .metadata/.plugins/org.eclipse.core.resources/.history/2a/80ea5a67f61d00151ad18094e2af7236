@@ -1,0 +1,8 @@
+package sessionbeans.concrete;
+
+import entity.dobavljac.Kupac;
+import sessionbeans.common.GenericDaoLocal;
+
+public interface KupacDaoLocal extends GenericDaoLocal<Kupac, Long> {
+
+}

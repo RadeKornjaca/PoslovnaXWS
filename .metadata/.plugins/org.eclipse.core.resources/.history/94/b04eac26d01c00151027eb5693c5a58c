@@ -1,0 +1,4 @@
+sifra=111
+url=http://localhost:8080/banka/services/
+namingUrl=http://localhost:8080/NamesRegistry/names/
+

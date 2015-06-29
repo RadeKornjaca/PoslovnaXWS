@@ -1,0 +1,33 @@
+'use strict';
+
+ angular.module('login', ['resource.partner', 'resource.user'])
+ 	.controller('LoginCtrl', function(Partner, User, $rootScope, $scope, $location, $log) {
+ 	
+ 		$scope.login = function() {
+ 			Partner.get({idDobavljaca : this.pib}).$promise.then(function(data) {
+ 				$log.info(data);
+ 				
+ 				var user = {
+ 					adresa : data.adresa,
+ 					id : data.id,
+ 					model : data.model,
+ 					naziv : data.naziv,
+ 					pib : data.pib,
+ 					pozivNaBroj : data.pozivNaBroj,
+ 					racun : data.racun
+ 				};
+ 				
+ 				$log.info($scope);
+ 				
+ 				
+ 				$rootScope.ownerView = false;
+ 				$rootScope.loggedIn = true;
+ 				
+ 				User.setUser(user);
+ 				$log.info(User.user.naziv + " se ulogovao");
+ 				
+ 				$location.path('/invoices');
+ 			});
+ 		};
+
+ 	});
