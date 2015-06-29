@@ -173,7 +173,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		if (status.getKod() != 0)
 			return status;
 		try{
-			RacunBanke racunBankePoverilac = racunBankeDao.findById(mt103.getUplata().getPrimalac().getPozivNaBroj());
+			RacunBanke racunBankePoverilac = racunBankeDao.findById(mt103.getUplata().getPrimalac().getRacun());
 			racunBankePoverilac.getStanjeRacuna().add(mt103.getUplata().getIznos());
 			racunBankeDao.merge(racunBankePoverilac, racunBankePoverilac.getId());
 		} catch(EJBException e){
