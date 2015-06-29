@@ -179,11 +179,13 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 		} catch(EJBException e){
 			status.setKod(5);
 			status.setOpis("Ne postoji racun duznika ili primalaca!");
-			e.printStackTrace();
+			//e.printStackTrace();
 			return status;
 		} catch(Exception e){
-			e.printStackTrace();
-			System.out.println("-----------------------OBICAN EXCEPTION-----------------------");
+			//e.printStackTrace();
+			status.setKod(5);
+			status.setOpis("Ne postoji racun duznika ili primalaca!");
+			//System.out.println("-----------------------OBICAN EXCEPTION-----------------------");
 		}
 		try {
 			mt103Dao.persist(new Poruka(mt103));
