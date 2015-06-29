@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,6 +41,7 @@ import poslovnaxws.banke.Preseci;
 import poslovnaxws.banke.Presek;
 import poslovnaxws.banke.Presek.StavkePreseka;
 import poslovnaxws.banke.Presek.Zaglavlje;
+import poslovnaxws.banke.RacunBanke;
 import poslovnaxws.banke.Uplata;
 import poslovnaxws.banke.ZahtevZaIzvod;
 import poslovnaxws.common.Status;
@@ -56,6 +58,8 @@ import sessionbeans.concrete.MT103DaoLocal;
 import sessionbeans.concrete.MT900DaoLocal;
 import sessionbeans.concrete.MT910DaoLocal;
 import sessionbeans.concrete.PreseciDaoLocal;
+import sessionbeans.concrete.PresekDaoLocal;
+import sessionbeans.concrete.RacunBankeDaoLocal;
 import sessionbeans.concrete.UplataDaoLocal;
 import util.JndiUtils;
 import xmldb.RequestMethod;
@@ -79,6 +83,8 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	@EJB
 	private PreseciDaoLocal presekDao = JndiUtils
 			.getLocalEJB(JndiUtils.PRESECI_DAO);
+	@EJB
+	private PresekDaoLocal presekDao1 = JndiUtils.getLocalEJB(JndiUtils.PRESEK_DAO);
 
 	@EJB
 	private MT900DaoLocal mt900Dao = JndiUtils.getLocalEJB(JndiUtils.MT900_DAO);
@@ -99,6 +105,9 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	@EJB
 	private BankaDaoLocal bankaDao = JndiUtils.getLocalEJB(JndiUtils.BANKA_DAO);
 
+	@EJB
+	private RacunBankeDaoLocal racunBankeDao = JndiUtils.getLocalEJB(JndiUtils.RACUNBANKE_DAO);
+	
 	private static final Logger LOG = Logger
 			.getLogger(BankaServiceMessagesImpl.class.getName());
 
@@ -163,7 +172,19 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 		if (status.getKod() != 0)
 			return status;
-
+		try{
+			RacunBanke racunBankePoverilac = racunBankeDao.findById(mt103.getUplata().getPrimalac().getPozivNaBroj());
+			racunBankePoverilac.getStanjeRacuna().add(mt103.getUplata().getIznos());
+			racunBankeDao.merge(racunBankePoverilac, racunBankePoverilac.getId());
+		} catch(EJBException e){
+			status.setKod(5);
+			status.setOpis("Ne postoji racun duznika ili primalaca!");
+			e.printStackTrace();
+			return status;
+		} catch(Exception e){
+			e.printStackTrace();
+			System.out.println("-----------------------OBICAN EXCEPTION-----------------------");
+		}
 		try {
 			mt103Dao.persist(new Poruka(mt103));
 
@@ -294,8 +315,7 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 	public Presek zahtevZaIzvod(ZahtevZaIzvod zahtevZaIzvod)
 			throws NotificationMessage {
 		System.out.println("Executing operation zahtevZaIzvod");
-		Preseci preseci = null;
-
+		//Preseci preseci = null;
 		poslovnaxws.common.Status status = validate(zahtevZaIzvod, BANKE_XSD);
 
 		// 0 = OK
@@ -309,22 +329,20 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 
 			System.out.println(zahtevZaIzvod.getDatum());
 			// Iz nekog razloga salje Z na kraju datuma
-			preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString()
-					.replace("Z", ""));
+			/*preseci = presekDao.findById(zahtevZaIzvod.getDatum().toString()
+					.replace("Z", ""));*/
+			
+			return presekDao1.getPresek(zahtevZaIzvod.getDatum(), zahtevZaIzvod.getBrojRacuna(), zahtevZaIzvod.getRedniBrojPreseka().intValue());
 
 			// Počinje od 1
-			int redniBroj = zahtevZaIzvod.getRedniBrojPreseka().intValue() - 1;
+			//int redniBroj = zahtevZaIzvod.getRedniBrojPreseka().intValue() - 1;
 
 			// Ako nema više, javi se exception-om (mora tako)
 			// Kod je 0 jer je sve ok.
-			if (redniBroj >= preseci.getPresek().size()) {
-				status.setKod(0);
-				status.setOpis("Ne postoji presek broj " + (redniBroj + 1)
-						+ " za datum: " + zahtevZaIzvod.getDatum().toString()
-						+ "; broj preseka: " + preseci.getPresek().size());
-				throw new NotificationMessage(status.getOpis(), status);
+			/*if (redniBroj >= preseci.getPresek().size()) {
+				
 			} else
-				return preseci.getPresek().get(redniBroj);
+				return preseci.getPresek().get(redniBroj);*/
 
 		} catch (NullPointerException e) {
 			status.setKod(5);
@@ -333,8 +351,8 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			NotificationMessage ex = new NotificationMessage(status.getOpis(),
 					status);
 			throw ex;
-		} catch (NotificationMessage e) {
-			throw e;
+		/*} catch (NotificationMessage e) {
+			throw e;*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			status.setKod(5);
@@ -367,6 +385,34 @@ public class BankaServiceMessagesImpl implements BankaServiceMessages {
 			// Ako je racun primaoca u istoj banci, nema slanja
 			if (nalog.getPrimalac().getRacun().substring(0, 3)
 					.equals(sifraBanke)) {
+				try{
+					RacunBanke racunBankeDuznik = racunBankeDao.findById(uplata.getNalog().getDuznik().getRacun());
+					RacunBanke racunBankePoverilac = racunBankeDao.findById(uplata.getNalog().getPrimalac().getRacun());
+					if(racunBankeDuznik.getStanjeRacuna().doubleValue() >= uplata.getNalog().getIznos().doubleValue()){
+						racunBankeDuznik.setStanjeRacuna(racunBankeDuznik.getStanjeRacuna().subtract(uplata.getNalog().getIznos()));
+						racunBankePoverilac.setStanjeRacuna(racunBankePoverilac.getStanjeRacuna().add(uplata.getNalog().getIznos()));
+						racunBankeDao.merge(racunBankeDuznik,racunBankeDuznik.getId());
+						System.out.println("Izmenjeno stanje racuna duznika");
+						racunBankeDao.merge(racunBankePoverilac, racunBankePoverilac.getId());
+						System.out.println("Izmenjeno stanje racuna poverioca");
+					}
+					else{
+						status.setKod(8);
+						status.setOpis("Racun duznika nema dovoljno sredstava!");
+						return status;
+					}
+				} catch(EJBException e){
+					status.setKod(5);
+					status.setOpis("Ne postoji racun duznika ili primalaca!");
+					e.printStackTrace();
+					return status;
+				} catch(Exception e){
+					status.setKod(8);
+					status.setOpis("Ne postoji racun duznika ili primalaca!");
+					System.out.println(status.getOpis());
+					return status;
+					//System.out.println("-----------------------OBICAN EXCEPTION-----------------------");
+				}
 				uplata.setSettled(true);
 				return status;
 			}

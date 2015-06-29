@@ -1,25 +1,20 @@
 package xmldb;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 
-import poslovnaxws.banke.Banka;
-import poslovnaxws.banke.Preseci;
-import poslovnaxws.common.TBanka;
-import sessionbeans.concrete.BankaDao;
-import sessionbeans.concrete.PreseciDao;
+import poslovnaxws.banke.RacunBanke;
+import sessionbeans.concrete.RacunBankeDao;
 
 /**
  * Klasa dodaje po jednog poslovnog partnera i jednu fakturu u [praznu] XML bazu
@@ -116,10 +111,56 @@ public final class InitDatabase {
 		}
 	}
 
+	public static void initRacuni(){
+		//Za racune-----------------------------------------------------
+		URL url;
+		try {
+			
+			url = new URL(REST_URL + "racuniBanke");
+			System.out.println(url);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestMethod(RequestMethod.PUT);
+			int responseCode = conn.getResponseCode();
+			String message = conn.getResponseMessage();
+			System.out.println("\n* HTTP response: " + responseCode + " ("
+					+ message + ')');
+			RacunBankeDao racunBankeDao = new RacunBankeDao();
+			RacunBanke racunBanke = new RacunBanke();
+			racunBanke.setRacunKlijenta("222-2222222222222-22");
+			racunBanke.setStanjeRacuna(new BigDecimal(200000));
+			System.out.println("Pre persista");
+			racunBankeDao.persist(racunBanke);
+			racunBanke = new RacunBanke();
+			racunBanke.setRacunKlijenta("222-3333333333333-33");
+			racunBanke.setStanjeRacuna(new BigDecimal(200000));
+			System.out.println("Pre persista");
+			racunBankeDao.persist(racunBanke);
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//--------------------------------------------------------------
+	}
+	
 	public static void main(String[] args) throws HttpException, IOException,
 			JAXBException {
 
-		URL url = new URL(REST_URL + "mt102");
+		
+		initRacuni();
+		
+		/*URL url = new URL(REST_URL + "mt102");
 
 		System.out.println(url);
 
@@ -219,6 +260,9 @@ public final class InitDatabase {
 
 		conn.disconnect();
 
+		
+		
+		
 		BankaDao bankaDao = new BankaDao();
 		Banka bankaWrapper = new Banka();
 		TBanka banka = new TBanka();

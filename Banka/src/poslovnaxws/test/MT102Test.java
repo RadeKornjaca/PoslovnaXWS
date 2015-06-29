@@ -34,7 +34,7 @@ public class MT102Test {
 
 	public static void main(String[] args) throws Exception {
 		URL wsdl;
-		wsdl = new URL("http://192.168.0.100:8080/banka/services/banka?wsdl");
+		wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
 
 		serviceName = new QName("PoslovnaXWS/services/banka", "BankaService");
 		portName = new QName("PoslovnaXWS/services/banka", "BankaServicePort");
@@ -70,11 +70,11 @@ public class MT102Test {
 		 * testInvalidMT102();
 		 */
 
-		 //testValidMT102();
+		 testValidMT102();
 
 		//testZahtev();
 
-		 testValidUplata();
+		 //testValidUplata();
 		
 		//banka.sendMT102();
 
@@ -109,7 +109,7 @@ public class MT102Test {
 
 	private static void testValidMT102() throws JAXBException {
 
-		File file = new File("C:/Users/Lazar/Desktop/Faks/test.xml");
+		File file = new File("E:/Za faks/XML TESTOVI/test.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

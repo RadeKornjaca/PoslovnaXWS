@@ -80,5 +80,9 @@ public class ObjectFactory {
     public Banka createBanka(){
     	return new Banka();
     }
+    
+    public RacunBanke createRacunBanke(){
+    	return new RacunBanke();
+    }
 
 }

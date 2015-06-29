@@ -4,7 +4,6 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 
 import poslovnaxws.banke.Banka;
-import poslovnaxws.common.TBanka;
 import sessionbeans.common.GenericDao;
 
 @Stateless
