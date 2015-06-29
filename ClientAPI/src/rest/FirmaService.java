@@ -43,6 +43,7 @@ import poslovnaxws.services.banka.NotificationMessage;
 import sessionbeans.concrete.DobavljacDaoLocal;
 import sessionbeans.concrete.FakturaDaoLocal;
 import sessionbeans.concrete.FaktureDaoLocal;
+import sessionbeans.concrete.KupacDaoLocal;
 import sessionbeans.concrete.StavkaFaktureDaoLocal;
 import sessionbeans.concrete.StavkeDaoLocal;
 
@@ -51,11 +52,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import entity.dobavljac.Partneri;
+import entity.dobavljac.Dobavljac;
 import entity.fakture.Faktura;
 import entity.fakture.Fakture;
 import entity.fakture.StavkaFakture;
 import entity.fakture.StavkeFakture;
+import entity.kupac.Kupac;
 
 @Path("/partneri")
 public class FirmaService {
@@ -71,6 +73,9 @@ public class FirmaService {
 
 	@EJB
 	private DobavljacDaoLocal dobavljacDao;
+	
+	@EJB
+	private KupacDaoLocal kupacDao;
 
 	@EJB
 	private StavkaFaktureDaoLocal stavkaDao;
@@ -661,14 +666,33 @@ public class FirmaService {
 	}
 
 	@GET
+	@Path("/{id_dobavljaca}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPartneri() {
+	public Response getPartner(@PathParam("id_dobavljaca")Long idDobavljaca) {
 		Response response;
-		Partneri result = new Partneri();
+		Dobavljac result = new Dobavljac();
 
 		try {
-			result.setPartneri(dobavljacDao.findAll());
+			result = dobavljacDao.findById(idDobavljaca);
+		} catch (IOException | JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		response = getResponsePack(result);
+		return response;
+	}
+	
+	@GET
+	@Path("/vlasnik/{id_kupca}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVlasnik(@PathParam("id_kupca")Long idKupca) {
+		Response response;
+		Kupac result = new Kupac();
+
+		try {
+			result = kupacDao.findById(idKupca);
 		} catch (IOException | JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

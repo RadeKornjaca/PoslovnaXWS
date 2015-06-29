@@ -60,12 +60,29 @@ public final class InitDatabase {
             put.releaseConnection();
         }
         
+		//	*****kreiranje vlasnika*****
+		url = new URL(REST_URL + "vlasnik");
+		
+		System.out.println(url);
+		
+		
+		conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+		
+		conn.setRequestMethod(RequestMethod.PUT);
+		
+		responseCode = conn.getResponseCode();
+		message = conn.getResponseMessage();
+		System.out.println("\n* HTTP response: " + responseCode + " (" + message + ')');
+		
+		conn.disconnect();
+        
         System.out.println("\n");
-        System.out.println("Sent HTTP PUT request to add bussiness partner");
+        System.out.println("Sent HTTP PUT request to add owner");
 
         input = new File("data/kupac_test.xml");
         
-        put = new PutMethod(REST_URL + "/whoami");
+        put = new PutMethod(REST_URL + "/vlasnik/35234515422");
         put.addRequestHeader(headerParameters[0][0] , headerParameters[0][1]);
         put.addRequestHeader(headerParameters[1][0] , headerParameters[1][1]);
         entity = new FileRequestEntity(input, "text/xml; charset=" + "UTF-8");

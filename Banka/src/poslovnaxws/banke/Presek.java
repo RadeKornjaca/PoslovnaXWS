@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.PersistenceContext;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import entity.iface.Identifiable;
 import poslovnaxws.common.TStavkaPreseka;
 
 /**
@@ -115,7 +117,7 @@ import poslovnaxws.common.TStavkaPreseka;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "zaglavlje", "stavkePreseka" })
 @XmlRootElement(name = "presek", namespace = "PoslovnaXWS/Banke")
-public class Presek {
+public class Presek implements Identifiable{
 
 	@XmlElement(required = true)
 	protected Presek.Zaglavlje zaglavlje;
@@ -569,5 +571,16 @@ public class Presek {
 		if (zaglavlje != null)
 			zaglavlje.updateZaglavlje(stavka);
 
+	}
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setId(String value) {
+		// TODO Auto-generated method stub
 	}
 }

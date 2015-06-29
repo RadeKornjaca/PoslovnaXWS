@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -40,6 +41,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import poslovnaxws.common.Status;
+import poslovnaxws.common.TNalog;
 import poslovnaxws.poruke.MT102;
 import poslovnaxws.poruke.MT103;
 import poslovnaxws.poruke.MT900;
@@ -218,9 +220,20 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		// 0 == OK
 		if (status.getKod() != 0)
 			return status;
-
+		double suma = 0;
+		for (TNalog nalog1 : mt102.getUplate().getUplata()) {
+			suma+=nalog1.getIznos().doubleValue();
+		}
+		if(mt102.getUkupanIznos().doubleValue() != suma){
+			status.setKod(11);
+			status.setOpis("Suma iznosa svih naloga nije jednaka ukupnoj sumi!");
+			return status;
+		}
+		
+		
 		Nalog nalog = null;
 		Object[] st = (Object[]) mt102Base.getStavkaPoruke().toArray();
+		
 		nalog = ((StavkaPoruke)st[0]).getNalog();			//Treba nam prvi nalog za model odobrenja i tako te stvari
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -236,8 +249,20 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		
 		try{
 			RacunBanke racunBankeDuznika = racunBankeDao.findByBrojRacuna(mt102Base.getRacunBankeDuznika().getBrojRacuna());
+			if(!racunBankeDuznika.getBanka().getSwiftKod().equals(mt102Base.getRacunBankeDuznika().getBanka().getSwiftKod())){
+				status.setKod(12);
+				status.setOpis("Swift kod banke duznika se ne poklapa sa onim u poruci!");
+				System.out.println(status.getOpis());
+				return status;
+			}
+			RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(mt102Base.getRacunBankePoverioca().getBrojRacuna());
+			if(!racunBankePoverioca.getBanka().getSwiftKod().equals(mt102Base.getRacunBankePoverioca().getBanka().getSwiftKod())){
+				status.setKod(12);
+				status.setOpis("Swift kod banke poverioca se ne poklapa sa onim u poruci!");
+				System.out.println(status.getOpis());
+				return status;
+			}
 			if(racunBankeDuznika.getStanjeRacuna()>= mt102Base.getUkupanIznos() && racunBankeDuznika.isAktivan() && racunBankeDuznika.isLikvidan()){
-				RacunBanke racunBankePoverioca = racunBankeDao.findByBrojRacuna(mt102Base.getRacunBankePoverioca().getBrojRacuna());
 				if(racunBankePoverioca.isAktivan() && racunBankePoverioca.isLikvidan()){
 					mt102Base.setRacunBankeDuznika(racunBankeDuznika);
 					mt102Base.setRacunBankePoverioca(racunBankePoverioca);
@@ -273,7 +298,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 		} catch(EJBException e){
 			e.printStackTrace();
 			System.out.println("EJB exception");
-			status.setOpis("EJB exception");
+			status.setOpis("Nema banke sa tim racunom");
 			return status;
 		} catch (Exception e){
 			e.printStackTrace();
@@ -304,6 +329,13 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 			Banka bankaDuznika = bankaDao.findBanka(mt10xBase.getRacunBankeDuznika().getBanka().getNaziv());
 			Banka bankaPoverioca = bankaDao
 					.findBanka(mt10xBase.getRacunBankePoverioca().getBanka().getNaziv());
+			if(!bankaDuznika.getSwiftKod().equals(mt10xBase.getRacunBankeDuznika().getBanka().getSwiftKod()) || 
+					!bankaPoverioca.getSwiftKod().equals(mt10xBase.getRacunBankePoverioca().getBanka().getSwiftKod())){
+				Status status = new Status();
+				status.setKod(10);
+				status.setOpis("Banke sa datim swift kodom ne postoje u bazi");
+				return status;
+			}
 			bankaDuznika = bankaDao
 					.getAllCollections(bankaDuznika.getBankaId());
 			bankaPoverioca = bankaDao.getAllCollections(bankaPoverioca
@@ -667,6 +699,7 @@ public class CentralnaBankaImpl implements CentralnaBanka {
 
 		// Poverilac
 		banka = createBankaService(String.valueOf(mt10x.getRacunBankePoverioca().getBanka().getSifra()));
+		System.out.println(nalog.getIznos() + "NALOG-------------------------------------");
 		status = banka.receiveMT910(new MT910(mt910, nalog));
 
 		if (status.getKod() != 0)

@@ -5,21 +5,24 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th ng-click="order('zaglavlje.id')">
+							<th ng-click="order('redniBroj')">
 								Redni broj
-								<span ng-show="predicate === 'zaglavlje.id'" class="{{ cssClass }}"></span>
+								<span ng-show="predicate === 'redniBroj'" class="{{ cssClass }}"></span>
 							</th>
-							<th ng-click="order('zaglavlje.iznosZaUplatu')">
+							<th ng-click="order('nazivUsluge')">
 								Naziv usluge
-								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
+								<span ng-show="predicate === 'nazivUsluge'" class="{{ cssClass }}"></span>
 							</th>
-							<th ng-click="order('zaglavlje.iznosZaUplatu')">
+							<th ng-click="order('tip')">
 								Tip
-								<span ng-show="predicate === 'zaglavlje.iznosZaUplatu'" class="{{ cssClass }}"></span>
+								<span ng-show="predicate === 'tip'" class="{{ cssClass }}"></span>
 							</th>
-							<th ng-click="order('zaglavlje.datumRacuna')">
+							<th ng-click="order('kolicina')">
 								Kolicina
-								<span ng-show="predicate === 'zaglavlje.datumRacuna'" class="{{ cssClass }}"></span>
+								<span ng-show="predicate === 'kolicina'" class="{{ cssClass }}"></span>
+							</th>
+							<th>
+								Izmena
 							</th>
 							<th>
 								Brisanje
@@ -27,7 +30,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items"> <!--| orderBy:predicate:reverse-->
+						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items | orderBy:predicate:reverse">
 							<td>
 								{{ item.redniBroj }}
 							</td>
@@ -40,7 +43,10 @@
 							<td>
 								{{ item.kolicina }}
 							</td>
-							<td ng-click="remove()" stop-event='click'>
+							<td ng-click="update('/updateItem',item.redniBroj)" stop-event='click'>
+								<span class="glyphicon glyphicon-pencil"></span>
+							</td>
+							<td ng-click="remove(item.redniBroj)" stop-event='click'>
 								<span class="glyphicon glyphicon-remove"></span>
 							</td>
 						</tr>
