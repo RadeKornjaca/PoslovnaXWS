@@ -25,6 +25,7 @@ import poslovnaxws.common.TNaseljenoMesto;
 import poslovnaxws.services.centralnabanka.CBClientService;
 import util.EntityInfoUtil;
 import util.Restifyable;
+import util.annotations.Regex;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,9 +43,11 @@ public class Drzava implements Restifyable {
 	@Column(name = "id_drzave", unique = true, nullable = false)
 	private long idDrzave;
 	/** @pdOid bf16e7af-a44e-4777-8693-676d9c1efd6c */
+	@Regex(pattern="[A-Z]")
 	@Column(name = "sifra_drzave", unique = true, nullable = false)
 	private java.lang.String sifraDrzave;
 	/** @pdOid 71d0d54c-a123-4e5e-8452-8844f7551592 */
+	@Regex(pattern="([A-Z]?[a-z]+)+")
 	@Column(name = "naziv_drzave", unique = true, nullable = false)
 	private java.lang.String nazivDrzave;
 

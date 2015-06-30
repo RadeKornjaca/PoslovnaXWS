@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * Klasa MetaData opisuje imena atributa entiteta, njihove tipove i ogranicenja
  * nad tim atributima.

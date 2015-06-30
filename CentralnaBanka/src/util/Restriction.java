@@ -1,7 +1,7 @@
 package util;
 
 /**
- * Opisuje ogranièenja nad obeležjem baze. Služi za slanje podataka potrebnih za
+ * Opisuje ograniï¿½enja nad obeleï¿½jem baze. Sluï¿½i za slanje podataka potrebnih za
  * generisanje forme u Angularjs aplikaciji.
  * 
  * @author Lazar
@@ -12,16 +12,19 @@ public class Restriction {
 	private int length;
 	private boolean nullable;
 	private boolean unique;
-
+	private String regex;
+	
 	public Restriction() {
 
 	}
 
-	public Restriction(int length, boolean nullable, boolean unique) {
+	public Restriction(int length, boolean nullable, boolean unique,
+			String regex) {
 		super();
 		this.length = length;
 		this.nullable = nullable;
 		this.unique = unique;
+		this.regex = regex;
 	}
 
 	public int getLength() {
@@ -47,5 +50,15 @@ public class Restriction {
 	public void setUnique(boolean unique) {
 		this.unique = unique;
 	}
+
+	public String getRegex() {
+		return regex;
+	}
+
+	public void setRegex(String regex) {
+		this.regex = regex;
+	}
+
+	
 
 }

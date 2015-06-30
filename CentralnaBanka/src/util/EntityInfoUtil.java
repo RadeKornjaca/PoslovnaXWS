@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import util.annotations.Regex;
+
 /**
  * Klasa sadrÅ¾i metodu koja vraÄ‡a polja entiteta u bazi podataka. Neophodna je
  * jer spoljna klasa ne moÅ¾e da pristupi privatnim atributima.
@@ -47,8 +49,9 @@ public final class EntityInfoUtil {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(Column.class)) {
 				Column column = field.getAnnotation(Column.class);
+				Regex regex = field.getAnnotation(Regex.class);
 				Restriction restriction = new Restriction(column.length(),
-						column.nullable(), column.unique());
+						column.nullable(), column.unique(), regex.pattern());
 				ret.add(new MetaData(field, restriction));
 			} else if (field.isAnnotationPresent(OneToMany.class)
 					|| field.isAnnotationPresent(ManyToMany.class)
@@ -64,17 +67,17 @@ public final class EntityInfoUtil {
 	/**
 	 * 
 	 * @param params
-	 *            - kljuè je ime polja po kojoj se pristupa vrednosti upita. <br>
-	 *            Npr. "nazivDrzave" je kljuè, "Srbija" je vrednost, a
-	 *            rezultujuæi upit je: <br>
+	 *            - kljuï¿½ je ime polja po kojoj se pristupa vrednosti upita. <br>
+	 *            Npr. "nazivDrzave" je kljuï¿½, "Srbija" je vrednost, a
+	 *            rezultujuï¿½i upit je: <br>
 	 * <br>
 	 *            <i>nazivDrzave like 'Srbija'</i>.
 	 *            <p>
-	 *            REST upit za filtriranje je sledeæeg oblika: <br>
+	 *            REST upit za filtriranje je sledeï¿½eg oblika: <br>
 	 *            <i>adresaServera/entitet?polje1=vrednost1&polje2=vrednost2</i>
 	 *            </p>
 	 *            <p>
-	 *            Može se ubaciti i sortiranje: <br>
+	 *            Moï¿½e se ubaciti i sortiranje: <br>
 	 *            <i>adresaServera/entitet?polje1=vrednost1&sort=polje1:asc,
 	 *            polje2:desc</i>
 	 *            </p>
@@ -90,8 +93,8 @@ public final class EntityInfoUtil {
 		String tableName = clazz.getSimpleName();
 
 		/*
-		 * Služi za proveru da li su parametri ispravni Npr. ako params sadrži
-		 * idDrzave, sa contains æe se proveriti da li idDrzave postoji kao
+		 * Sluï¿½i za proveru da li su parametri ispravni Npr. ako params sadrï¿½i
+		 * idDrzave, sa contains ï¿½e se proveriti da li idDrzave postoji kao
 		 * polje entiteta
 		 */
 		HashMap<String, MetaData> fields = new HashMap<String, MetaData>();
@@ -99,7 +102,7 @@ public final class EntityInfoUtil {
 		String sort = null;
 
 		/*
-		 * Sort se nalazi u parametrima, ali ne uèestvuje kao polje u select
+		 * Sort se nalazi u parametrima, ali ne uï¿½estvuje kao polje u select
 		 * naredbi, pa se izbacuje iz parametara.
 		 */
 		if (params.containsKey("sort")) {
@@ -123,7 +126,7 @@ public final class EntityInfoUtil {
 			}
 
 			// Formiranje select naredbe
-			// Prvo se upisuju polja koja se èitaju
+			// Prvo se upisuju polja koja se ï¿½itaju
 			while (it.hasNext()) {
 				String field = it.next();
 				if (fields.containsKey(field)) {
