@@ -16,6 +16,8 @@ public class Mt10xDaoBean extends GenericDaoBean<Mt10x, Integer> implements Mt10
 	@Override
 	public Mt10x getAllCollections(long id) {
 		Mt10x mt10x = em.find(Mt10x.class, id);
+		if (mt10x == null)
+			return null;
 		mt10x.getStavkaPoruke().size();
 		//mt10x.getMt9xy().size();
 		return mt10x;

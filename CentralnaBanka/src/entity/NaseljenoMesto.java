@@ -41,8 +41,8 @@ public class NaseljenoMesto implements Restifyable {
 	@Column(name = "id_mesta", unique = true, nullable = false)
 	private long idMesta;
 	/** @pdOid df0b8df9-75df-43a0-8f53-322631fc2db2 */
-	@Regex(pattern="[A-Za-z]{3}")
-	@Column(name = "sifra_mesta", unique = true, nullable = false)
+	@Regex(pattern="[A-Za-z0-9]{3}")
+	@Column(name = "sifra_mesta", unique = true, nullable = false, length = 3)
 	private java.lang.String sifraMesta;
 	/** @pdOid 34d8a4d0-b62c-41a0-94a7-e685a50a5800 */
 	@Column(name = "naziv_mesta", unique = true, nullable = false)

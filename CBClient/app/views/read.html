@@ -1,5 +1,5 @@
 <!--Polja su opisana u $scope.meta, a sami podaci su u $scope.data-->
-<p>
+<div class = "row">
 	<div>
 
 		<div class="col-xs-8 ">
@@ -22,7 +22,8 @@
 		</div>
 	</div>
 </p>
-<p>
+</div>
+<div class = "row">
 	<table class="table table-striped table-bordered table-hover">
 		<!-- Za svako polje entiteta, napravi header. -->
 		<th ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
@@ -45,4 +46,4 @@
 		</td>
 	</tr>
 </table>
-</p>
+</div>

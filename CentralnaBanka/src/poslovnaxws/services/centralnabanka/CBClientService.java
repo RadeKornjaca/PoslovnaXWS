@@ -1,7 +1,14 @@
 package poslovnaxws.services.centralnabanka;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -16,7 +23,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
+import poslovnaxws.common.Status;
 import session.dao.BankaDaoLocal;
 import session.dao.DnevnoStanjeRacunaDaoLocal;
 import session.dao.DrzavaDaoLocal;
@@ -634,7 +644,9 @@ public class CBClientService {
 		Mt10x value = mt10xDao.findById(id);
 
 		if (value != null) {
-
+			if (value.getVrsta() != 102) {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
 			ret.addData(value.restify());
 
 			ret.setMeta(EntityInfoUtil.getFields(Mt10x.class));
@@ -644,9 +656,8 @@ public class CBClientService {
 			ObjectNode json = objectMapper.valueToTree(ret);
 			return Response.ok(json.toString()).build();
 
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
 		}
+		return Response.status(Response.Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -657,11 +668,13 @@ public class CBClientService {
 		Mt10x value = mt10xDao.findById(id);
 
 		if (value != null) {
+			if (value.getVrsta() != 103) {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
 
 			ret.addData(value.restify());
 
 			ret.setMeta(EntityInfoUtil.getFields(Mt10x.class));
-
 			ObjectMapper objectMapper = new ObjectMapper();
 
 			ObjectNode json = objectMapper.valueToTree(ret);
@@ -680,6 +693,10 @@ public class CBClientService {
 		Mt9xy value = mt9xyDao.findById(id);
 
 		if (value != null) {
+			
+			if (value.getVrsta() != 900) {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
 
 			ret.addData(value.restify());
 
@@ -703,6 +720,10 @@ public class CBClientService {
 		Mt9xy value = mt9xyDao.findById(id);
 
 		if (value != null) {
+			
+			if (value.getVrsta() != 910) {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
 
 			ret.addData(value.restify());
 
@@ -833,53 +854,53 @@ public class CBClientService {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
-	
+
 	@GET
 	@Path("/{id}/banka/racunBanke")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getRacuniForBanka(@PathParam(value = "id") int id) {
 		Wrapper ret = new Wrapper();
 		Banka value = bankaDao.getAllCollections(id);
-		
-		if(value != null) {
-			for(RacunBanke rb : value.getRacunBanke()) {
+
+		if (value != null) {
+			for (RacunBanke rb : value.getRacunBanke()) {
 				ret.addData(rb.restify());
 			}
-			
+
 			ret.setMeta(EntityInfoUtil.getFields(RacunBanke.class));
-			
+
 			ObjectMapper objectMapper = new ObjectMapper();
-			
+
 			ObjectNode json = objectMapper.valueToTree(ret);
 			return Response.ok(json.toString()).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
-	
+
 	@GET
-	@Path("/{id}/mt10x/stavka")
+	@Path("/{id}/mt10x/stavkaPoruke")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStavkaForMt10x(@PathParam(value = "id") int id) {
 		Wrapper ret = new Wrapper();
 		Mt10x value = mt10xDao.getAllCollections(id);
-		
-		if(value != null) {
-			for(StavkaPoruke sp : value.getStavkaPoruke()) {
+
+		if (value != null) {
+			for (StavkaPoruke sp : value.getStavkaPoruke()) {
 				ret.addData(sp.restify());
 			}
-			
+
 			ret.setMeta(EntityInfoUtil.getFields(StavkaPoruke.class));
-			
+
 			ObjectMapper objectMapper = new ObjectMapper();
-			
+
 			ObjectNode json = objectMapper.valueToTree(ret);
 			return Response.ok(json.toString()).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
-	
+
 	@POST
 	@Path("/{id}/naseljenoMesto/drzava")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -950,6 +971,40 @@ public class CBClientService {
 		}
 		return Response.ok().build();
 	}
+	
+	@DELETE
+	@Path("/{id}/racunBanke")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response removeRacun(@PathParam(value = "id") int id) {
+		RacunBanke value = racunDao.findById(id);
+
+		if (value != null) {
+
+			racunDao.remove(value);
+
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Path("/kliring")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response kliring() {
+		CentralnaBanka cb = createBankaService();
+		
+		Status status = cb.doClearing();
+		
+		if (status.getKod() != 0) {
+
+			return Response.status(Response.Status.BAD_REQUEST).build();
+
+		} else {
+			return Response.ok().build();
+		}
+	}
+
 
 	/**
 	 * Pomocna metoda koja vraca sve entitete prosledjene klase na osnovu upita.
@@ -1001,4 +1056,47 @@ public class CBClientService {
 		return json.toString();
 	}
 
+	private CentralnaBanka createBankaService() {
+	
+		Properties prop = new Properties();
+	
+		InputStream propInput = null;
+	
+		try {
+			propInput = new FileInputStream(
+					"../webapps/CentralnaBanka/CentralnaBanka/WEB-INF/config.properties");
+			prop.load(propInput);
+		} catch (IOException e1) {
+			// e1.printStackTrace();
+			return null;
+		}
+	
+		URL url, wsdl;
+		try {
+	
+			url = new URL(prop.getProperty("url"));
+		
+			QName serviceName = new QName(
+					"PoslovnaXWS/services/centralnaBanka", "CBService");
+			QName portName = new QName("PoslovnaXWS/services/centralnaBanka",
+					"CentralnaBankaPort");
+	
+			wsdl = new URL(url + "CBService?wsdl");
+	
+			Service service = Service.create(wsdl, serviceName);
+			
+	
+			return service.getPort(portName, CentralnaBanka.class);
+	
+		} catch (MalformedURLException e1) {
+			// e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+		}
+	
+		return null;
+	
+	}
+	
 }

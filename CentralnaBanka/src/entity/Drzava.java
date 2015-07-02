@@ -43,7 +43,8 @@ public class Drzava implements Restifyable {
 	@Column(name = "id_drzave", unique = true, nullable = false)
 	private long idDrzave;
 	/** @pdOid bf16e7af-a44e-4777-8693-676d9c1efd6c */
-	@Column(name = "sifra_drzave", unique = true, nullable = false)
+	@Regex(pattern="[A-Za-z0-9]{3}")
+	@Column(name = "sifra_drzave", unique = true, nullable = false, length = 3)
 	private java.lang.String sifraDrzave;
 	/** @pdOid 71d0d54c-a123-4e5e-8452-8844f7551592 */
 	@Column(name = "naziv_drzave", unique = true, nullable = false)

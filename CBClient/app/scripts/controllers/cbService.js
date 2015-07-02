@@ -27,7 +27,7 @@
 
 		var deleteResource = function(type, id){
 
-			return $http.delete(restURL+id+type).then(function(response){
+			return $http.delete(restURL+'/'+id+type).then(function(response){
 				return response.data;
 			});
 		}
@@ -47,12 +47,19 @@
 				return response.data;
 			});
 		};
+		var doKliring = function(){
+			return $http.put(restURL+'/kliring').then(function(response){
+				return response.data;
+			});
+		}
 		return {
 			getResource : getResource,
 			getResourceFiltered : getResourceFiltered,
 			getResourceById: getResourceById,
 			editResource: editResource,
 			newResource : newResource,
+			deleteResource : deleteResource,
+			doKliring : doKliring,
 			restURL : restURL
 		};
 	};

@@ -127,6 +127,22 @@
     templateUrl: 'views/zoom.html',
     controller: 'ReadOnlyCtrl'
   })
+  .when('/:id/drzava/naseljenoMesto', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+  .when('/:id/banka/racunBanke', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+  .when('/:id/mt10x/stavkaPoruke', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+  .when('/kliring', {
+    templateUrl: 'views/kliring.html',
+    controller: 'KliringCtrl'
+  })
   .otherwise({
     redirectTo: '/'
   })

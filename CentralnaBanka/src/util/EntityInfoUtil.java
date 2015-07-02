@@ -69,6 +69,13 @@ public final class EntityInfoUtil {
 				ret.add(new MetaData(field, restriction));
 			}
 		}
+		//Rekurzivno kroz čitavo stablo nasleđivanja
+		if (Restifyable.class.isAssignableFrom(clazz.getSuperclass())){
+			List<MetaData> parentMeta = getFields(clazz.getSuperclass());
+			for (MetaData meta : parentMeta){
+				ret.add(meta);
+			}
+		}
 		return ret;
 	}
 

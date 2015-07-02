@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-	var ReadOnlyCtrl = function($scope, $routeParams, $route, $location, cbService) {
+	var CollectionCtrl = function($scope, $routeParams, $route, cbService) {
 
 		//search.term - Kriterijum pretrage
 		//search.field - Polje po kom se pretražujea
@@ -72,7 +72,7 @@
 		};
 
 		var onError = function(reason) {
-			$scope.error = "Neuspešna operacija: " + reason.statusText;
+			$scope.error = "Could not fetch the data, reason: " + reason.statusText;
 		};
 
 		$scope.search = function() {
@@ -103,14 +103,6 @@
 	$scope.setSearchField = function(field){
 		$scope.searchParams.field = field;
 	};
-
-	$scope.newEntry = function(){
-		$location.path($scope.type + '/new');
-	}
-
-	$scope.deleteEntry = function(id, type){
-		cbService.deleteResource(type, id).then(function(){ location.reload() }, onError);
-	}
 
 	$scope.sort = function(field){
 
@@ -149,12 +141,12 @@
 		 */
 		 var route = $route.current.$$route.originalPath.split("/");
 
-		 $scope.type = "/"+route[route.length - 1];
+		 var id = $routeParams.id;
 
-		 cbService.getResource($scope.type).then(onResourceComplete, onError);
+		 cbService.getResource("/"+id+"/"+route[2]+"/"+route[3]).then(onResourceComplete, onError);
 		};
 
 		var app = angular.module("cbApp");
-		app.controller("ReadOnlyCtrl", ReadOnlyCtrl);
+		app.controller("CollectionCtrl", CollectionCtrl);
 
 	}());

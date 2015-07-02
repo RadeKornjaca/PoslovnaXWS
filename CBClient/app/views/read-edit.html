@@ -1,5 +1,5 @@
 <!--Polja su opisana u $scope.meta, a sami podaci su u $scope.data-->
-<p>
+<div class = "row">
 	<div>
 
 		<div class="col-xs-8 ">
@@ -21,7 +21,10 @@
 			</div>
 		</div>
 	</div>
-</p>
-<p>
+</div>
+<div class = "row">
 	<div ng-include="'views/table.html'"></div>
-</p>
+</div>
+<div class = "row">
+	<button class = "btn btn-success" ng-click="newEntry()"><i class="glyphicon glyphicon-plus" ></i> Novi</button>
+</div>

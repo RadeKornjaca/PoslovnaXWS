@@ -22,7 +22,9 @@
 		</td>
 		<td>
 			<a ng-href = "#/{{entry[idField]}}{{type}}/"><span class="glyphicon glyphicon-pencil"></span></a>
-			<a ng-href = "#/{{entry[idField]}}{{type}}"><span class="glyphicon glyphicon-trash"></span></a>
+			<a href = "javascript:void(0)" ng-click = "deleteEntry('{{entry[idField]}}','{{type}}')">
+				<span class="glyphicon glyphicon-trash"></span>
+			</a>
 		</td>
 	</tr>
 </table>

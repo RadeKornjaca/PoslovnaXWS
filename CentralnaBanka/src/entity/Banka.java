@@ -57,6 +57,7 @@ public class Banka implements Restifyable {
 	 *             coll=java.util.Collection impl=java.util.HashSet mult=0..*
 	 *             side=A
 	 */
+	@JsonIgnore
 	@OneToMany(cascade = { ALL }, fetch = LAZY, mappedBy = "banka")
 	private java.util.Collection<RacunBanke> racunBanke = new HashSet<RacunBanke>();
 
@@ -121,6 +122,7 @@ public class Banka implements Restifyable {
 	 * @pdGenerated default setter
 	 * @param newRacunBanke
 	 */
+	@JsonIgnore
 	public void setRacunBanke(java.util.Collection<RacunBanke> newRacunBanke) {
 		removeAllRacunBanke();
 		for (java.util.Iterator iter = newRacunBanke.iterator(); iter.hasNext();)
