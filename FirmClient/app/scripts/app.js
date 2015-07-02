@@ -94,6 +94,7 @@
   .when('/logout', {
     templateUrl: 'views/login.html',
     controller: 'LogoutCtrl'
+  })
   .when('/presek',{
     templateUrl: 'views/presek.html',
     controller: 'PresekController'

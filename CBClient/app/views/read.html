@@ -36,7 +36,12 @@
 	svim njegovim poljima -->
 	<tr ng-repeat="entry in entries">
 		<td ng-repeat="metaItem in meta" ng-if="metaItem.type != 'id'">
+		<div ng-show="metaItem.type == 'link' || metaItem.type == 'zoom'">
+			<a ng-href="{{entry[metaItem.name]}}">{{metaItem.name}}</a>
+		</div>
+		<div ng-show="metaItem.type != 'link' && metaItem.type != 'zoom'">
 			{{entry[metaItem.name]}}
+		</div>
 		</td>
 	</tr>
 </table>

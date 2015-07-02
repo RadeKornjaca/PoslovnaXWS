@@ -48,10 +48,18 @@ public final class EntityInfoUtil {
 		for (Field field : fields) {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(Column.class)) {
+				Regex regex = null;
+				if (field.isAnnotationPresent(Regex.class)){
+					regex = field.getAnnotation(Regex.class);
+				}
 				Column column = field.getAnnotation(Column.class);
-				Regex regex = field.getAnnotation(Regex.class);
+				
 				Restriction restriction = new Restriction(column.length(),
-						column.nullable(), column.unique(), regex.pattern());
+						column.nullable(), column.unique());
+				
+				if (regex != null)
+					restriction.setRegex(regex.pattern());
+				
 				ret.add(new MetaData(field, restriction));
 			} else if (field.isAnnotationPresent(OneToMany.class)
 					|| field.isAnnotationPresent(ManyToMany.class)

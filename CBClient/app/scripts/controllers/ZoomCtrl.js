@@ -1,53 +1,51 @@
 'use strict';
 
 (function() {
-	var ZoomCtrl = function($scope, $routeParams, $route, cbService) {
+	var ZoomCtrl = function(ZoomService, $scope, $routeParams, $window, $route, cbService) {
 
-		var onResourceComplete = function(data) {
+
+		$scope.error = false;
+		$scope.success = false;
+
+		var onError = function(reason) {
+			$scope.response = "Neuspešno učitavanje podataka: " + reason.status +" "+ reason.statusText;
+			$scope.error = true;
+			$scope.success = false;
+			$scope.isZoom = false;
+		};
+
+		var onErrorSend = function(reason){
+			$scope.response = "Neuspešna izmena podataka: " + reason.status + reason.statusText;
+			$scope.error = true;
+			$scope.success = false;
+		};
+
+		var onSuccessSend = function(){
+			$scope.response = "Uspešna izmena podataka."
+			$scope.error = false;
+			$scope.success = true;
+		};
+
+
+		$scope.pick = function(){
 
 			var idField = $scope.$parent.idField;
 
 			//Izvlaci se samo id, posto su dodati linkovi umesto objekata
-			var picked = $scope.$parent.selectedEntry[idField];
+			var picked = $scope.$parent.selectedEntry;
 
-			var entry = data.data[0];
-
-
-			//npr: za drzave ce type biti /drzave
-			entry[pickType.replace("/","")]={};
-			entry[pickType.replace("/","")][idField] = picked;
-
+			var field = pickType.replace("/","");
+			var data = {};
+			data[idField] = picked[idField];
+			var pickedURL = cbService.restURL + '/' + picked[idField] + pickType;
 			//Sacuvaj promenjeni entitet
-			cbService.editResource(type, id, entry).then(onSuccessSend, onErrorSend);
-			
-			};
+			ZoomService.setPicked(data, field);
 
-			$scope.error = false;
-			$scope.success = false;
+			//Vrati se na prethodnu stranicu
+			//$location.path('/'+id+type);
+			$window.history.back();
 
-			var onError = function(reason) {
-				$scope.response = "Neuspešno učitavanje podataka: " + reason.status +" "+ reason.statusText;
-				$scope.error = true;
-				$scope.success = false;
-				$scope.isZoom = false;
-			};
-
-			var onErrorSend = function(reason){
-				$scope.response = "Neuspešna izmena podataka: " + reason.status + reason.statusText;
-				$scope.error = true;
-				$scope.success = false;
-			};
-
-			var onSuccessSend = function(){
-				$scope.response = "Uspešna izmena podataka."
-				$scope.error = false;
-				$scope.success = true;
-			};
-
-
-			$scope.pick = function(){
-				cbService.getResourceById(type, id).then(onResourceComplete, onError);
-			}
+		}
 
 		/* Uzima putanju do kontrolera.
 		 * npr: za CBClient/#/1/drzave će vratiti /1/drzave
@@ -62,9 +60,14 @@
 		 var type = "/"+route[2];
 		 var id = $routeParams.id;
 
-		 $scope.num = {'num':1};
+		 //Ako se pravi novi entitet, putanja ce biti /new/tip/ref_tip
+		 if (type == 'new'){;
+		 	var temp = type;
+		 	type = id;
+		 	id = temp;
+		 }
 
-		 //cbService.getResourceById(type, id).then(onResourceComplete, onError);
+		 $scope.num = {'num':1};
 		};
 
 		var app = angular.module("cbApp");

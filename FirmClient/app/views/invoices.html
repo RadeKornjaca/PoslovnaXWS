@@ -1,6 +1,29 @@
 <div ng-controller="InvoicesCtrl">
 	<div class="container-fluid">
 		<div class="row">
+			<select ng-model="byDatumRacuna">
+				<option></option>
+				<option>vece</option>
+				<option>manje</option>
+			</select>
+			<input type="date" ng-model="filterDatumRacuna">
+
+			<select ng-model="byDatumValute">
+				<option></option>
+				<option>vece</option>
+				<option>manje</option>
+			</select>
+			<input type="date" ng-model="filterDatumValute">
+
+			<select ng-model="byIznos">
+				<option></option>
+				<option>vece</option>
+				<option>jednako</option>
+				<option>manje</option>
+			</select>
+			<input type="number" ng-model="filterIznos">
+
+			<btn ng-click="filter()"></btn>
 			<div class="col-md-12">
 				<table class="table table-hover">
 					<thead>
@@ -20,7 +43,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | orderBy:predicate:reverse">
+						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | orderBy:predicate:reverse | filter: filterInvoices()">
 							<td>
 								{{ invoice.zaglavlje.id }}
 							</td>

@@ -1,19 +1,16 @@
 (function(){
 	var cbService = function($http){
-		var getAllMessages = function(){
-			return $http.get("http://localhost:8080/CentralnaBanka/services/restService/poruke").then(function(response){
-				return response.data;
-			});
-		};
+
+		var restURL = "http://localhost:8080/CentralnaBanka/services/restService";
 
 		var getResource = function(type){
-			return $http.get("http://localhost:8080/CentralnaBanka/services/restService"+type).then(function(response){
+			return $http.get(restURL+type).then(function(response){
 				return response.data;
 			});
 		};
 
 		var getResourceById = function(type, id){
-			return $http.get("http://localhost:8080/CentralnaBanka/services/restService/"+id+type).then(function(response){
+			return $http.get(restURL+'/'+id+type).then(function(response){
 				return response.data;
 			});
 		};
@@ -23,22 +20,40 @@
 				"wrapper":{"data":data}
 			};
 
-			return $http.put("http://localhost:8080/CentralnaBanka/services/restService/"+id+type, JSON.stringify(wrapper)).then(function(response){
+			return $http.put(restURL+'/'+id+type, JSON.stringify(wrapper)).then(function(response){
+				return response.data;
+			});
+		}
+
+		var deleteResource = function(type, id){
+
+			return $http.delete(restURL+id+type).then(function(response){
+				return response.data;
+			});
+		}
+
+		var newResource = function(type, data){
+			var wrapper = {
+				"wrapper":{"data":data}
+			};
+
+			return $http.post(restURL+type, JSON.stringify(wrapper)).then(function(response){
 				return response.data;
 			});
 		}
 
 		var getResourceFiltered = function(type, query){
-			return $http.get("http://localhost:8080/CentralnaBanka/services/restService"+type+"?"+query).then(function(response){
+			return $http.get(restURL+type+"?"+query).then(function(response){
 				return response.data;
 			});
 		};
 		return {
-			getAllMessages : getAllMessages,
 			getResource : getResource,
 			getResourceFiltered : getResourceFiltered,
 			getResourceById: getResourceById,
-			editResource: editResource
+			editResource: editResource,
+			newResource : newResource,
+			restURL : restURL
 		};
 	};
 	var module = angular.module("cbApp");

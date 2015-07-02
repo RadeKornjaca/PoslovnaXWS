@@ -33,7 +33,7 @@ public class CBTest {
 
 	public static void main(String[] args) throws Exception {
 		URL wsdl;
-		wsdl = new URL("http://192.168.41.253:8080/CentralnaBanka/services/CBService?wsdl");
+		wsdl = new URL("http://192.168.1.4:8080/CentralnaBanka/services/CBService?wsdl");
 
 		serviceName = new QName("PoslovnaXWS/services/centralnaBanka",
 				"CBService");
@@ -44,9 +44,9 @@ public class CBTest {
 
 		cb = service.getPort(portName, CentralnaBanka.class);
 
-		//testValidMT103();
+		testValidMT103();
 		//testInvalidMT103();
-		testValidMT102();
+		//testValidMT102();
 		//testInvalidIznosMT102();
 
 	}

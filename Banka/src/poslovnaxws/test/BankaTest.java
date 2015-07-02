@@ -33,7 +33,7 @@ public class BankaTest {
 
 	public static void main(String[] args) throws Exception {
 		URL wsdl;
-		wsdl = new URL("http://192.168.41.253:8080/banka/services/banka?wsdl");
+		wsdl = new URL("http://localhost:8080/banka/services/banka?wsdl");
 
 		serviceName = new QName("PoslovnaXWS/services/banka", "BankaService");
 		portName = new QName("PoslovnaXWS/services/banka", "BankaServicePort");
@@ -68,6 +68,8 @@ public class BankaTest {
 		 * 
 		 * testInvalidMT102();
 		 */
+		
+		//testUplataMalo();
 
 		// testValidMT102();
 
@@ -77,7 +79,7 @@ public class BankaTest {
 
 		// testInvalidUplata();
 
-		 testUplataIstaBanka();
+		 //testUplataIstaBanka();
 
 		// testUplataRazlicitaBanka();
 		//testUplataPuno();
@@ -153,6 +155,7 @@ public class BankaTest {
 		MT103 message = (MT103) jaxbUnmarshaller.unmarshal(file);
 		Uplata uplata = new Uplata();
 		uplata.setNalog(message.getUplata());
+		uplata.getNalog().setHitno(false);
 		Status response = banka.receiveUplata(uplata);
 		System.out.println("response: " + +response.getKod() + ":"
 				+ response.getOpis());
@@ -200,8 +203,9 @@ public class BankaTest {
 		MT103 message = (MT103) jaxbUnmarshaller.unmarshal(file);
 		Uplata uplata = new Uplata();
 		uplata.setNalog(message.getUplata());
-		uplata.getNalog().getPrimalac().setRacun("222-2222222222222-22");
-		uplata.getNalog().getDuznik().setRacun("222-3333333333333-33");
+		uplata.getNalog().getPrimalac().setRacun("222-1111111111111-11");
+		uplata.getNalog().getDuznik().setRacun("111-3333333333333-33");
+		uplata.getNalog().setIznos(new BigDecimal("260000"));
 		Status response = banka.receiveUplata(uplata);
 		System.out.println("response: " + +response.getKod() + ":"
 				+ response.getOpis());

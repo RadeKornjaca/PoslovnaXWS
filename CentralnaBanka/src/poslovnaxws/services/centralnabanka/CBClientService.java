@@ -36,6 +36,7 @@ import util.Restifyable;
 import wrappers.BankaWrapper;
 import wrappers.DrzavaWrapper;
 import wrappers.NaseljenoMestoWrapper;
+import wrappers.RacunBankeWrapper;
 import wrappers.Wrapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -129,7 +130,7 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt102(@Context UriInfo query) {
 		try {
-			
+
 			query.getQueryParameters().add("vrsta", "102");
 
 			String ret = getAll(mt10xDao, query);
@@ -147,7 +148,7 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt103(@Context UriInfo query) {
 		try {
-			
+
 			query.getQueryParameters().add("vrsta", "103");
 
 			String ret = getAll(mt10xDao, query);
@@ -165,7 +166,7 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt900(@Context UriInfo query) {
 		try {
-			
+
 			query.getQueryParameters().add("vrsta", "900");
 
 			String ret = getAll(mt9xyDao, query);
@@ -183,7 +184,7 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt910(@Context UriInfo query) {
 		try {
-			
+
 			query.getQueryParameters().add("vrsta", "910");
 
 			String ret = getAll(mt9xyDao, query);
@@ -412,6 +413,45 @@ public class CBClientService {
 
 	}
 
+	@POST
+	@Path("/racunBanke")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addRacunBanke(RacunBankeWrapper racunWrapper) {
+
+		RacunBanke racun = racunWrapper.getWrappedParameter().get(0);
+
+		// Drzava je mandatory
+		if (racun.getBanka() == null) {
+			ObjectNode mapper = new ObjectNode(JsonNodeFactory.instance);
+			mapper.put("message", "Drava can't be null.");
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity(mapper.toString()).build();
+		}
+
+		Banka banka = bankaDao.getAllCollections((long) racun.getBanka()
+				.getBankaId());
+
+		banka.addRacunBanke(racun);
+
+		if (racun.getIdRacuna() != 0) {
+			ObjectNode mapper = new ObjectNode(JsonNodeFactory.instance);
+			mapper.put("message", "Can't send ID.");
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity(mapper.toString()).build();
+		}
+		try {
+			racunDao.persist(racun);
+			bankaDao.merge(banka);
+		} catch (RuntimeException e) {
+			// EntityExistsException se nalazi ugnjeden u gomili drugih
+			// Ne moe se uhvatiti na elegantan naèin
+			return Response.status(Response.Status.CONFLICT).build();
+		}
+
+		return Response.ok().build();
+
+	}
+
 	@PUT
 	@Path("/{id}/drzava")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -443,6 +483,26 @@ public class CBClientService {
 
 		try {
 			naseljenoMestoDao.merge(mestoNew);
+		} catch (RuntimeException e) {
+			// EntityExistsException se nalazi ugnjeden u gomili drugih
+			// Ne moe se uhvatiti na elegantan naèin
+			return Response.status(Response.Status.CONFLICT).build();
+		}
+
+		return Response.ok().build();
+
+	}
+
+	@PUT
+	@Path("/{id}/racunBanke")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editRacun(@PathParam(value = "id") int id,
+			RacunBankeWrapper racunWrapper) {
+
+		RacunBanke racunNew = racunWrapper.getWrappedParameter().get(0);
+		// TODO: Nova mesta
+		try {
+			racunDao.merge(racunNew);
 		} catch (RuntimeException e) {
 			// EntityExistsException se nalazi ugnjeden u gomili drugih
 			// Ne moe se uhvatiti na elegantan naèin
