@@ -856,7 +856,30 @@ public class CBClientService {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
-
+	
+	@GET
+	@Path("/{id}/mt10x/stavka")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStavkaForMt10x(@PathParam(value = "id") int id) {
+		Wrapper ret = new Wrapper();
+		Mt10x value = mt10xDao.getAllCollections(id);
+		
+		if(value != null) {
+			for(StavkaPoruke sp : value.getStavkaPoruke()) {
+				ret.addData(sp.restify());
+			}
+			
+			ret.setMeta(EntityInfoUtil.getFields(StavkaPoruke.class));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			ObjectNode json = objectMapper.valueToTree(ret);
+			return Response.ok(json.toString()).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
+	
 	@POST
 	@Path("/{id}/naseljenoMesto/drzava")
 	@Produces(MediaType.APPLICATION_JSON)
