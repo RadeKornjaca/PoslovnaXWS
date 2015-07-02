@@ -18,13 +18,11 @@ public class Restriction {
 
 	}
 
-	public Restriction(int length, boolean nullable, boolean unique,
-			String regex) {
+	public Restriction(int length, boolean nullable, boolean unique) {
 		super();
 		this.length = length;
 		this.nullable = nullable;
 		this.unique = unique;
-		this.regex = regex;
 	}
 
 	public int getLength() {

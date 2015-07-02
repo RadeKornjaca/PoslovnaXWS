@@ -31,6 +31,7 @@ angular.module('invoices', ['resource.invoices', 'resource.invoiceParams', 'reso
         	InvoiceParams.setIdFakture(idFakture);
         	$location.path( path );
         };
+<<<<<<< HEAD
         
 
         $scope.filterInvoices = function(){
@@ -42,10 +43,22 @@ angular.module('invoices', ['resource.invoices', 'resource.invoiceParams', 'reso
         			datumRacuna = item.zaglavlje.datumRacuna > $scope.filterDatumRacuna;
         		else 
         			if ($scope.byDatumRacuna == 2)
+=======
+
+        $scope.filterInvoices = function(item){
+        	var datumValute = true, iznos = true, datumRacuna = true;
+
+        	if ($scope.byDatumRacuna != null && $scope.byDatumRacuna != undefined){
+        		if ($scope.byDatumRacuna == 'vece')
+        			datumRacuna = item.zaglavlje.datumRacuna > $scope.filterDatumRacuna;
+        		else 
+        			if ($scope.byDatumRacuna == 'manje')
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
         				datumRacuna = item.zaglavlje.datumRacuna < $scope.filterDatumRacuna;
         		}
 
         		if ($scope.byDatumValute != null && $scope.byDatumValute != undefined){
+<<<<<<< HEAD
         			if ($scope.byDatumValute == 1)
         				datumValute = item.zaglavlje.datumValute > $scope.filterDatumValute;
         			else 
@@ -61,11 +74,32 @@ angular.module('invoices', ['resource.invoices', 'resource.invoiceParams', 'reso
         						iznos = item.zaglavlje.iznosZaUplatu < $scope.filterIznos;
         				else 
         					if ($scope.byIznos == 0)
-        						iznos = item.zaglavlje.iznosZaUplatu = $scope.filterIznos;
+        						iznos = item.zaglavlje.iznosZaUplatu == $scope.filterIznos;
         				}
         				return datumValute && iznos && datumRacuna;
         			}
         			}
+=======
+        			if ($scope.byDatumRacuna == 'vece')
+        				datumRacuna = item.zaglavlje.datumValute > $scope.filterDatumValute;
+        			else 
+        				if ($scope.byDatumRacuna == 'manje')
+        					datumRacuna = item.zaglavlje.datumValute< $scope.filterDatumValute;
+        			}
+
+        			if ($scope.byIznos != null && $scope.byIznos != undefined){
+        				if ($scope.byIznos == 'vece')
+        					datumRacuna = item.zaglavlje.iznos > $scope.filterIznos;
+        				else 
+        					if ($scope.byDatumRacuna == 'manje')
+        						datumRacuna = item.zaglavlje.iznos< $scope.filterIznos;
+        				else 
+        					if ($scope.byDatumRacuna == 'jednako')
+        						datumRacuna = item.zaglavlje.iznos = $scope.filterIznos;
+        				}
+        				return datumValute && iznos && datumRacuna;
+        			};
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
         		});
 
 

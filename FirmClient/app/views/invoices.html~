@@ -3,23 +3,39 @@
 		<div class="row">
 			<select ng-model="byDatumRacuna">
 				<option></option>
+<<<<<<< HEAD
+				<option>2</option>
+				<option>1</option>
+=======
 				<option>vece</option>
 				<option>manje</option>
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
 			</select>
 			<input type="date" ng-model="filterDatumRacuna">
 
 			<select ng-model="byDatumValute">
 				<option></option>
+<<<<<<< HEAD
+				<option>2</option>
+				<option>1</option>
+=======
 				<option>vece</option>
 				<option>manje</option>
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
 			</select>
 			<input type="date" ng-model="filterDatumValute">
 
 			<select ng-model="byIznos">
 				<option></option>
+<<<<<<< HEAD
 				<option>1</option>
 				<option>2</option>
 				<option>0</option>
+=======
+				<option>vece</option>
+				<option>jednako</option>
+				<option>manje</option>
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
 			</select>
 			<input type="number" ng-model="filterIznos">
 
@@ -43,7 +59,11 @@
 						</tr>
 					</thead>
 					<tbody>
+<<<<<<< HEAD
 						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | filter : filterInvoices() |  orderBy:predicate:reverse">
+=======
+						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | orderBy:predicate:reverse | filter: filterInvoices()">
+>>>>>>> 6df587a886998a871ebfdcd7830164b84a3a6603
 							<td>
 								{{ invoice.zaglavlje.id }}
 							</td>

@@ -46,6 +46,7 @@ angular.module('invoices', ['resource.invoices', 'resource.invoiceParams', 'reso
         		}
 
         		if ($scope.byDatumValute != null && $scope.byDatumValute != undefined){
+
         			if ($scope.byDatumValute == 1)
         				datumValute = item.zaglavlje.datumValute > $scope.filterDatumValute;
         			else 
@@ -66,6 +67,7 @@ angular.module('invoices', ['resource.invoices', 'resource.invoiceParams', 'reso
         				return datumValute && iznos && datumRacuna;
         			}
         			}
+
         		});
 
 

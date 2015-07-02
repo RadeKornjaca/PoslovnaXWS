@@ -37,6 +37,7 @@
 			 	if ($scope.sortList[$scope.meta[i].name] == undefined)
 			 		$scope.sortList[$scope.meta[i].name] = '';
 
+
 			 	//ID polje je potrebno za formiranje linkova za edit i brisanje
 			 	//ID polje se nece prikazati u tabeli
 			 	if ($scope.meta[i].type === 'id')
@@ -45,6 +46,13 @@
 			 	//Posto je u pitanju samo prikaz, polja se mogu slobodno menjati.
 			 	for (var j = 0; j < $scope.entries.length; j++){
 			 		var entry = $scope.entries[j];
+
+			 					 	
+				 	if ($scope.meta[i].type == 'Date'){
+				 		var dateLong = $scope.entries[j][$scope.meta[i].name];
+				 		$scope.entries[j][$scope.meta[i].name] = new Date(dateLong);
+				 	}
+
 			 		if($scope.meta[i].type === 'zoom'
 			 			|| $scope.meta[i].type === 'link'){
 			 			//Nisu implementirani svi linkovi; npr za nalog

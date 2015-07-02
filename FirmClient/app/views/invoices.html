@@ -20,6 +20,7 @@
 				<option>1</option>
 				<option>2</option>
 				<option>0</option>
+
 			</select>
 			<input type="number" ng-model="filterIznos">
 
@@ -44,6 +45,7 @@
 					</thead>
 					<tbody>
 						<tr ng-click="go('/invoice',invoice.zaglavlje.dobavljac.pib,invoice.id)" ng-repeat="invoice in invoices | filter : filterInvoices() |  orderBy:predicate:reverse">
+
 							<td>
 								{{ invoice.zaglavlje.id }}
 							</td>

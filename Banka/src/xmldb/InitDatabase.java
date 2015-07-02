@@ -127,12 +127,12 @@ public final class InitDatabase {
 					+ message + ')');
 			RacunBankeDao racunBankeDao = new RacunBankeDao();
 			RacunBanke racunBanke = new RacunBanke();
-			racunBanke.setRacunKlijenta("222-2222222222222-22");
+			racunBanke.setRacunKlijenta("111-1111111111111-11");
 			racunBanke.setStanjeRacuna(new BigDecimal(200000));
 			System.out.println("Pre persista");
 			racunBankeDao.persist(racunBanke);
 			racunBanke = new RacunBanke();
-			racunBanke.setRacunKlijenta("222-3333333333333-33");
+			racunBanke.setRacunKlijenta("111-3333333333333-33");
 			racunBanke.setStanjeRacuna(new BigDecimal(200000));
 			System.out.println("Pre persista");
 			racunBankeDao.persist(racunBanke);

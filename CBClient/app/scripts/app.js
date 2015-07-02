@@ -23,14 +23,6 @@
     templateUrl: 'views/main.html',
     controller: 'MainCtrl'
   })
-  .when('/about', {
-    templateUrl: 'views/about.html',
-    controller: 'AboutCtrl'
-  })
-  .when('/messages', {
-    templateUrl: 'views/messages.html',
-    controller: 'AllMessagesCtrl'
-  })
   .when('/drzava', {
     templateUrl: 'views/read-edit.html',
     controller: 'ReadOnlyCtrl'
@@ -55,7 +47,7 @@
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
-  .when('/racunBanake', {
+  .when('/racunBanke', {
     templateUrl: 'views/read.html',
     controller: 'ReadOnlyCtrl'
   })
@@ -95,11 +87,43 @@
     templateUrl: 'views/edit.html',
     controller: 'EditCtrl'
   })
-  .when('/:id/banka', {
+  .when('/:id/racunBanke', {
     templateUrl: 'views/edit.html',
     controller: 'EditCtrl'
   })
+  .when('/drzava/new', {
+    templateUrl: 'views/edit.html',
+    controller: 'AddCtrl'
+  })
+  .when('/naseljenoMesto/new', {
+    templateUrl: 'views/edit.html',
+    controller: 'AddCtrl'
+  })
+  .when('/banka/new', {
+    templateUrl: 'views/edit.html',
+    controller: 'AddCtrl'
+  })
+  .when('/racunBanke/new', {
+    templateUrl: 'views/edit.html',
+    controller: 'AddCtrl'
+  })
   .when('/:id/naseljenoMesto/drzava', {
+    templateUrl: 'views/zoom.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/:id/naseljenoMesto/drzava', {
+    templateUrl: 'views/zoom.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/:id/racunBanke/banka', {
+    templateUrl: 'views/zoom.html',
+    controller: 'ReadOnlyCtrl'
+  })
+  .when('/naseljenoMesto/new/drzava', {
+    templateUrl: 'views/zoom.html',
+    controller: 'ReadOnlyCtrl'
+  })
+ .when('/racunBanke/new/drzava', {
     templateUrl: 'views/zoom.html',
     controller: 'ReadOnlyCtrl'
   })
