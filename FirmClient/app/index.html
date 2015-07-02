@@ -41,11 +41,17 @@
             <li ng-show="loggedIn">
             	<a href="#/logout">Izloguj se</a>
             </li>
-            <li ng-show="ownerView">
+            <li ng-hide="ownerView && loggedIn">
               <a  href="#/createInvoice">Kreiraj fakturu</a>
             </li>
-            <li ng-show="ownerView">
+            <li ng-hide="ownerView && loggedIn">
               <a href="#/invoices">Prikaži fakture</a>
+            </li>
+            <li ng-show="ownerView">
+              <a  href="#/uplata">Uplata</a>
+            </li>
+            <li ng-show="ownerView">
+              <a href="#/presek">Zahtev za presek</a>
             </li>
           </ul>
         </div>

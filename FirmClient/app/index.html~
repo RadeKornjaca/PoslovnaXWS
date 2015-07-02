@@ -41,11 +41,17 @@
             <li ng-show="loggedIn">
             	<a href="#/logout">Izloguj se</a>
             </li>
-            <li ng-show="ownerView">
+            <li ng-hide="ownerView">
               <a  href="#/createInvoice">Kreiraj fakturu</a>
             </li>
-            <li ng-show="ownerView">
+            <li ng-hide="ownerView">
               <a href="#/invoices">Prikaži fakture</a>
+            </li>
+            <li ng-show="ownerView">
+              <a  href="#/uplata">Uplata</a>
+            </li>
+            <li ng-show="ownerView">
+              <a href="#/presek">Zahtev za presek</a>
             </li>
           </ul>
         </div>
@@ -112,19 +118,19 @@
      <script src="scripts/controllers/UplataController.js"></script>
 
      <script src="scripts/factories/uplataFactory.js"></script>
-<<<<<<< HEAD
+
      
      <script src="scripts/controllers/loginController.js"></script>
      <script src="scripts/controllers/logoutController.js"></script>
      <script src="scripts/factories/userFactory.js"></script>
      <script src="scripts/factories/ownerFactory.js"></script>
      
-=======
+
 
      <script src="scripts/controllers/PresekController.js"></script>
 
      <script src="scripts/factories/zahtevZaPresekFactory.js"></script>
->>>>>>> fe26763ae43a7dce8eb5d9eb552a25e41686b896
+
      <!-- endbuild -->
    </body>
    </html>

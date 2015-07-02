@@ -2,6 +2,27 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
+			Vrednost:
+			<select ng-model="byVrednost">
+				<option></option>
+				<option>1</option>
+				<option>2</option>
+				<option>0</option>
+			</select>
+			Kolicina:
+			<input type="number" ng-model="filterVrednost">
+			<select ng-model="byKolicina">
+				<option></option>
+				<option>1</option>
+				<option>2</option>
+				<option>0</option>
+			</select>
+			<input type="number" ng-model="filterKolicina">
+			Naziv:
+			<input type="text" ng-model="filterNaziv">
+			Jedinica:
+			<input type="text" ng-model="filterJedinica">
+			
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -30,7 +51,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items | orderBy:predicate:reverse">
+						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items | filter : filterItems() | orderBy:predicate:reverse">
 							<td>
 								{{ item.redniBroj }}
 							</td>

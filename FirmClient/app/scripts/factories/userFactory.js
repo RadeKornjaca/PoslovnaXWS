@@ -3,9 +3,9 @@
 angular.module('resource.user', [])
 	.factory('User', function ($log) {
 	
+	
 	var setUser = function(user) {
 		this.user = user;
-		$log.info(user);
 	};
 	
 	var getUser = function() {

@@ -3,8 +3,8 @@
 <typeInfo handle="=ClientAPI/\/usr\/lib\/jvm\/java-7-oracle\/jre\/lib\/rt.jar&lt;java.io(Serializable.class[Serializable" modifiers="1537" timestamp="1434020211000"/>
 <typeInfo handle="=ClientAPI/lib\/javaee-api-6.0-4-tomcat.jar&lt;javax.validation.bootstrap(GenericBootstrap.class[GenericBootstrap" modifiers="1537" timestamp="1435146988000"/>
 <typeInfo handle="=ClientAPI/src&lt;sessionbeans.concrete{StavkaFaktureDaoLocal.java[StavkaFaktureDaoLocal" modifiers="513" timestamp="1434754157000"/>
-<typeInfo handle="=ClientAPI/src&lt;sessionbeans.common{GenericDaoLocal.java[GenericDaoLocal" modifiers="513" timestamp="1435164399000"/>
-<typeInfo handle="=ClientAPI/src&lt;sessionbeans.common{GenericDao.java[GenericDao" modifiers="1025" timestamp="1435164297000"/>
 <typeInfo handle="=ClientAPI/src&lt;sessionbeans.concrete{FakturaDaoLocal.java[FakturaDaoLocal" modifiers="513" timestamp="1434811372000"/>
 <typeInfo handle="=ClientAPI/src&lt;sessionbeans.concrete{FaktureDaoLocal.java[FaktureDaoLocal" modifiers="513" timestamp="1434796947000"/>
+<typeInfo handle="=ClientAPI/src&lt;sessionbeans.common{GenericDaoLocal.java[GenericDaoLocal" modifiers="513" timestamp="1435164399000"/>
+<typeInfo handle="=ClientAPI/src&lt;sessionbeans.common{GenericDao.java[GenericDao" modifiers="1025" timestamp="1435164297000"/>
 </typeInfoHistroy>

@@ -2,6 +2,26 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
+			Vrednost:
+			<select ng-model="byVrednost">
+				<option></option>
+				<option>1</option>
+				<option>2</option>
+				<option>0</option>
+			</select>
+			<input type="number" ng-model="filterVrednost">
+			<select ng-model="byKolicina">
+				<option></option>
+				<option>1</option>
+				<option>2</option>
+				<option>0</option>
+			</select>
+			<input type="number" ng-model="filterKolicina">
+			Naziv:
+			<input type="text" ng-model="filterNaziv">
+			Jedinica:
+			<input type="text" ng-model="filterJedinica">
+			
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -17,9 +37,9 @@
 								Tip
 								<span ng-show="predicate === 'tip'" class="{{ cssClass }}"></span>
 							</th>
-							<th ng-click="order('kolicina')">
-								Kolicina
-								<span ng-show="predicate === 'kolicina'" class="{{ cssClass }}"></span>
+							<th ng-click="order('vrednost')">
+								Vrednost
+								<span ng-show="predicate === 'vrednost'" class="{{ cssClass }}"></span>
 							</th>
 							<th>
 								Izmena
@@ -30,7 +50,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items | orderBy:predicate:reverse">
+						<tr ng-click="go('/item',item.redniBroj)" ng-repeat="item in items | filter : filterItems() | orderBy:predicate:reverse">
 							<td>
 								{{ item.redniBroj }}
 							</td>
@@ -41,7 +61,7 @@
 								{{ item.tip }}
 							</td>
 							<td>
-								{{ item.kolicina }}
+								{{ item.vrednost }}
 							</td>
 							<td ng-click="update('/updateItem',item.redniBroj)" stop-event='click'>
 								<span class="glyphicon glyphicon-pencil"></span>

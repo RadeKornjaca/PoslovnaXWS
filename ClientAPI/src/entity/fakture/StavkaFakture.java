@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import entity.iface.Identifiable;
 
 
@@ -141,27 +143,38 @@ import entity.iface.Identifiable;
 @XmlRootElement(name = "stavkaFakture")
 public class StavkaFakture implements Identifiable{
 
+	@JsonProperty(required = true)
     @XmlElement(required = true)
     protected BigInteger redniBroj;
-    @XmlElement(name = "Naziv", required = true)
+	@JsonProperty(required = true)
+	@XmlElement(name = "Naziv", required = true)
     protected String naziv;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal kolicina;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected String jedinicaMere;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal jedinicnaCena;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal vrednost;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal procenatRabata;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal iznosRabata;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal umanjenoZaRabat;
-    @XmlElement(required = true)
+	@JsonProperty(required = true)
+	@XmlElement(required = true)
     protected BigDecimal ukupanPorez;
-    @XmlAttribute(name = "tip", required = true)
+	@JsonProperty(required = true)
+	@XmlAttribute(name = "tip", required = true)
     protected String tip;
 
     /**

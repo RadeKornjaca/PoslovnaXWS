@@ -1,6 +1,7 @@
 package rest;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +29,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.util.JAXBSource;
 import javax.xml.namespace.QName;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.ws.Service;
 
 import poslovnaxws.banke.Presek;
@@ -209,7 +215,7 @@ public class FirmaService {
 			stavka = mapper.readValue(jsonStavka, StavkaFakture.class);
 			URI uri = new URI("/partneri/" + idDobavljaca + "/fakture"
 					+ idFakture + "/stavke/" + stavka.getId());
-
+			
 			if (checkDobavljac(idDobavljaca)) {
 
 				try {

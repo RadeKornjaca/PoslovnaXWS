@@ -19,7 +19,6 @@
 <fullyQualifiedTypeName name="entity.common.TFirma"/>
 <fullyQualifiedTypeName name="entity.fakture.Identifiable"/>
 <fullyQualifiedTypeName name="java.lang.Long"/>
-<fullyQualifiedTypeName name="entity.dobavljac.Dobavljac"/>
 <fullyQualifiedTypeName name="java.lang.Exception"/>
 <fullyQualifiedTypeName name="entity.fakture.TStavkaFakture"/>
 <fullyQualifiedTypeName name="entity.result.Result"/>
@@ -42,5 +41,14 @@
 <fullyQualifiedTypeName name="javax.ws.rs.Produces"/>
 <fullyQualifiedTypeName name="javax.ws.rs.core.MediaType"/>
 <fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="javax.ws.rs.PathParam"/>
+<fullyQualifiedTypeName name="entity.dobavljac.Dobavljac"/>
+<fullyQualifiedTypeName name="entity.dobavljac.Kupac"/>
 <fullyQualifiedTypeName name="entity.iface.Identifiable"/>
+<fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonProperty"/>
+<fullyQualifiedTypeName name="java.lang.annotation.Target"/>
+<fullyQualifiedTypeName name="java.lang.annotation.ElementType"/>
+<fullyQualifiedTypeName name="java.lang.annotation.Retention"/>
+<fullyQualifiedTypeName name="java.lang.annotation.RetentionPolicy"/>
+<fullyQualifiedTypeName name="util.annotations.Regex"/>
 </qualifiedTypeNameHistroy>

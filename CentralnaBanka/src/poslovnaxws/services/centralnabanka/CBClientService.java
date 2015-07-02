@@ -773,6 +773,29 @@ public class CBClientService {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
+	
+	@GET
+	@Path("/{id}/banka/racunBanke")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRacuniForBanka(@PathParam(value = "id") int id) {
+		Wrapper ret = new Wrapper();
+		Banka value = bankaDao.getAllCollections(id);
+		
+		if(value != null) {
+			for(RacunBanke rb : value.getRacunBanke()) {
+				ret.addData(rb.restify());
+			}
+			
+			ret.setMeta(EntityInfoUtil.getFields(RacunBanke.class));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			ObjectNode json = objectMapper.valueToTree(ret);
+			return Response.ok(json.toString()).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
 
 	@POST
 	@Path("/{id}/naseljenoMesto/drzava")

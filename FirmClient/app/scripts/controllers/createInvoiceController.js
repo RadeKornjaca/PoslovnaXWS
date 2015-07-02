@@ -1,7 +1,7 @@
 'use strict';
 
- angular.module('createInvoice', ['resource.invoices', 'resource.user'])
- 	.controller('CreateInvoiceCtrl', function(Invoices, User, $scope, $location, $log) {
+ angular.module('createInvoice', ['resource.invoices', 'resource.user', 'resource.owner', 'resource.partner'])
+ 	.controller('CreateInvoiceCtrl', function(Invoices, User, Owner, Partner, $scope, $location, $log) {
  	
  	var partneri = [];
  	this.datumRacuna = new Date();
@@ -20,13 +20,25 @@
  			}
  		}	
  	});*/
- 	
+
  	
  	$scope.submit = function() {
+ 		var owner;
+ 		Owner.get({ idVlasnika : 35234515422 }, function(data) {
+ 			$log.info(data);
+ 			owner = data.kupac
+ 		});
+ 		
+ 		var partner;
+		Partner.get({idDobavljaca : 14234512432}, function(data) {
+ 		 	$log.info(data);
+ 			partner = data.kupac
+ 		});
+ 		
  		var zaglavlje = {
  			id : this.id,
- 			dobavljac : User.user,
- 			kupac : User.user,
+ 			dobavljac : partner,
+ 			kupac : owner,
  			brojRacuna : this.brojRacuna,
  			datumRacuna : this.datumRacuna,
  			vrednostRobe : 0,
