@@ -911,6 +911,29 @@ public class CBClientService {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 	}
+	
+	@GET
+	@Path("{id}/racun/stavkaRacuna")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStavkaFromRacun(@PathParam(value = "id") int id) {
+		Wrapper ret = new Wrapper();
+		RacunBanke value = racunDao.getAllCollections(id);
+
+		if (value != null) {
+			for (DnevnoStanjeRacuna dsr : value.getDnevnoStanjeRacuna()) {
+				ret.addData(dsr.restify());
+			}
+
+			ret.setMeta(EntityInfoUtil.getFields(DnevnoStanjeRacuna.class));
+
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			ObjectNode json = objectMapper.valueToTree(ret);
+			return Response.ok(json.toString()).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
 
 	@GET
 	@Path("/{id}/mt10x/stavkaPoruke")
@@ -918,6 +941,29 @@ public class CBClientService {
 	public Response getStavkaForMt10x(@PathParam(value = "id") int id) {
 		Wrapper ret = new Wrapper();
 		Mt10x value = mt10xDao.getAllCollections(id);
+
+		if (value != null) {
+			for (StavkaPoruke sp : value.getStavkaPoruke()) {
+				ret.addData(sp.restify());
+			}
+
+			ret.setMeta(EntityInfoUtil.getFields(StavkaPoruke.class));
+
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			ObjectNode json = objectMapper.valueToTree(ret);
+			return Response.ok(json.toString()).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
+	
+	@GET
+	@Path("/{id}/nalog/stavkaPoruke")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getMt10xForNalog(@PathParam(value = "id") int id) {
+		Wrapper ret = new Wrapper();
+		Nalog value = nalogDao.getAllCollections(id);
 
 		if (value != null) {
 			for (StavkaPoruke sp : value.getStavkaPoruke()) {

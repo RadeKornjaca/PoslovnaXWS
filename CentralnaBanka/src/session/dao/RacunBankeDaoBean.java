@@ -19,4 +19,12 @@ public class RacunBankeDaoBean extends GenericDaoBean<RacunBanke, Integer> imple
 		return racunBanke;
 	}
 
+	@Override
+	public RacunBanke getAllCollections(int id) {
+		RacunBanke racunBanke = findById(id);
+		racunBanke.getDnevnoStanjeRacuna();
+		
+		return racunBanke;
+	}
+
 }
