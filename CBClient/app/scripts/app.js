@@ -48,7 +48,7 @@
     controller: 'ReadOnlyCtrl'
   })
   .when('/racunBanke', {
-    templateUrl: 'views/read.html',
+    templateUrl: 'views/read-edit.html',
     controller: 'ReadOnlyCtrl'
   })
   .when('/stavkaDnevnogRacuna', {
