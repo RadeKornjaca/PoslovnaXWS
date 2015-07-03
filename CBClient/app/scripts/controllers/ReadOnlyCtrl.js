@@ -109,7 +109,11 @@
 	}
 
 	$scope.deleteEntry = function(id, type){
-		cbService.deleteResource(type, id).then(function(){ location.reload() }, onError);
+		var r = window.confirm("Da li ste sigurni?");
+		if (r == true) {
+    		cbService.deleteResource(type, id).then(function(){ location.reload() }, onError);
+		}
+		
 	}
 
 	$scope.sort = function(field){
