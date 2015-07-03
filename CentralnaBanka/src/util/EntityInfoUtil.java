@@ -149,6 +149,8 @@ public final class EntityInfoUtil {
 					if (fields.get(field).getType().equals("String"))
 						query.append("x." + field + " LIKE '%"
 								+ params.get(field) + "%'");
+					else if (fields.get(field).getType().equals("Date"))
+						query.append("x." + field + "='" + params.get(field)+"'");
 					else
 						query.append("x." + field + "=" + params.get(field));
 
