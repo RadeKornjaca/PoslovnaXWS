@@ -140,10 +140,19 @@ public class CBClientService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response mt102(@Context UriInfo query) {
 		try {
+			
+			HashMap<String, String> params = new HashMap<String, String>();
+			// Izvuci iz upita sve parametre
+			// Parametri se nalaze iza ? u URL-u, smesteni su u UriInfo
+			for (String key : query.getQueryParameters().keySet()) {
+		
+				params.put(key, query.getQueryParameters().getFirst(key));
+		
+			}
+			params.put("vrsta", "102");
+			
 
-			query.getQueryParameters().add("vrsta", "102");
-
-			String ret = getAll(mt10xDao, query);
+			String ret = getAll(mt10xDao, params);
 
 			return Response.ok(ret).build();
 
@@ -159,9 +168,18 @@ public class CBClientService {
 	public Response mt103(@Context UriInfo query) {
 		try {
 
-			query.getQueryParameters().add("vrsta", "103");
+			HashMap<String, String> params = new HashMap<String, String>();
+			// Izvuci iz upita sve parametre
+			// Parametri se nalaze iza ? u URL-u, smesteni su u UriInfo
+			for (String key : query.getQueryParameters().keySet()) {
+		
+				params.put(key, query.getQueryParameters().getFirst(key));
+		
+			}
+			params.put("vrsta", "103");
+			
 
-			String ret = getAll(mt10xDao, query);
+			String ret = getAll(mt10xDao, params);
 
 			return Response.ok(ret).build();
 
@@ -177,7 +195,15 @@ public class CBClientService {
 	public Response mt900(@Context UriInfo query) {
 		try {
 
-			query.getQueryParameters().add("vrsta", "900");
+			HashMap<String, String> params = new HashMap<String, String>();
+			// Izvuci iz upita sve parametre
+			// Parametri se nalaze iza ? u URL-u, smesteni su u UriInfo
+			for (String key : query.getQueryParameters().keySet()) {
+		
+				params.put(key, query.getQueryParameters().getFirst(key));
+		
+			}
+			params.put("vrsta", "900");
 
 			String ret = getAll(mt9xyDao, query);
 
@@ -195,7 +221,15 @@ public class CBClientService {
 	public Response mt910(@Context UriInfo query) {
 		try {
 
-			query.getQueryParameters().add("vrsta", "910");
+			HashMap<String, String> params = new HashMap<String, String>();
+			// Izvuci iz upita sve parametre
+			// Parametri se nalaze iza ? u URL-u, smesteni su u UriInfo
+			for (String key : query.getQueryParameters().keySet()) {
+		
+				params.put(key, query.getQueryParameters().getFirst(key));
+		
+			}
+			params.put("vrsta", "910");
 
 			String ret = getAll(mt9xyDao, query);
 
@@ -1052,6 +1086,50 @@ public class CBClientService {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
+		ObjectNode json = objectMapper.valueToTree(ret);
+		return json.toString();
+	}
+
+	/**
+	 * Pomocna metoda koja vraca sve entitete prosledjene klase na osnovu upita.
+	 * Params nije readonly za razliku od URI-ja, tako da se mogu slobodno dodavati
+	 * parametri pretrage (recimo vrsta poruke).
+	 * @param dao
+	 * @param query
+	 *            - upit iz URL-a REST servisa
+	 * @return formirani string odgovora
+	 * @throws QueryBuilderException
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private String getAll(GenericDaoLocal dao, HashMap<String, String> params)
+			throws QueryBuilderException {
+	
+		Wrapper ret = new Wrapper();
+	
+	
+	
+		String queryString;
+		try {
+			queryString = EntityInfoUtil.getQueryString(dao.getEntityType(),
+					params);
+	
+			List<Restifyable> dataList = dao.findBy(queryString);
+	
+			for (Restifyable data : dataList)
+				ret.addData(data.restify());
+	
+			ret.setMeta(EntityInfoUtil.getFields(dao.getEntityType()));
+	
+		} catch (QueryBuilderException e) {
+			e.printStackTrace();
+			ObjectNode mapper = new ObjectNode(JsonNodeFactory.instance);
+			mapper.put("message", "Loe formiran upit.");
+			mapper.put("reason", e.getMessage());
+			throw new QueryBuilderException(mapper.toString());
+		}
+	
+		ObjectMapper objectMapper = new ObjectMapper();
+	
 		ObjectNode json = objectMapper.valueToTree(ret);
 		return json.toString();
 	}

@@ -328,8 +328,9 @@ public class Mt10x extends Poruka {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		ObjectNode json = objectMapper.valueToTree(this);
-
-		json.put("racunBankeDuznika", racunBankeDuznika.resourceURL());
+		if (racunBankeDuznika != null)
+			json.put("racunBankeDuznika", racunBankeDuznika.resourceURL());
+		if (racunBankePoverioca != null)
 		json.put("racunBankePoverioca", racunBankePoverioca.resourceURL());
 
 		// Daje link cak i ako nije ucitan zbog lazy fetch-a
