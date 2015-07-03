@@ -82,6 +82,7 @@ public class StavkaDnevnogRacuna implements Restifyable {
 
 	public void setDnevnoStanjeRacuna(DnevnoStanjeRacuna dnevnoStanjeRacuna) {
 		this.dnevnoStanjeRacuna = dnevnoStanjeRacuna;
+		dnevnoStanjeRacuna.getStavkaDnevnogRacuna().add(this);
 	}
 
 	public Nalog getNalog() {
@@ -98,10 +99,10 @@ public class StavkaDnevnogRacuna implements Restifyable {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		ObjectNode json = objectMapper.valueToTree(this);
-
+		if (dnevnoStanjeRacuna != null)
 		json.put("dnevnoStanjeRacuna", dnevnoStanjeRacuna.resourceURL());
-		
-		json.put("nalog", nalog.resourceURL());
+		if (nalog != null)
+			json.put("nalog", nalog.resourceURL());
 
 		return json;
 	}

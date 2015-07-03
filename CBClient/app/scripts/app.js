@@ -123,7 +123,7 @@
     templateUrl: 'views/zoom.html',
     controller: 'ReadOnlyCtrl'
   })
- .when('/racunBanke/new/drzava', {
+  .when('/racunBanke/new/drzava', {
     templateUrl: 'views/zoom.html',
     controller: 'ReadOnlyCtrl'
   })
@@ -136,6 +136,18 @@
     controller: 'CollectionCtrl'
   })
   .when('/:id/mt10x/stavkaPoruke', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+  .when('/:id/racunBanke/dnevnoStanjeRacuna', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+    .when('/:id/dnevnoStanjeRacuna/stavka_dnevnog_racuna', {
+    templateUrl: 'views/read.html',
+    controller: 'CollectionCtrl'
+  })
+  .when('/:id/nalog/stavkaPoruke', {
     templateUrl: 'views/read.html',
     controller: 'CollectionCtrl'
   })
