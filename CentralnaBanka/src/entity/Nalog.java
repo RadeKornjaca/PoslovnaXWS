@@ -24,6 +24,7 @@ import javax.persistence.Table;
 import poslovnaxws.common.TKlijent;
 import poslovnaxws.common.TNalog;
 import poslovnaxws.services.centralnabanka.CBClientService;
+import util.EntityInfoUtil;
 import util.Restifyable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -407,6 +408,16 @@ public class Nalog implements Restifyable {
 		ObjectNode json = objectMapper.valueToTree(this);
 
 		json.put("naseljenoMesto", naseljenoMesto.resourceURL());
+		
+		json.put(
+				"stavkaDnevnogRacuna",
+				resourceURL()
+						+ EntityInfoUtil.getTableName(StavkaDnevnogRacuna.class));
+		
+		json.put(
+				"stavkaPoruke",
+				resourceURL()
+						+ EntityInfoUtil.getTableName(StavkaPoruke.class));
 
 		return json;
 	}

@@ -109,11 +109,11 @@ public class Mt9xy extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + idPoruke + "/mt9xy";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/" + vrsta;
+		return CBClientService.REST_URL + "/mt9xy";
 	}
 }

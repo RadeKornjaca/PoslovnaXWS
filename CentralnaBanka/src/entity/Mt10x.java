@@ -342,12 +342,12 @@ public class Mt10x extends Poruka {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idPoruke + "/" + vrsta;
+		return CBClientService.REST_URL + "/" + idPoruke + "/mt10x";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/" + vrsta;
+		return CBClientService.REST_URL + "/mt10x" ;
 	}
 
 

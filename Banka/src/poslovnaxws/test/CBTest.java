@@ -33,7 +33,7 @@ public class CBTest {
 
 	public static void main(String[] args) throws Exception {
 		URL wsdl;
-		wsdl = new URL("http://192.168.1.4:8080/CentralnaBanka/services/CBService?wsdl");
+		wsdl = new URL("http://localhost:8080/CentralnaBanka/services/CBService?wsdl");
 
 		serviceName = new QName("PoslovnaXWS/services/centralnaBanka",
 				"CBService");
@@ -54,7 +54,7 @@ public class CBTest {
 	private static void testValidMT102() throws JAXBException {
 
 		File file = new File(
-				"C:/Users/Lazar/Desktop/Faks/test/testMT102Valid.xml");
+				"E:/test/testMT102Valid.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(MT102.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -92,7 +92,7 @@ public class CBTest {
 	private static void testValidMT103() throws JAXBException {
 
 		File file = new File(
-				"C:/Users/Lazar/Desktop/Faks/test/uplataPuno.xml");
+				"E:/test/testMT103Valid.xml");
 		JAXBContext jaxbContext = JAXBContext.newInstance(MT103.class);
 
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
