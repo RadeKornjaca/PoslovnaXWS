@@ -913,7 +913,7 @@ public class CBClientService {
 	}
 	
 	@GET
-	@Path("{id}/racun/stavkaRacuna")
+	@Path("{id}/racunBanke/dnevnoStanjeRacuna")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStavkaFromRacun(@PathParam(value = "id") int id) {
 		Wrapper ret = new Wrapper();
@@ -925,6 +925,29 @@ public class CBClientService {
 			}
 
 			ret.setMeta(EntityInfoUtil.getFields(DnevnoStanjeRacuna.class));
+
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			ObjectNode json = objectMapper.valueToTree(ret);
+			return Response.ok(json.toString()).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
+	
+	@GET
+	@Path("{id}/dnevnoStanjeRacuna/stavka_dnevnog_racuna")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStavkeForDnevnoStanje(@PathParam(value = "id") int id) {
+		Wrapper ret = new Wrapper();
+		DnevnoStanjeRacuna value = dnevnoStanjeRacunaDao.getAllCollections(id);
+
+		if (value != null) {
+			for (StavkaDnevnogRacuna sdr : value.getStavkaDnevnogRacuna()) {
+				ret.addData(sdr.restify());
+			}
+
+			ret.setMeta(EntityInfoUtil.getFields(StavkaDnevnogRacuna.class));
 
 			ObjectMapper objectMapper = new ObjectMapper();
 

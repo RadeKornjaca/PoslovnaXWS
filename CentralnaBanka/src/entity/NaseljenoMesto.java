@@ -176,12 +176,12 @@ public class NaseljenoMesto implements Restifyable {
 
 	@Override
 	public String resourceURL() {
-		return CBClientService.REST_URL + "/" + idMesta + "/naseljenoMesta";
+		return CBClientService.REST_URL + "/" + idMesta + "/naseljenoMesto";
 	}
 
 	@Override
 	public String tableURL() {
-		return CBClientService.REST_URL + "/naseljenoMesta";
+		return CBClientService.REST_URL + "/naseljenoMesto";
 	}
 
 	@Override

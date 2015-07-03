@@ -195,6 +195,8 @@ public class DnevnoStanjeRacuna implements Restifyable {
 				"stavkaDnevnogRacuna",
 				resourceURL()
 						+ EntityInfoUtil.getTableName(StavkaDnevnogRacuna.class));
+		json.put(
+				"racunBanke", racunBanke.restify());
 
 		return json;
 	}
