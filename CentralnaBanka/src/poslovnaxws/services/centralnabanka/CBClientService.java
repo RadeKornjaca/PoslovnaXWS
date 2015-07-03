@@ -205,7 +205,7 @@ public class CBClientService {
 			}
 			params.put("vrsta", "900");
 
-			String ret = getAll(mt9xyDao, query);
+			String ret = getAll(mt9xyDao, params);
 
 			return Response.ok(ret).build();
 
@@ -231,7 +231,7 @@ public class CBClientService {
 			}
 			params.put("vrsta", "910");
 
-			String ret = getAll(mt9xyDao, query);
+			String ret = getAll(mt9xyDao, params);
 
 			return Response.ok(ret).build();
 
